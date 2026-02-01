@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bioinformatics Pipeline Terminal</title>
+    <title>DAB-seq Pipeline Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,51 +13,101 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: #1a1a1a;
-            height: 100vh;
-            overflow: hidden;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .terminal-wrapper {
+            width: 100%;
+            max-width: 950px;
+            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5));
         }
 
         .terminal-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background-color: #1e1e1e;
+            background: #0d1117;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #30363d;
         }
 
         .terminal-header {
-            padding: 12px 20px;
-            background-color: #2d2d2d;
-            border-bottom: 1px solid #3e3e3e;
-            color: #d4d4d4;
-            font-size: 14px;
+            padding: 14px 20px;
+            background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transition: filter 0.2s;
+        }
+        .dot:hover { filter: brightness(1.2); }
+        .dot.red { background: #ff5f57; }
+        .dot.yellow { background: #febc2e; }
+        .dot.green { background: #28c840; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .terminal-badge {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .terminal-body {
-            flex: 1;
+            height: 520px;
             overflow-y: auto;
-            padding: 16px;
-            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             cursor: text;
         }
 
         .terminal-line {
             white-space: pre-wrap;
             word-wrap: break-word;
+            margin-bottom: 2px;
         }
 
         .terminal-input-line {
             display: flex;
             align-items: center;
+            margin-top: 4px;
         }
 
         .terminal-prompt {
-            color: #0dbc79;
+            color: #3fb950;
             margin-right: 8px;
+            user-select: none;
+        }
+
+        .terminal-prompt .path {
+            color: #58a6ff;
         }
 
         #terminal-input {
@@ -64,50 +115,100 @@
             background: transparent;
             border: none;
             outline: none;
-            color: #d4d4d4;
-            font-family: 'Courier New', Courier, monospace;
+            color: #e6edf3;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             font-size: 14px;
-            caret-color: #00ff00;
+            caret-color: #58a6ff;
         }
 
         #terminal-input:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
-        .color-white { color: #d4d4d4; }
-        .color-green { color: #0dbc79; }
-        .color-cyan { color: #11a8cd; }
-        .color-red { color: #cd3131; }
-        .color-yellow { color: #e5e510; }
+        /* Colors */
+        .c-white { color: #e6edf3; }
+        .c-gray { color: #8b949e; }
+        .c-green { color: #3fb950; }
+        .c-cyan { color: #58a6ff; }
+        .c-yellow { color: #d29922; }
+        .c-red { color: #f85149; }
+        .c-magenta { color: #a371f7; }
+        .c-bold { font-weight: 600; }
 
-        ::-webkit-scrollbar {
-            width: 10px;
+        /* Progress bar animation */
+        .progress-bar {
+            color: #3fb950;
         }
 
-        ::-webkit-scrollbar-track {
-            background: #1e1e1e;
+        /* ASCII art styling */
+        .ascii-art {
+            color: #58a6ff;
+            line-height: 1.2;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: #3e3e3e;
-            border-radius: 5px;
+        /* Scrollbar */
+        .terminal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .terminal-body::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+        .terminal-body::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4e4e4e;
+        /* Glow effect for special output */
+        .glow {
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* Footer */
+        .terminal-footer {
+            padding: 10px 20px;
+            background: #161b22;
+            border-top: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #6e7681;
+        }
+
+        .footer-link {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+        .footer-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="terminal-container">
-        <div class="terminal-header">
-            🧬 Bioinformatics Pipeline Terminal
-        </div>
-        <div class="terminal-body" id="terminal-body">
-            <div id="terminal-output"></div>
-            <div class="terminal-input-line">
-                <span class="terminal-prompt" id="prompt">~/bioinfo $</span>
-                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+    <div class="terminal-wrapper">
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <div class="window-controls">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                </div>
+                <div class="terminal-title">dabseq_pipeline.py — bash</div>
+                <div class="terminal-badge">v1.2</div>
+            </div>
+            <div class="terminal-body" id="terminal-body">
+                <div id="terminal-output"></div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt" id="prompt">user:<span class="path">~</span>$</span>
+                    <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+            <div class="terminal-footer">
+                <span>DAB-seq: Single-Cell DNA + Antibody Sequencing</span>
+                <a class="footer-link" href="https://github.com/AbateLab/DAb-seq" target="_blank">Abate Lab @ UCSF</a>
             </div>
         </div>
     </div>
@@ -116,185 +217,87 @@
         const terminalOutput = document.getElementById('terminal-output');
         const terminalInput = document.getElementById('terminal-input');
         const terminalBody = document.getElementById('terminal-body');
+        const promptEl = document.getElementById('prompt');
         
         let commandHistory = [];
         let historyIndex = -1;
         let isProcessing = false;
-        const currentPath = '~/bioinfo';
+        let currentPath = '~';
 
-        const commands = {
-            help: {
-                output: [
-                    '',
-                    'Available commands:',
-                    '  help              - Show this help message',
-                    '  ls                - List files in current directory',
-                    '  fastqc            - Run quality control on FASTQ files',
-                    '  trimmomatic       - Trim adapter sequences',
-                    '  bwa mem           - Align reads to reference genome',
-                    '  samtools          - Process SAM/BAM files',
-                    '  bcftools          - Call variants',
-                    '  pipeline          - Run full analysis pipeline',
-                    '  clear             - Clear terminal',
-                    '',
-                    'Type any command to see a simulation of the tool running.',
-                    ''
-                ]
+        // Simulated filesystem
+        const filesystem = {
+            '~': {
+                type: 'dir',
+                contents: ['barcodes/', 'fastq/', 'config/', 'output/', 'dabseq_pipeline.py', 'README.md']
             },
-            ls: {
-                output: [
-                    '',
-                    'sample1_R1.fastq.gz',
-                    'sample1_R2.fastq.gz',
-                    'sample2_R1.fastq.gz',
-                    'sample2_R2.fastq.gz',
-                    'reference_genome.fasta',
-                    ''
-                ]
+            '~/barcodes': {
+                type: 'dir',
+                contents: ['cell_barcodes_v1.txt', 'antibody_barcodes.csv']
             },
-            fastqc: {
-                steps: [
-                    'FastQC v0.12.1',
-                    'Starting analysis...',
-                    'Processing: sample1_R1.fastq.gz',
-                    '  - Basic Statistics: PASS',
-                    '  - Per base sequence quality: PASS',
-                    '  - Per sequence quality scores: PASS',
-                    '  - Per base sequence content: WARN',
-                    '  - Per sequence GC content: PASS',
-                    '  - Per base N content: PASS',
-                    '  - Sequence Length Distribution: PASS',
-                    '  - Sequence Duplication Levels: WARN',
-                    '  - Overrepresented sequences: PASS',
-                    '  - Adapter Content: PASS',
-                    'Analysis complete!',
-                    'Output: sample1_R1_fastqc.html',
-                    ''
-                ],
-                delay: 200
+            '~/fastq': {
+                type: 'dir',
+                contents: ['panel_R1.fastq.gz', 'panel_R2.fastq.gz', 'abs_R1.fastq.gz', 'abs_R2.fastq.gz']
             },
-            trimmomatic: {
-                steps: [
-                    'TrimmomaticPE v0.39',
-                    'Using adapter sequences from TruSeq3-PE.fa',
-                    'Input Read Pairs: 5000000',
-                    'Processing reads...',
-                    'Progress: 25% [=====               ]',
-                    'Progress: 50% [==========          ]',
-                    'Progress: 75% [===============     ]',
-                    'Progress: 100% [====================]',
-                    'Both Surviving: 4750000 (95.00%)',
-                    'Forward Only Surviving: 150000 (3.00%)',
-                    'Reverse Only Surviving: 75000 (1.50%)',
-                    'Dropped: 25000 (0.50%)',
-                    'Trimming complete!',
-                    ''
-                ],
-                delay: 300
+            '~/config': {
+                type: 'dir',
+                contents: ['dabseq.hg19.cfg', 'panel_targets.bed']
             },
-            'bwa mem': {
-                steps: [
-                    'BWA-MEM v0.7.17',
-                    'Loading reference genome...',
-                    '[M::bwa_idx_load_from_disk] read 0 ALT contigs',
-                    '[M::process] read 500000 sequences (75000000 bp)...',
-                    '[M::process] read 500000 sequences (75000000 bp)...',
-                    '[M::mem_process_seqs] Processed 500000 reads in 32.451 CPU sec, 8.112 real sec',
-                    '[M::mem_process_seqs] Processed 500000 reads in 31.892 CPU sec, 7.973 real sec',
-                    '[main] Version: 0.7.17-r1188',
-                    '[main] CMD: bwa mem reference_genome.fasta sample1_R1.fastq.gz sample1_R2.fastq.gz',
-                    '[main] Real time: 245.321 sec; CPU: 962.441 sec',
-                    'Alignment complete! Output: aligned.sam',
-                    ''
-                ],
-                delay: 250
-            },
-            samtools: {
-                steps: [
-                    'SAMtools v1.17',
-                    'Converting SAM to BAM...',
-                    '[bam_sort_core] merging from 4 files and 1 in-memory blocks...',
-                    'Sorting BAM file...',
-                    'Indexing BAM file...',
-                    'Calculating alignment statistics...',
-                    '',
-                    'Alignment Statistics:',
-                    '  Total reads: 5000000',
-                    '  Mapped reads: 4875000 (97.50%)',
-                    '  Properly paired: 4750000 (95.00%)',
-                    '  Average coverage: 32.5x',
-                    '  Average mapping quality: 58.3',
-                    '',
-                    'Output: aligned_sorted.bam',
-                    'Output: aligned_sorted.bam.bai',
-                    ''
-                ],
-                delay: 180
-            },
-            bcftools: {
-                steps: [
-                    'BCFtools v1.17',
-                    'Calling variants...',
-                    'Processing chromosome 1...',
-                    'Processing chromosome 2...',
-                    'Processing chromosome 3...',
-                    '...',
-                    'Filtering variants (QUAL > 30)...',
-                    '',
-                    'Variant Summary:',
-                    '  Total variants called: 125,432',
-                    '  SNPs: 118,245 (94.27%)',
-                    '  Insertions: 3,891 (3.10%)',
-                    '  Deletions: 3,296 (2.63%)',
-                    '  Filtered (low quality): 8,234',
-                    '  High confidence variants: 117,198',
-                    '',
-                    'Output: variants.vcf.gz',
-                    ''
-                ],
-                delay: 220
-            },
-            pipeline: {
-                steps: [
-                    '╔════════════════════════════════════════════╗',
-                    '║   BIOINFORMATICS ANALYSIS PIPELINE v2.0    ║',
-                    '╚════════════════════════════════════════════╝',
-                    '',
-                    'Step 1/5: Quality Control (FastQC)',
-                    '  ✓ Sample 1 analyzed',
-                    '  ✓ Sample 2 analyzed',
-                    '',
-                    'Step 2/5: Adapter Trimming (Trimmomatic)',
-                    '  ✓ Processed 10M read pairs',
-                    '  ✓ 95% reads retained',
-                    '',
-                    'Step 3/5: Read Alignment (BWA-MEM)',
-                    '  ✓ Aligned to reference genome',
-                    '  ✓ 97.5% mapping rate',
-                    '',
-                    'Step 4/5: BAM Processing (SAMtools)',
-                    '  ✓ Sorted and indexed',
-                    '  ✓ Average coverage: 32.5x',
-                    '',
-                    'Step 5/5: Variant Calling (BCFtools)',
-                    '  ✓ Called 125,432 variants',
-                    '  ✓ 117,198 high-confidence variants',
-                    '',
-                    '════════════════════════════════════════════',
-                    'Pipeline completed successfully! 🧬',
-                    'Total runtime: 18m 42s',
-                    'Check output directory for results',
-                    ''
-                ],
-                delay: 300
-            },
-            clear: { clear: true }
+            '~/output': {
+                type: 'dir',
+                contents: []
+            }
         };
 
-        function addLine(text, color = 'white') {
+        const fileContents = {
+            'README.md': `# DAB-seq Pipeline
+Combined single-cell DNA genotyping and protein quantification.
+Abate Lab @ UCSF | Nature Communications 2021`,
+            'cell_barcodes_v1.txt': `AAACCTGAGAAACCAT
+AAACCTGAGAAACGAG
+AAACCTGAGAAACTGT
+AAACCTGAGAAATGGT
+... (737,280 total barcodes)`,
+            'antibody_barcodes.csv': `antibody,barcode,sequence
+CD34,AB001,AGTCAGTCAGTC
+CD38,AB002,TCGATCGATCGA
+CD45,AB003,GCTAGCTAGCTA
+CD117,AB004,ATCGATCGATCG
+CD33,AB005,CGATCGATCGAT
+CD14,AB006,TAGCTAGCTAGC
+CD15,AB007,GATCGATCGATC
+HLA-DR,AB008,CTGACTGACTGA`,
+            'dabseq.hg19.cfg': `[reference]
+genome = hg19
+fasta = /ref/hg19.fa
+index = /ref/hg19.fa.fai
+
+[pipeline]
+threads = 16
+memory = 64G
+temp_dir = /tmp/dabseq
+
+[gatk]
+java_opts = -Xmx32g
+intervals = panel_targets.bed`,
+            'panel_targets.bed': `chr1\t115256528\t115256623\tNRAS
+chr7\t55241607\t55241727\tEGFR
+chr12\t25398208\t25398329\tKRAS
+chr17\t7577498\t7577608\tTP53
+chr13\t28592634\t28592750\tFLT3`
+        };
+
+        function addLine(text, className = 'c-white') {
             const line = document.createElement('div');
-            line.className = `terminal-line color-${color}`;
-            line.textContent = text || ' ';
+            line.className = `terminal-line ${className}`;
+            line.innerHTML = text || '&nbsp;';
+            terminalOutput.appendChild(line);
+            scrollToBottom();
+        }
+
+        function addHTML(html) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = html;
             terminalOutput.appendChild(line);
             scrollToBottom();
         }
@@ -303,77 +306,293 @@
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
+        function updatePrompt() {
+            promptEl.innerHTML = `user:<span class="path">${currentPath}</span>$`;
+        }
+
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        async function executeCommand(cmd) {
-            const trimmedCmd = cmd.trim().toLowerCase();
-            
-            if (!trimmedCmd) return;
-
-            addLine(`${currentPath} $ ${cmd}`, 'green');
-
-            if (trimmedCmd === 'clear') {
-                terminalOutput.innerHTML = '';
-                return;
+        function resolvePath(p) {
+            if (!p || p === '~') return '~';
+            if (p === '..') {
+                if (currentPath === '~') return '~';
+                return currentPath.split('/').slice(0, -1).join('/') || '~';
             }
+            if (p.startsWith('~/')) return p;
+            if (p.startsWith('/')) return '~' + p;
+            const clean = p.replace(/\/$/, '');
+            return currentPath === '~' ? `~/${clean}` : `${currentPath}/${clean}`;
+        }
 
-            if (commands[trimmedCmd]) {
-                const result = commands[trimmedCmd];
+        // Commands
+        const commands = {
+            help: async () => {
+                addLine('');
+                addHTML('<span class="c-cyan c-bold">Available Commands:</span>');
+                addLine('');
+                addHTML('  <span class="c-green">ls</span>                      List directory contents');
+                addHTML('  <span class="c-green">cd</span> &lt;dir&gt;               Change directory');
+                addHTML('  <span class="c-green">cat</span> &lt;file&gt;             View file contents');
+                addHTML('  <span class="c-green">pwd</span>                     Print working directory');
+                addHTML('  <span class="c-green">clear</span>                   Clear terminal');
+                addHTML('  <span class="c-green">help</span>                    Show this message');
+                addLine('');
+                addHTML('<span class="c-cyan c-bold">Pipeline Commands:</span>');
+                addLine('');
+                addHTML('  <span class="c-yellow">dabseq_pipeline.py barcode</span>   Run barcode mode');
+                addHTML('  <span class="c-yellow">dabseq_pipeline.py genotype</span>  Run genotype mode');
+                addLine('');
+                addHTML('<span class="c-gray">Options: --dna-only, --ab-only, --help</span>');
+                addLine('');
+            },
 
-                if (result.clear) {
-                    terminalOutput.innerHTML = '';
+            pwd: async () => {
+                addLine(currentPath.replace('~', '/home/user'));
+            },
+
+            ls: async (args) => {
+                let targetPath = currentPath;
+                if (args && args[0]) {
+                    targetPath = resolvePath(args[0]);
+                }
+                const dir = filesystem[targetPath];
+                if (!dir) {
+                    addHTML(`<span class="c-red">ls: cannot access '${args[0]}': No such file or directory</span>`);
                     return;
                 }
-
-                if (result.output) {
-                    result.output.forEach(line => addLine(line));
-                } else if (result.steps) {
-                    isProcessing = true;
-                    terminalInput.disabled = true;
-                    
-                    for (const step of result.steps) {
-                        await sleep(result.delay);
-                        addLine(step);
-                    }
-                    
-                    isProcessing = false;
-                    terminalInput.disabled = false;
-                    terminalInput.focus();
+                if (dir.contents.length === 0) {
+                    addLine('');
+                    return;
                 }
-            } else {
-                addLine(`Command not found: ${trimmedCmd}`, 'red');
-                addLine('Type "help" for available commands.');
+                const output = dir.contents.map(f => 
+                    f.endsWith('/') ? `<span class="c-cyan">${f}</span>` : `<span class="c-white">${f}</span>`
+                ).join('  ');
+                addHTML(output);
+            },
+
+            cd: async (args) => {
+                if (!args || !args[0] || args[0] === '~') {
+                    currentPath = '~';
+                    updatePrompt();
+                    return;
+                }
+                const target = resolvePath(args[0]);
+                if (filesystem[target]) {
+                    currentPath = target;
+                    updatePrompt();
+                } else {
+                    addHTML(`<span class="c-red">cd: ${args[0]}: No such file or directory</span>`);
+                }
+            },
+
+            cat: async (args) => {
+                if (!args || !args[0]) {
+                    addHTML('<span class="c-red">cat: missing operand</span>');
+                    return;
+                }
+                const filename = args[0].replace('./', '');
+                if (fileContents[filename]) {
+                    fileContents[filename].split('\n').forEach(line => addLine(line));
+                } else {
+                    addHTML(`<span class="c-red">cat: ${args[0]}: No such file or directory</span>`);
+                }
+            },
+
+            clear: async () => {
+                terminalOutput.innerHTML = '';
+            }
+        };
+
+        async function runBarcode(args) {
+            const dnaOnly = args.includes('--dna-only');
+            const abOnly = args.includes('--ab-only');
+
+            addLine('');
+            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
+            addHTML('<span class="c-cyan c-bold">  DAB-seq Pipeline v1.2 — BARCODE MODE</span>');
+            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
+            addLine('');
+
+            // Step 1: Load barcodes
+            addHTML('<span class="c-yellow">[1/4]</span> Loading barcodes...');
+            await sleep(600);
+            addHTML('  <span class="c-gray">→</span> 737,280 cell barcodes loaded');
+            if (!dnaOnly) {
+                addHTML('  <span class="c-gray">→</span> 8 antibody targets: CD34, CD38, CD45, CD117, CD33, CD14, CD15, HLA-DR');
+            }
+            addLine('');
+
+            // Step 2: DNA processing
+            if (!abOnly) {
+                addHTML('<span class="c-yellow">[2/4]</span> Processing DNA panel...');
+                await animateProgress('Demultiplex', 2000);
+                await animateProgress('Align      ', 2500);
+                await animateProgress('GVCF       ', 2000);
+                addHTML('  <span class="c-green">✓</span> 12,847 cells processed (87.9% barcode match rate)');
                 addLine('');
+            }
+
+            // Step 3: Antibody processing
+            if (!dnaOnly) {
+                addHTML('<span class="c-yellow">[3/4]</span> Processing antibody tags...');
+                await animateProgress('UMI extract', 1200);
+                await animateProgress('Tag count  ', 1500);
+                await animateProgress('Deduplicate', 1000);
+                addHTML('  <span class="c-green">✓</span> 11,924 cells with antibody signal');
+                addLine('');
+            }
+
+            // Step 4: Write outputs
+            addHTML('<span class="c-yellow">[4/4]</span> Writing outputs...');
+            await sleep(800);
+            filesystem['~/output'].contents = ['Sample1.gvcf.gz', 'Sample1.ab_counts.csv', 'cell_metadata.csv'];
+            addHTML('  <span class="c-gray">→</span> output/Sample1.gvcf.gz');
+            addHTML('  <span class="c-gray">→</span> output/Sample1.ab_counts.csv');
+            addHTML('  <span class="c-gray">→</span> output/cell_metadata.csv');
+            addLine('');
+
+            addHTML('<span class="c-green c-bold glow">✓ Barcode mode complete!</span>');
+            addHTML('<span class="c-gray">Run "dabseq_pipeline.py genotype" for joint variant calling.</span>');
+            addLine('');
+        }
+
+        async function runGenotype(args) {
+            addLine('');
+            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
+            addHTML('<span class="c-cyan c-bold">  DAB-seq Pipeline v1.2 — GENOTYPE MODE</span>');
+            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
+            addLine('');
+
+            // Step 1: Import
+            addHTML('<span class="c-yellow">[1/3]</span> Importing GVCFs to GenomicsDB...');
+            await animateProgress('Import     ', 2500);
+            addHTML('  <span class="c-green">✓</span> 12,847 cell GVCFs imported');
+            addLine('');
+
+            // Step 2: Joint genotyping
+            addHTML('<span class="c-yellow">[2/3]</span> Joint genotyping (GATK GenotypeGVCFs)...');
+            await animateProgress('chr1-chr7  ', 1500);
+            await animateProgress('chr8-chr14 ', 1500);
+            await animateProgress('chr15-chrX ', 1500);
+            addLine('');
+            addHTML('  <span class="c-magenta">Variant Summary:</span>');
+            addHTML('    Total variants: <span class="c-cyan">1,247</span>');
+            addHTML('    SNPs: <span class="c-cyan">892</span> | Indels: <span class="c-cyan">355</span>');
+            addHTML('    High-confidence: <span class="c-green">1,089</span>');
+            addLine('');
+
+            // Step 3: Generate matrices
+            addHTML('<span class="c-yellow">[3/3]</span> Generating output matrices...');
+            await sleep(1200);
+            filesystem['~/output'].contents = ['genotypes.h5', 'antibody_counts.h5', 'variants.vcf.gz', 'cell_metadata.csv'];
+            addHTML('  <span class="c-gray">→</span> output/genotypes.h5 <span class="c-gray">(12,847 cells × 1,089 variants)</span>');
+            addHTML('  <span class="c-gray">→</span> output/antibody_counts.h5 <span class="c-gray">(11,924 cells × 8 antibodies)</span>');
+            addHTML('  <span class="c-gray">→</span> output/variants.vcf.gz');
+            addLine('');
+
+            addHTML('<span class="c-green c-bold glow">✓ Genotype mode complete!</span>');
+            addHTML('<span class="c-gray">Results saved to output/ directory.</span>');
+            addLine('');
+        }
+
+        async function animateProgress(label, duration) {
+            const steps = 25;
+            const delay = duration / steps;
+            
+            for (let i = 0; i <= steps; i++) {
+                const pct = Math.round((i / steps) * 100);
+                const filled = Math.round((i / steps) * 20);
+                const empty = 20 - filled;
+                const bar = '█'.repeat(filled) + '░'.repeat(empty);
+                
+                // Update last line or create new one
+                const lines = terminalOutput.querySelectorAll('.terminal-line');
+                const lastLine = lines[lines.length - 1];
+                
+                if (i === 0) {
+                    addHTML(`  <span class="c-gray">${label}</span> <span class="c-green">[${bar}]</span> <span class="c-white">${pct}%</span>`);
+                } else {
+                    lastLine.innerHTML = `  <span class="c-gray">${label}</span> <span class="c-green">[${bar}]</span> <span class="c-white">${pct}%</span>`;
+                }
+                scrollToBottom();
+                await sleep(delay);
             }
         }
 
-        // Initialize terminal
-        addLine('╔════════════════════════════════════════════╗', 'cyan');
-        addLine('║   Bioinformatics Pipeline Terminal        ║', 'cyan');
-        addLine('╚════════════════════════════════════════════╝', 'cyan');
-        addLine('', 'white');
-        addLine('Welcome! Type help to see available commands.', 'white');
-        addLine('', 'white');
+        async function executeCommand(input) {
+            const parts = input.trim().split(/\s+/);
+            const cmd = parts[0].toLowerCase();
+            const args = parts.slice(1);
 
-        // Handle input
+            // Show the command
+            addHTML(`<span class="c-green">user</span>:<span class="c-cyan">${currentPath}</span>$ ${input}`);
+
+            if (!cmd) return;
+
+            // Handle dabseq_pipeline.py
+            if (cmd === 'dabseq_pipeline.py' || cmd === './dabseq_pipeline.py') {
+                if (args[0] === 'barcode') {
+                    await runBarcode(args.slice(1));
+                } else if (args[0] === 'genotype') {
+                    await runGenotype(args.slice(1));
+                } else if (args.includes('--help') || args.includes('-h')) {
+                    await commands.help();
+                } else {
+                    addHTML('<span class="c-red">Usage: dabseq_pipeline.py &lt;barcode|genotype&gt; [options]</span>');
+                    addLine('Try --help for more info.');
+                }
+                return;
+            }
+
+            // Handle built-in commands
+            if (commands[cmd]) {
+                await commands[cmd](args);
+            } else {
+                addHTML(`<span class="c-red">${cmd}: command not found</span>`);
+                addLine('Type "help" for available commands.');
+            }
+        }
+
+        // Welcome message
+        function showWelcome() {
+            addHTML('<span class="ascii-art">┌──────────────────────────────────────────────┐</span>');
+            addHTML('<span class="ascii-art">│</span>  <span class="c-cyan c-bold">DAB-seq Pipeline Simulator</span>                <span class="ascii-art">│</span>');
+            addHTML('<span class="ascii-art">│</span>  <span class="c-gray">Single-Cell DNA + Antibody Sequencing</span>     <span class="ascii-art">│</span>');
+            addHTML('<span class="ascii-art">└──────────────────────────────────────────────┘</span>');
+            addLine('');
+            addHTML('<span class="c-gray">Type</span> <span class="c-green">help</span> <span class="c-gray">to see available commands.</span>');
+            addLine('');
+        }
+
+        // Input handling
         terminalInput.addEventListener('keydown', async (e) => {
             if (e.key === 'Enter' && !isProcessing) {
                 const cmd = terminalInput.value;
+                terminalInput.value = '';
+                
                 if (cmd.trim()) {
                     commandHistory.push(cmd);
                     historyIndex = -1;
-                    terminalInput.value = '';
-                    await executeCommand(cmd);
                 }
+                
+                isProcessing = true;
+                terminalInput.disabled = true;
+                
+                await executeCommand(cmd);
+                
+                isProcessing = false;
+                terminalInput.disabled = false;
+                terminalInput.focus();
+                
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 if (commandHistory.length > 0) {
                     if (historyIndex === -1) {
                         historyIndex = commandHistory.length - 1;
-                    } else {
-                        historyIndex = Math.max(0, historyIndex - 1);
+                    } else if (historyIndex > 0) {
+                        historyIndex--;
                     }
                     terminalInput.value = commandHistory[historyIndex];
                 }
@@ -391,10 +610,11 @@
             }
         });
 
-        // Click anywhere to focus input
-        terminalBody.addEventListener('click', () => {
-            terminalInput.focus();
-        });
+        // Click to focus
+        terminalBody.addEventListener('click', () => terminalInput.focus());
+
+        // Initialize
+        showWelcome();
     </script>
 </body>
 </html>
