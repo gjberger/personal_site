@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAB-seq Pipeline Terminal</title>
+    <title>DAB-seq v2 Terminal</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            background: #e8e8e8;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,38 +20,28 @@
 
         .terminal-wrapper {
             width: 100%;
-            max-width: 950px;
-            filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5));
+            max-width: 900px;
+            filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.15));
         }
 
         .terminal-container {
-            background: #0d1117;
-            border-radius: 12px;
+            background: #ffffff;
+            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid #30363d;
+            border: 1px solid #d0d0d0;
         }
 
         .terminal-header {
-            padding: 14px 20px;
-            background: linear-gradient(180deg, #21262d 0%, #161b22 100%);
-            border-bottom: 1px solid #30363d;
+            padding: 12px 16px;
+            background: linear-gradient(180deg, #f6f6f6 0%, #e8e8e8 100%);
+            border-bottom: 1px solid #d0d0d0;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .window-controls {
-            display: flex;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            transition: filter 0.2s;
-        }
-        .dot:hover { filter: brightness(1.2); }
+        .window-controls { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot.red { background: #ff5f57; }
         .dot.yellow { background: #febc2e; }
         .dot.green { background: #28c840; }
@@ -63,128 +49,71 @@
         .terminal-title {
             flex: 1;
             text-align: center;
-            color: #8b949e;
+            color: #555;
             font-size: 13px;
             font-weight: 500;
         }
 
         .terminal-badge {
-            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            background: #0969da;
             color: #fff;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .terminal-body {
-            height: 520px;
+            height: 480px;
             overflow-y: auto;
-            padding: 20px;
-            font-size: 14px;
+            padding: 16px;
+            font-size: 13px;
             line-height: 1.6;
             cursor: text;
+            background: #fafafa;
         }
 
-        .terminal-line {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            margin-bottom: 2px;
-        }
-
-        .terminal-input-line {
-            display: flex;
-            align-items: center;
-            margin-top: 4px;
-        }
-
-        .terminal-prompt {
-            color: #3fb950;
-            margin-right: 8px;
-            user-select: none;
-        }
-
-        .terminal-prompt .path {
-            color: #58a6ff;
-        }
+        .terminal-line { white-space: pre-wrap; word-wrap: break-word; }
+        .terminal-input-line { display: flex; align-items: center; margin-top: 4px; }
+        .terminal-prompt { color: #1a7f37; font-weight: 600; margin-right: 8px; }
+        .terminal-prompt .path { color: #0969da; }
 
         #terminal-input {
             flex: 1;
             background: transparent;
             border: none;
             outline: none;
-            color: #e6edf3;
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 14px;
-            caret-color: #58a6ff;
+            color: #1f2328;
+            font-family: inherit;
+            font-size: 13px;
+            caret-color: #0969da;
         }
+        #terminal-input:disabled { opacity: 0.5; }
 
-        #terminal-input:disabled {
-            opacity: 0.6;
-        }
+        /* High contrast colors for light background */
+        .c-default { color: #1f2328; }
+        .c-gray { color: #656d76; }
+        .c-green { color: #1a7f37; }
+        .c-cyan { color: #0969da; }
+        .c-yellow { color: #9a6700; }
+        .c-red { color: #cf222e; }
+        .c-purple { color: #8250df; }
 
-        /* Colors */
-        .c-white { color: #e6edf3; }
-        .c-gray { color: #8b949e; }
-        .c-green { color: #3fb950; }
-        .c-cyan { color: #58a6ff; }
-        .c-yellow { color: #d29922; }
-        .c-red { color: #f85149; }
-        .c-magenta { color: #a371f7; }
-        .c-bold { font-weight: 600; }
+        .terminal-body::-webkit-scrollbar { width: 8px; }
+        .terminal-body::-webkit-scrollbar-track { background: #f0f0f0; }
+        .terminal-body::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 4px; }
 
-        /* Progress bar animation */
-        .progress-bar {
-            color: #3fb950;
-        }
-
-        /* ASCII art styling */
-        .ascii-art {
-            color: #58a6ff;
-            line-height: 1.2;
-        }
-
-        /* Scrollbar */
-        .terminal-body::-webkit-scrollbar {
-            width: 8px;
-        }
-        .terminal-body::-webkit-scrollbar-track {
-            background: #0d1117;
-        }
-        .terminal-body::-webkit-scrollbar-thumb {
-            background: #30363d;
-            border-radius: 4px;
-        }
-        .terminal-body::-webkit-scrollbar-thumb:hover {
-            background: #484f58;
-        }
-
-        /* Glow effect for special output */
-        .glow {
-            text-shadow: 0 0 10px currentColor;
-        }
-
-        /* Footer */
         .terminal-footer {
-            padding: 10px 20px;
-            background: #161b22;
-            border-top: 1px solid #30363d;
+            padding: 8px 16px;
+            background: #f6f6f6;
+            border-top: 1px solid #d0d0d0;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             font-size: 11px;
-            color: #6e7681;
+            color: #656d76;
         }
-
-        .footer-link {
-            color: #58a6ff;
-            text-decoration: none;
-        }
-        .footer-link:hover {
-            text-decoration: underline;
-        }
+        .terminal-footer a { color: #0969da; text-decoration: none; }
+        .terminal-footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -196,8 +125,8 @@
                     <span class="dot yellow"></span>
                     <span class="dot green"></span>
                 </div>
-                <div class="terminal-title">dabseq_pipeline.py — bash</div>
-                <div class="terminal-badge">v1.2</div>
+                <div class="terminal-title">dabseq — bash</div>
+                <div class="terminal-badge">C++17</div>
             </div>
             <div class="terminal-body" id="terminal-body">
                 <div id="terminal-output"></div>
@@ -207,8 +136,8 @@
                 </div>
             </div>
             <div class="terminal-footer">
-                <span>DAB-seq: Single-Cell DNA + Antibody Sequencing</span>
-                <a class="footer-link" href="https://github.com/AbateLab/DAb-seq" target="_blank">Abate Lab @ UCSF</a>
+                <span>DAB-seq v2 — Single-Cell Leukemia Sequencing Pipeline</span>
+                <a href="https://github.com/gjberger/dabseq_v2" target="_blank">github.com/gjberger/dabseq_v2</a>
             </div>
         </div>
     </div>
@@ -224,74 +153,56 @@
         let isProcessing = false;
         let currentPath = '~';
 
-        // Simulated filesystem
         const filesystem = {
-            '~': {
-                type: 'dir',
-                contents: ['barcodes/', 'fastq/', 'config/', 'output/', 'dabseq_pipeline.py', 'README.md']
-            },
-            '~/barcodes': {
-                type: 'dir',
-                contents: ['cell_barcodes_v1.txt', 'antibody_barcodes.csv']
-            },
-            '~/fastq': {
-                type: 'dir',
-                contents: ['panel_R1.fastq.gz', 'panel_R2.fastq.gz', 'abs_R1.fastq.gz', 'abs_R2.fastq.gz']
-            },
-            '~/config': {
-                type: 'dir',
-                contents: ['dabseq.hg19.cfg', 'panel_targets.bed']
-            },
-            '~/output': {
-                type: 'dir',
-                contents: []
-            }
+            '~': { contents: ['data/', 'cell_counts/', 'src/', 'dabseq', 'Makefile', 'README.md'] },
+            '~/data': { contents: ['R1.fastq.gz', 'R2.fastq.gz', 'cell_barcodes.csv', 'antibody_barcodes.csv'] },
+            '~/cell_counts': { contents: [] },
+            '~/src': { contents: ['main.cpp', 'fastq_reader.cpp', 'fastq_reader.h', 'barcode_index.cpp', 'barcode_index.h', 'dabseq_utilities.cpp', 'dabseq_utilities.h'] }
         };
 
         const fileContents = {
-            'README.md': `# DAB-seq Pipeline
-Combined single-cell DNA genotyping and protein quantification.
-Abate Lab @ UCSF | Nature Communications 2021`,
-            'cell_barcodes_v1.txt': `AAACCTGAGAAACCAT
-AAACCTGAGAAACGAG
-AAACCTGAGAAACTGT
-AAACCTGAGAAATGGT
-... (737,280 total barcodes)`,
-            'antibody_barcodes.csv': `antibody,barcode,sequence
-CD34,AB001,AGTCAGTCAGTC
-CD38,AB002,TCGATCGATCGA
-CD45,AB003,GCTAGCTAGCTA
-CD117,AB004,ATCGATCGATCG
-CD33,AB005,CGATCGATCGAT
-CD14,AB006,TAGCTAGCTAGC
-CD15,AB007,GATCGATCGATC
-HLA-DR,AB008,CTGACTGACTGA`,
-            'dabseq.hg19.cfg': `[reference]
-genome = hg19
-fasta = /ref/hg19.fa
-index = /ref/hg19.fa.fai
+            'README.md': `# DAB-seq v2
+C++ data processing pipeline for high-throughput
+single-cell leukemia sequencing data.
 
-[pipeline]
-threads = 16
-memory = 64G
-temp_dir = /tmp/dabseq
+Usage:
+  ./dabseq R1.fastq[.gz] R2.fastq[.gz] cell_barcodes.csv antibody_barcodes.csv
 
-[gatk]
-java_opts = -Xmx32g
-intervals = panel_targets.bed`,
-            'panel_targets.bed': `chr1\t115256528\t115256623\tNRAS
-chr7\t55241607\t55241727\tEGFR
-chr12\t25398208\t25398329\tKRAS
-chr17\t7577498\t7577608\tTP53
-chr13\t28592634\t28592750\tFLT3`
+Build:
+  make`,
+            'Makefile': `CXX = g++
+CXXFLAGS = -std=c++17 -O3 -Wall
+LDFLAGS = -lz -lhts
+
+SRCS = main.cpp fastq_reader.cpp barcode_index.cpp dabseq_utilities.cpp
+TARGET = dabseq
+
+all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+clean:
+	rm -f $(TARGET)`,
+            'cell_barcodes.csv': `TAGACCATG,1
+TGAACGGTT,2
+AAACCTGAG,3
+GAAACGAGT,4
+... (1536 Mission Bio cell barcodes)`,
+            'antibody_barcodes.csv': `CCGTGTTCCTCATTA,CD71
+TCACCAGTACCTCAT,CD34
+GACAAGTGATCTGCA,CD38
+TGTGTATTCCCTTGT,CD45
+ATGTTTTGGCTCAAT,CD117
+... (46 TotalSeq-B antibodies)`
         };
 
-        function addLine(text, className = 'c-white') {
+        function addLine(text, className = 'c-default') {
             const line = document.createElement('div');
             line.className = `terminal-line ${className}`;
             line.innerHTML = text || '&nbsp;';
             terminalOutput.appendChild(line);
-            scrollToBottom();
+            terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
         function addHTML(html) {
@@ -299,10 +210,6 @@ chr13\t28592634\t28592750\tFLT3`
             line.className = 'terminal-line';
             line.innerHTML = html;
             terminalOutput.appendChild(line);
-            scrollToBottom();
-        }
-
-        function scrollToBottom() {
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
@@ -310,310 +217,139 @@ chr13\t28592634\t28592750\tFLT3`
             promptEl.innerHTML = `user:<span class="path">${currentPath}</span>$`;
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
         function resolvePath(p) {
             if (!p || p === '~') return '~';
-            if (p === '..') {
-                if (currentPath === '~') return '~';
-                return currentPath.split('/').slice(0, -1).join('/') || '~';
-            }
+            if (p === '..') return currentPath === '~' ? '~' : (currentPath.split('/').slice(0, -1).join('/') || '~');
             if (p.startsWith('~/')) return p;
-            if (p.startsWith('/')) return '~' + p;
             const clean = p.replace(/\/$/, '');
             return currentPath === '~' ? `~/${clean}` : `${currentPath}/${clean}`;
         }
 
-        // Commands
         const commands = {
             help: async () => {
                 addLine('');
-                addHTML('<span class="c-cyan c-bold">Available Commands:</span>');
+                addHTML('<span class="c-cyan">Commands:</span>');
+                addHTML('  ls, cd, cat, pwd, clear, make, help');
                 addLine('');
-                addHTML('  <span class="c-green">ls</span>                      List directory contents');
-                addHTML('  <span class="c-green">cd</span> &lt;dir&gt;               Change directory');
-                addHTML('  <span class="c-green">cat</span> &lt;file&gt;             View file contents');
-                addHTML('  <span class="c-green">pwd</span>                     Print working directory');
-                addHTML('  <span class="c-green">clear</span>                   Clear terminal');
-                addHTML('  <span class="c-green">help</span>                    Show this message');
-                addLine('');
-                addHTML('<span class="c-cyan c-bold">Pipeline Commands:</span>');
-                addLine('');
-                addHTML('  <span class="c-yellow">dabseq_pipeline.py barcode</span>   Run barcode mode');
-                addHTML('  <span class="c-yellow">dabseq_pipeline.py genotype</span>  Run genotype mode');
-                addLine('');
-                addHTML('<span class="c-gray">Options: --dna-only, --ab-only, --help</span>');
+                addHTML('<span class="c-cyan">Pipeline:</span>');
+                addHTML('  ./dabseq R1.fastq R2.fastq cell_barcodes.csv antibody_barcodes.csv');
                 addLine('');
             },
-
-            pwd: async () => {
-                addLine(currentPath.replace('~', '/home/user'));
-            },
-
+            pwd: async () => { addLine(currentPath.replace('~', '/home/user')); },
             ls: async (args) => {
-                let targetPath = currentPath;
-                if (args && args[0]) {
-                    targetPath = resolvePath(args[0]);
-                }
-                const dir = filesystem[targetPath];
-                if (!dir) {
-                    addHTML(`<span class="c-red">ls: cannot access '${args[0]}': No such file or directory</span>`);
-                    return;
-                }
-                if (dir.contents.length === 0) {
-                    addLine('');
-                    return;
-                }
-                const output = dir.contents.map(f => 
-                    f.endsWith('/') ? `<span class="c-cyan">${f}</span>` : `<span class="c-white">${f}</span>`
-                ).join('  ');
-                addHTML(output);
+                const target = args?.[0] ? resolvePath(args[0]) : currentPath;
+                const dir = filesystem[target];
+                if (!dir) { addHTML(`<span class="c-red">ls: cannot access '${args[0]}': No such file or directory</span>`); return; }
+                if (dir.contents.length === 0) return;
+                const out = dir.contents.map(f => f.endsWith('/') ? `<span class="c-cyan">${f}</span>` : (f === 'dabseq' ? `<span class="c-green">${f}</span>` : f)).join('  ');
+                addHTML(out);
             },
-
             cd: async (args) => {
-                if (!args || !args[0] || args[0] === '~') {
-                    currentPath = '~';
-                    updatePrompt();
-                    return;
-                }
+                if (!args?.[0] || args[0] === '~') { currentPath = '~'; updatePrompt(); return; }
                 const target = resolvePath(args[0]);
-                if (filesystem[target]) {
-                    currentPath = target;
-                    updatePrompt();
-                } else {
-                    addHTML(`<span class="c-red">cd: ${args[0]}: No such file or directory</span>`);
-                }
+                if (filesystem[target]) { currentPath = target; updatePrompt(); }
+                else { addHTML(`<span class="c-red">cd: ${args[0]}: No such file or directory</span>`); }
             },
-
             cat: async (args) => {
-                if (!args || !args[0]) {
-                    addHTML('<span class="c-red">cat: missing operand</span>');
-                    return;
-                }
-                const filename = args[0].replace('./', '');
-                if (fileContents[filename]) {
-                    fileContents[filename].split('\n').forEach(line => addLine(line));
-                } else {
-                    addHTML(`<span class="c-red">cat: ${args[0]}: No such file or directory</span>`);
-                }
+                if (!args?.[0]) { addHTML('<span class="c-red">cat: missing operand</span>'); return; }
+                const name = args[0].replace('./', '');
+                if (fileContents[name]) { fileContents[name].split('\n').forEach(l => addLine(l)); }
+                else { addHTML(`<span class="c-red">cat: ${args[0]}: No such file or directory</span>`); }
             },
-
-            clear: async () => {
-                terminalOutput.innerHTML = '';
+            clear: async () => { terminalOutput.innerHTML = ''; },
+            make: async () => {
+                addHTML('<span class="c-gray">g++ -std=c++17 -O3 -Wall -o dabseq main.cpp fastq_reader.cpp barcode_index.cpp dabseq_utilities.cpp -lz -lhts</span>');
+                await sleep(600);
+                addHTML('<span class="c-green">Build complete.</span>');
             }
         };
 
-        async function runBarcode(args) {
-            const dnaOnly = args.includes('--dna-only');
-            const abOnly = args.includes('--ab-only');
-
-            addLine('');
-            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
-            addHTML('<span class="c-cyan c-bold">  DAB-seq Pipeline v1.2 — BARCODE MODE</span>');
-            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
-            addLine('');
-
-            // Step 1: Load barcodes
-            addHTML('<span class="c-yellow">[1/4]</span> Loading barcodes...');
-            await sleep(600);
-            addHTML('  <span class="c-gray">→</span> 737,280 cell barcodes loaded');
-            if (!dnaOnly) {
-                addHTML('  <span class="c-gray">→</span> 8 antibody targets: CD34, CD38, CD45, CD117, CD33, CD14, CD15, HLA-DR');
-            }
-            addLine('');
-
-            // Step 2: DNA processing
-            if (!abOnly) {
-                addHTML('<span class="c-yellow">[2/4]</span> Processing DNA panel...');
-                await animateProgress('Demultiplex', 2000);
-                await animateProgress('Align      ', 2500);
-                await animateProgress('GVCF       ', 2000);
-                addHTML('  <span class="c-green">✓</span> 12,847 cells processed (87.9% barcode match rate)');
-                addLine('');
+        async function runDabseq(args) {
+            if (args.length !== 4) {
+                addHTML('<span class="c-red">Usage: ./dabseq R1.fastq[.gz] R2.fastq[.gz] cell_barcodes.csv antibody_barcodes.csv</span>');
+                return;
             }
 
-            // Step 3: Antibody processing
-            if (!dnaOnly) {
-                addHTML('<span class="c-yellow">[3/4]</span> Processing antibody tags...');
-                await animateProgress('UMI extract', 1200);
-                await animateProgress('Tag count  ', 1500);
-                await animateProgress('Deduplicate', 1000);
-                addHTML('  <span class="c-green">✓</span> 11,924 cells with antibody signal');
-                addLine('');
-            }
+            const totalPairs = 10000;
+            const numWithBarcodes = 8734;
+            const numWithAbPayload = 7621;
+            const numWithBoth = 7156;
 
-            // Step 4: Write outputs
-            addHTML('<span class="c-yellow">[4/4]</span> Writing outputs...');
-            await sleep(800);
-            filesystem['~/output'].contents = ['Sample1.gvcf.gz', 'Sample1.ab_counts.csv', 'cell_metadata.csv'];
-            addHTML('  <span class="c-gray">→</span> output/Sample1.gvcf.gz');
-            addHTML('  <span class="c-gray">→</span> output/Sample1.ab_counts.csv');
-            addHTML('  <span class="c-gray">→</span> output/cell_metadata.csv');
+            await sleep(400);
             addLine('');
-
-            addHTML('<span class="c-green c-bold glow">✓ Barcode mode complete!</span>');
-            addHTML('<span class="c-gray">Run "dabseq_pipeline.py genotype" for joint variant calling.</span>');
-            addLine('');
-        }
-
-        async function runGenotype(args) {
-            addLine('');
-            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
-            addHTML('<span class="c-cyan c-bold">  DAB-seq Pipeline v1.2 — GENOTYPE MODE</span>');
-            addHTML('<span class="c-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>');
-            addLine('');
-
-            // Step 1: Import
-            addHTML('<span class="c-yellow">[1/3]</span> Importing GVCFs to GenomicsDB...');
-            await animateProgress('Import     ', 2500);
-            addHTML('  <span class="c-green">✓</span> 12,847 cell GVCFs imported');
-            addLine('');
-
-            // Step 2: Joint genotyping
-            addHTML('<span class="c-yellow">[2/3]</span> Joint genotyping (GATK GenotypeGVCFs)...');
-            await animateProgress('chr1-chr7  ', 1500);
-            await animateProgress('chr8-chr14 ', 1500);
-            await animateProgress('chr15-chrX ', 1500);
-            addLine('');
-            addHTML('  <span class="c-magenta">Variant Summary:</span>');
-            addHTML('    Total variants: <span class="c-cyan">1,247</span>');
-            addHTML('    SNPs: <span class="c-cyan">892</span> | Indels: <span class="c-cyan">355</span>');
-            addHTML('    High-confidence: <span class="c-green">1,089</span>');
-            addLine('');
-
-            // Step 3: Generate matrices
-            addHTML('<span class="c-yellow">[3/3]</span> Generating output matrices...');
-            await sleep(1200);
-            filesystem['~/output'].contents = ['genotypes.h5', 'antibody_counts.h5', 'variants.vcf.gz', 'cell_metadata.csv'];
-            addHTML('  <span class="c-gray">→</span> output/genotypes.h5 <span class="c-gray">(12,847 cells × 1,089 variants)</span>');
-            addHTML('  <span class="c-gray">→</span> output/antibody_counts.h5 <span class="c-gray">(11,924 cells × 8 antibodies)</span>');
-            addHTML('  <span class="c-gray">→</span> output/variants.vcf.gz');
-            addLine('');
-
-            addHTML('<span class="c-green c-bold glow">✓ Genotype mode complete!</span>');
-            addHTML('<span class="c-gray">Results saved to output/ directory.</span>');
-            addLine('');
-        }
-
-        async function animateProgress(label, duration) {
-            const steps = 25;
-            const delay = duration / steps;
+            addLine(' Summary over ' + totalPairs + ' pairs:');
+            addLine(numWithBarcodes + ' have valid cell barcodes');
+            addLine(numWithAbPayload + ' have valid ab payloads');
+            addLine(numWithBoth + ' have both cell + ab');
             
-            for (let i = 0; i <= steps; i++) {
-                const pct = Math.round((i / steps) * 100);
-                const filled = Math.round((i / steps) * 20);
-                const empty = 20 - filled;
-                const bar = '█'.repeat(filled) + '░'.repeat(empty);
-                
-                // Update last line or create new one
-                const lines = terminalOutput.querySelectorAll('.terminal-line');
-                const lastLine = lines[lines.length - 1];
-                
-                if (i === 0) {
-                    addHTML(`  <span class="c-gray">${label}</span> <span class="c-green">[${bar}]</span> <span class="c-white">${pct}%</span>`);
-                } else {
-                    lastLine.innerHTML = `  <span class="c-gray">${label}</span> <span class="c-green">[${bar}]</span> <span class="c-white">${pct}%</span>`;
-                }
-                scrollToBottom();
-                await sleep(delay);
-            }
+            await sleep(300);
+            addLine('');
+            addLine(' cell_id     antibody_barcode     count');
+            
+            await sleep(400);
+            
+            filesystem['~/cell_counts'].contents = [
+                'cell_TAGACCATG_TGAACGGTT.csv',
+                'cell_AAACCTGAG_GAAACGAGT.csv',
+                'cell_TCGATCGAT_ATCGATCGA.csv'
+            ];
+            
+            addLine('');
         }
 
         async function executeCommand(input) {
             const parts = input.trim().split(/\s+/);
-            const cmd = parts[0].toLowerCase();
+            const cmd = parts[0];
             const args = parts.slice(1);
 
-            // Show the command
             addHTML(`<span class="c-green">user</span>:<span class="c-cyan">${currentPath}</span>$ ${input}`);
 
             if (!cmd) return;
 
-            // Handle dabseq_pipeline.py
-            if (cmd === 'dabseq_pipeline.py' || cmd === './dabseq_pipeline.py') {
-                if (args[0] === 'barcode') {
-                    await runBarcode(args.slice(1));
-                } else if (args[0] === 'genotype') {
-                    await runGenotype(args.slice(1));
-                } else if (args.includes('--help') || args.includes('-h')) {
-                    await commands.help();
-                } else {
-                    addHTML('<span class="c-red">Usage: dabseq_pipeline.py &lt;barcode|genotype&gt; [options]</span>');
-                    addLine('Try --help for more info.');
-                }
-                return;
-            }
-
-            // Handle built-in commands
-            if (commands[cmd]) {
-                await commands[cmd](args);
+            if (cmd === './dabseq' || cmd === 'dabseq') {
+                await runDabseq(args);
+            } else if (commands[cmd.toLowerCase()]) {
+                await commands[cmd.toLowerCase()](args);
             } else {
                 addHTML(`<span class="c-red">${cmd}: command not found</span>`);
-                addLine('Type "help" for available commands.');
             }
         }
 
-        // Welcome message
         function showWelcome() {
-            addHTML('<span class="ascii-art">┌──────────────────────────────────────────────┐</span>');
-            addHTML('<span class="ascii-art">│</span>  <span class="c-cyan c-bold">DAB-seq Pipeline Simulator</span>                <span class="ascii-art">│</span>');
-            addHTML('<span class="ascii-art">│</span>  <span class="c-gray">Single-Cell DNA + Antibody Sequencing</span>     <span class="ascii-art">│</span>');
-            addHTML('<span class="ascii-art">└──────────────────────────────────────────────┘</span>');
-            addLine('');
-            addHTML('<span class="c-gray">Type</span> <span class="c-green">help</span> <span class="c-gray">to see available commands.</span>');
+            addHTML('<span class="c-cyan">DAB-seq v2</span> <span class="c-gray">— C++ single-cell sequencing pipeline</span>');
+            addHTML('<span class="c-gray">Type "help" for commands</span>');
             addLine('');
         }
 
-        // Input handling
         terminalInput.addEventListener('keydown', async (e) => {
             if (e.key === 'Enter' && !isProcessing) {
                 const cmd = terminalInput.value;
                 terminalInput.value = '';
-                
-                if (cmd.trim()) {
-                    commandHistory.push(cmd);
-                    historyIndex = -1;
-                }
-                
+                if (cmd.trim()) { commandHistory.push(cmd); historyIndex = -1; }
                 isProcessing = true;
                 terminalInput.disabled = true;
-                
                 await executeCommand(cmd);
-                
                 isProcessing = false;
                 terminalInput.disabled = false;
                 terminalInput.focus();
-                
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 if (commandHistory.length > 0) {
-                    if (historyIndex === -1) {
-                        historyIndex = commandHistory.length - 1;
-                    } else if (historyIndex > 0) {
-                        historyIndex--;
-                    }
+                    historyIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
                     terminalInput.value = commandHistory[historyIndex];
                 }
             } else if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 if (historyIndex !== -1) {
                     historyIndex++;
-                    if (historyIndex >= commandHistory.length) {
-                        historyIndex = -1;
-                        terminalInput.value = '';
-                    } else {
-                        terminalInput.value = commandHistory[historyIndex];
-                    }
+                    terminalInput.value = historyIndex >= commandHistory.length ? (historyIndex = -1, '') : commandHistory[historyIndex];
                 }
             }
         });
 
-        // Click to focus
         terminalBody.addEventListener('click', () => terminalInput.focus());
-
-        // Initialize
         showWelcome();
     </script>
 </body>
