@@ -10,3 +10,8 @@ node_modules/
 npm-debug.log*
 # os
 .DS_Store
+
+# Writing is PRIVATE BY DEFAULT: unfinished/personal drafts stay local, never committed.
+# To publish a piece: set draft:false AND add a matching "!" exception line below.
+src/content/writing/*.md
+!src/content/writing/wifi-build-log.md
