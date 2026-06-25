@@ -54,7 +54,7 @@ timing, so there was a lot of margin to be wrong in.
 
 ![SDIO bus signals](/img/wifi/figure36.png)
 
-*From the SDIO spec: the bus lines I had to drive by hand: clock, command, and four data lines.*
+*From the SDIO spec: the clock, command, and four data lines I had to drive by hand.*
 
 ![SDIO functions](/img/wifi/sdio_funcs.png)
 
