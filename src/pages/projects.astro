@@ -36,13 +36,13 @@ const projects = [
     body: `A Subway Surfers-style game written in C on a Mango Pi (RISC-V), bare metal
       with no OS or libraries. You switch lanes by tilting a real skateboard wired to an
       MPU-6050 gyroscope, read over I2C with interrupts; obstacles spawn on a timer and
-      the graphics run on a model-view-controller setup. Built with Finley Desai.`,
+      the graphics run on a model-view-controller setup. Built with <a href="https://www.linkedin.com/in/finley-desai-306246268/">Finley Desai</a>.`,
+    bodyHtml: true,
     tags: ["RISC-V", "Mango Pi", "bare-metal", "C", "MPU-6050 / I2C", "game"],
     ai: "Built without AI",
     actions: [
       { label: "watch the demo →", href: "https://youtu.be/-RlIWbqkDPk" },
       { label: "github ↗", href: "https://github.com/gjberger/cs107e_project" },
-      { label: "Finley Desai ↗", href: "https://www.linkedin.com/in/finley-desai-306246268/" },
     ],
   },
   {
@@ -129,7 +129,7 @@ const projects = [
             <span class="when">{p.when}</span>
           </div>
           <p class="role">{p.role}</p>
-          <p>{p.body}</p>
+          {p.bodyHtml ? <p set:html={p.body} /> : <p>{p.body}</p>}
           {p.img && <img src={p.img} alt={p.title} loading="lazy" style="max-height: 340px; max-width: 100%; border-radius: 8px; margin-top: 0.7rem; display: block" />}
           {p.ai && <p class="muted" style="font-size: 0.8rem; margin-top: 0.35rem">{p.ai}</p>}
           <div class="tags">
