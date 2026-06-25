@@ -2,7 +2,7 @@
 title: "Building a quantified-self dashboard"
 date: 2026-06-23
 description: "Gluing Oura and Hevy into one local dashboard with Flask and a little React, and how to build your own."
-draft: false
+draft: true
 ---
 
 I wanted my own data (sleep, readiness, workouts) in one place instead of four
