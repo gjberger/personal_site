@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 const positions = [
   {
     lab: "Alizadeh Lab",
+    url: "https://med.stanford.edu/ash_alizadeh.html",
     org: "Stanford Cancer Institute",
     role: "Visiting Student Researcher (incoming)",
     when: "summer 2026",
@@ -11,10 +12,11 @@ const positions = [
       often-fatal point where chronic lymphocytic leukemia turns into an aggressive
       lymphoma. Cell types shed DNA and RNA into the blood differently, so measuring
       cell-free DNA against cell-free RNA can separate the transformed clone from the
-      leukemia it came from. The samples come from a phase-2 trial.`,
+      leukemia it came from.`,
   },
   {
     lab: "Smith Lab",
+    url: "https://www.smithlabucsf.com/",
     org: "UCSF Department of Medicine",
     role: "Visiting Student Researcher",
     when: "since 2025",
@@ -22,11 +24,11 @@ const positions = [
       pipeline (DAB-seq v2) for leukemia research, so a patient's samples can be
       followed across diagnosis, remission, and relapse to study treatment response
       and resistance. I wrote a modular C++/Python toolchain that runs on Slurm-based
-      HPC, about 10× faster than the old one, and it's headed for use across research
-      institutions.`,
+      HPC, about 10× faster than the old one.`,
   },
   {
     lab: "Bogyo Lab",
+    url: "https://med.stanford.edu/bogyolab.html",
     org: "Stanford University School of Medicine",
     role: "Visiting Student Researcher",
     when: "2022-24",
@@ -50,7 +52,7 @@ const positions = [
       positions.map((r) => (
         <div class="entry">
           <div class="head">
-            <h3>{r.lab} <span class="muted" style="font-weight:400">· {r.org}</span></h3>
+            <h3>{r.url ? <a href={r.url} target="_blank" rel="noopener">{r.lab}</a> : r.lab} <span class="muted" style="font-weight:400">· {r.org}</span></h3>
             <span class="when">{r.when}</span>
           </div>
           <p class="role">{r.role}</p>
