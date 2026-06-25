@@ -7,7 +7,7 @@ draft: false
 
 I wanted my own data (sleep, readiness, workouts) in one place instead of four
 different apps. So I built a small local dashboard, "Me, Quantified." It's a file of
-Python and one HTML page, and it taught me more about API plumbing than any tutorial.
+Python and one HTML page.
 Here's how it works, and how to build your own.
 
 ## The shape of it
