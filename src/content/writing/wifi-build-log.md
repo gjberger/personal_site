@@ -5,7 +5,7 @@ description: "Getting a Raspberry Pi Zero W onto WiFi with no operating system, 
 draft: false
 ---
 
-This was my final project for CS140E, Stanford's bare-metal systems class — the one
+This was my final project for CS140E, Stanford's bare-metal systems class, the one
 where you build up from nothing on a Raspberry Pi, no operating system to stand on. I
 wanted the hardest version of "how does this actually work," so I went for the radio.
 
@@ -54,7 +54,7 @@ timing, so there was a lot of margin to be wrong in.
 
 ![SDIO bus signals](/img/wifi/figure36.png)
 
-*From the SDIO spec: the bus lines I had to drive by hand — clock, command, and four data lines.*
+*From the SDIO spec: the bus lines I had to drive by hand: clock, command, and four data lines.*
 
 ![SDIO functions](/img/wifi/sdio_funcs.png)
 
@@ -62,12 +62,12 @@ timing, so there was a lot of margin to be wrong in.
 
 ## Into the transfer state, then the backplane
 SDIO initialization (CMD5 → CMD3 → CMD7) to get the card into the transfer state, widen
-the bus, and enable function 1 — the "backplane" that exposes the chip's internal 32-bit
+the bus, and enable function 1, the "backplane" that exposes the chip's internal 32-bit
 address space. First proof of life: reading the chip ID over the backplane.
 
 ![CMD5 format](/img/wifi/cmd5_format.png)
 
-*From the spec: CMD5, the first command — it negotiates voltage and starts SDIO initialization.*
+*From the spec: CMD5, the first command, which negotiates voltage and starts SDIO initialization.*
 
 ![Enabling a function via the CCCR](/img/wifi/cccr_enablefunc.png)
 
@@ -86,26 +86,26 @@ mailbox: ready.
 
 ![The on-chip CPU](/img/wifi/onchip_cpu.png)
 
-*From the datasheet: the chip's own Cortex-M3 and SRAM — the thing the firmware runs on once you upload it.*
+*From the datasheet: the chip's own Cortex-M3 and SRAM, the thing the firmware runs on once you upload it.*
 
 ![CYW43438 internals](/img/wifi/wifichipdiagram.png)
 
 *From the datasheet: the WLAN core, with the processor and memory the firmware lives in.*
 
 ## Talking to the firmware (IOCTL / SDPCM)
-Once the firmware is running its own CPU, you can't poke registers anymore — you have to
+Once the firmware is running its own CPU, you can't poke registers anymore. You have to
 message it. That's SDPCM + CDC framing over function 2, with channels for control
 (scan, join, set security), events (scan results, join status), and network traffic.
 
 ![WLAN software architecture](/img/wifi/wlan_softwarearchitecture.png)
 
-*From the datasheet: the firmware's software stack — what you're sending messages to once the core is live.*
+*From the datasheet: the firmware's software stack, what you're sending messages to once the core is live.*
 
 ## Scanning and joining
 An escan request over the control channel, then parse one event per network found.
 (Fun fact: the Pi Zero W is 2.4 GHz only.) Joining means association plus the WPA2 key
-exchange — and you're not done until you've seen *both* the association event and the
-keys-installed event. Aside: this is why Stanford is nearly impossible — eduroam is
+exchange, and you're not done until you've seen *both* the association event and the
+keys-installed event. Aside: this is why Stanford is nearly impossible: eduroam is
 WPA2-Enterprise, per-person credentials over a captive portal, a nightmare for a
 bare-metal driver.
 
@@ -113,19 +113,19 @@ bare-metal driver.
 With a clean data path, every Ethernet frame the radio receives lands on the data
 channel. DHCP is a four-message handshake (discover → offer → request → ack), each one a
 hand-built Ethernet + IP + UDP + DHCP frame. After that I had an IP, a gateway, and a
-netmask. To prove the whole path end to end, the Pi sends a UDP broadcast — "hello from
-bare-metal pi zero w!" — and sits in a loop answering ARP requests and ICMP pings, so
+netmask. To prove the whole path end to end, the Pi sends a UDP broadcast ("hello from
+bare-metal pi zero w!") and sits in a loop answering ARP requests and ICMP pings, so
 other machines can find it and reach it. Built straight from the RFCs (826, 792, 768,
 791).
 
 ![The Raspberry Pi Zero W showing up as a client on my router](/img/wifi/pi-on-network.png)
 
-*Proof it worked: the bare-metal Pi (192.168.8.181) shows up in the router's client list — on the network, with its own IP, no operating system anywhere.*
+*Proof it worked: the bare-metal Pi (192.168.8.181) shows up in the router's client list, on the network, with its own IP, no operating system anywhere.*
 
 ## Why an LLM
 The hardware is documented but scattered: tracing GPIO43 to `LPO_IN` across the device
 tree, the datasheet, and the schematic is tedious but doable. The software interface is
-the opposite — proprietary, undocumented, only legible by reading the Linux `brcmfmac`
+the opposite: proprietary, undocumented, only legible by reading the Linux `brcmfmac`
 driver. An LLM was a real accelerant there, and a lot of the C came from pairing with
 one. The engineering was in driving it: deciding the sequence, debugging the silence,
 and understanding it well enough to write this down.
