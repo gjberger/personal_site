@@ -5,13 +5,10 @@ description: "Gluing Oura and Hevy into one local dashboard with Flask and a lit
 draft: false
 ---
 
-<!-- Technical build log / how-to, drafted from your Me-Quantified source. Review and set draft: false.
-     Deliberately kept to the engineering — your personal health/meds data stays out of the public version. -->
-
-I wanted my own data — sleep, readiness, workouts — in one place instead of four
-different apps. So I built a small local dashboard, "Me, Quantified." It's about a
-file of Python and one HTML page, and it taught me more about API plumbing than any
-tutorial. Here's how it works, and how to build your own.
+I wanted my own data (sleep, readiness, workouts) in one place instead of four
+different apps. So I built a small local dashboard, "Me, Quantified." It's a file of
+Python and one HTML page, and it taught me more about API plumbing than any tutorial.
+Here's how it works, and how to build your own.
 
 ## The shape of it
 
@@ -27,12 +24,12 @@ GitHub  ──┘     5-min cache · normalize by date · return JSON
 
 ## The data sources
 
-- **Oura** — sleep, readiness, activity, resilience. You make a personal access token in
+- **Oura**: sleep, readiness, activity, resilience. You make a personal access token in
   the Oura developer portal; the `oura-ring` Python client covers most endpoints, with
   raw `requests` for the newer ones.
-- **Hevy** — strength workouts: exercises, sets, reps, volume, which I map to muscle
+- **Hevy**: strength workouts. Exercises, sets, reps, volume, which I map to muscle
   groups and an auto-detected "split." Auth is a single `api-key` header.
-- **GitHub** (optional side feature) — a little kanban that reads a course repo's labs
+- **GitHub** (optional side feature): a little kanban that reads a course repo's labs
   and turns each README into a task. Unauthenticated REST is plenty.
 
 Keys live in a `.env` next to the server:
@@ -63,4 +60,4 @@ python server.py          # serves http://localhost:5001
 
 It's a long-running local process, not a cron job: the page fetches live, the server
 caches, and a background thread or two poll GitHub and any deadlines. Keep it bound to
-`127.0.0.1` — it's your data, and it never has to leave your machine.
+`127.0.0.1`. It's your data, and it never has to leave your machine.
