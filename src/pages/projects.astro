@@ -11,6 +11,7 @@ const projects = [
       built it for Stanford's advanced systems course, and I'm now refining the
       design with Prof. Mark Horowitz, with the goal of an actual silicon tape-out.`,
     tags: ["RISC-V", "RTL / Verilog", "Verilator", "computer architecture"],
+    ai: "Built without AI",
     actions: [
       { label: "slides ↗", href: "https://docs.google.com/presentation/d/1eM30zefdneeNq4L18o5cn-lGOrb1QurfjWYZ5y85uEI/edit" },
     ],
@@ -25,6 +26,7 @@ const projects = [
       reading the datasheet until the hardware finally answered, then documenting the
       whole bring-up.`,
     tags: ["C", "bare-metal", "SDIO", "WPA2 / DHCP / UDP", "reverse-engineering"],
+    ai: "Used AI to reverse-engineer Linux kernel source",
     actions: [],
   },
   {
@@ -38,6 +40,7 @@ const projects = [
       researchers follow a patient's samples from diagnosis through remission to
       relapse. Built at UCSF and planned for use across research institutions.`,
     tags: ["C++17", "Python", "Slurm / HPC", "GNU Parallel", "bioinformatics"],
+    ai: "AI used to extend it",
     actions: [
       { label: "live terminal demo →", href: "/dabseq" },
       { label: "github ↗", href: "https://github.com/gjberger/dabseq_v2" },
@@ -51,6 +54,7 @@ const projects = [
       alongside physics so the intuition comes before the machinery. The throughline:
       start from where an idea comes from, not the formula it ends up as.`,
     tags: ["teaching", "calculus", "curriculum design"],
+    ai: "I built most of it; AI used to extend it",
     actions: [],
   },
   {
@@ -62,6 +66,7 @@ const projects = [
       and driven over SPI. Mostly an exercise in doing a lot with 648×480
       black-and-white pixels.`,
     tags: ["Python", "Raspberry Pi", "Pillow", "e-ink / SPI"],
+    ai: "Built with AI",
     actions: [],
   },
   {
@@ -74,6 +79,7 @@ const projects = [
       in gluing a few APIs together cleanly: live fetches, a short cache, atomic JSON
       writes.`,
     tags: ["Python", "Flask", "React", "REST APIs", "Oura / Hevy"],
+    ai: "Built with AI",
     actions: [
       { label: "build your own →", href: "/writing/quantified-self" },
     ],
@@ -108,6 +114,7 @@ const projects = [
           </div>
           <p class="role">{p.role}</p>
           <p>{p.body}</p>
+          {p.ai && <p class="muted" style="font-size: 0.8rem; margin-top: 0.35rem">{p.ai}</p>}
           <div class="tags">
             {p.tags.map((t) => (
               <span>{t}</span>

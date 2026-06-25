@@ -1,0 +1,53 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+// Reverse-chronological feed (title + date beneath, Bromberg style), with the
+// flip-phone arc pulled into its own series. Drafts preview in dev only.
+const isDev = import.meta.env.DEV;
+const all = (await getCollection("writing"))
+  .filter((p) => p.id !== "example")
+  .filter((p) => isDev || !p.data.draft);
+
+// The flip-phone arc, in narrative order (not date order).
+const FLIP = ["iflip", "flipping-out", "stillness"];
+const flip = FLIP.map((id) => all.find((p) => p.id === id)).filter(Boolean);
+const rest = all
+  .filter((p) => !FLIP.includes(p.id))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+
+<Base path="/writing" title="Writing" description="Writing by Gabriel Berger.">
+  <div class="wrap">
+    <h1>Writing</h1>
+
+    {rest.length === 0 && flip.length === 0 && <p class="muted">Nothing here yet.</p>}
+
+    {flip.length > 0 && (
+      <section class="series">
+        <h2>the flip phone</h2>
+        <p class="series-note">The same story, told until I understood it.</p>
+        <ul class="postlist">
+          {flip.map((p) => (
+            <li>
+              <h3><a href={`/writing/${p.id}`}>{p.data.title}</a></h3>
+              <p class="postmeta">{fmt(p.data.date)}{p.data.draft ? " · draft" : ""}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <ul class="postlist">
+      {rest.map((p) => (
+        <li>
+          <h3><a href={`/writing/${p.id}`}>{p.data.title}</a></h3>
+          <p class="postmeta">{fmt(p.data.date)}{p.data.draft ? " · draft" : ""}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>

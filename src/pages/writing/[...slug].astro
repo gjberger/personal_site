@@ -1,0 +1,28 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  // Drafts render in local dev (so you can review them) but are excluded from the
+  // production build, so nothing unpublished ships to the live site.
+  const posts = await getCollection("writing", ({ data }) =>
+    import.meta.env.PROD ? !data.draft : true,
+  );
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const fmt = (d) =>
+  d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+
+<Base path={`/writing/${post.id}`} title={post.data.title} description={post.data.description ?? ""}>
+  <article class="wrap prose">
+    <h1>{post.data.title}</h1>
+    <p class="post-date">{fmt(post.data.date)}{post.data.draft ? " · draft (preview)" : ""}</p>
+    <Content />
+    <p class="post-back"><a href="/writing">← all writing</a></p>
+  </article>
+</Base>
