@@ -30,12 +30,27 @@ const projects = [
     actions: [],
   },
   {
+    title: "107e Surfers",
+    role: "a bare-metal game with a physical controller",
+    when: "2025",
+    body: `A Subway Surfers-style game written in C on a Mango Pi (RISC-V), bare metal
+      with no OS or libraries. You switch lanes by tilting a real skateboard wired to an
+      MPU-6050 gyroscope, read over I2C with interrupts; obstacles spawn on a timer and
+      the graphics run on a model-view-controller setup. Built with Finley Desai.`,
+    tags: ["RISC-V", "Mango Pi", "bare-metal", "C", "MPU-6050 / I2C", "game"],
+    img: "/img/107e/playing.jpg",
+    actions: [
+      { label: "watch the demo →", href: "https://youtu.be/-RlIWbqkDPk" },
+      { label: "github ↗", href: "https://github.com/gjberger/cs107e_project" },
+    ],
+  },
+  {
     title: "DAB-seq v2",
     role: "single-cell leukemia sequencing pipeline",
     when: "since 2025",
     body: `A ground-up C++17 rewrite of a high-throughput pipeline that turns raw
       FASTQ reads into per-cell genotypes and antibody-marker profiles, with
-      quality-control metrics and visual summaries. It runs on Slurm-based HPC,
+      quality-control metrics and visual summaries. Mission Bio's Tapestri software is a black box, so I reverse-engineered how its raw reads encode each cell (the DNA-amplicon and antibody-tag barcoding) and built the pipeline to demultiplex the data itself. It runs on Slurm-based HPC,
       parallelized across samples and targets for about a 10× speedup, which lets
       researchers follow a patient's samples from diagnosis through remission to
       relapse. Built at UCSF and planned for use across research institutions.`,
@@ -114,6 +129,7 @@ const projects = [
           </div>
           <p class="role">{p.role}</p>
           <p>{p.body}</p>
+          {p.img && <img src={p.img} alt={p.title} loading="lazy" style="max-height: 340px; max-width: 100%; border-radius: 8px; margin-top: 0.7rem; display: block" />}
           {p.ai && <p class="muted" style="font-size: 0.8rem; margin-top: 0.35rem">{p.ai}</p>}
           <div class="tags">
             {p.tags.map((t) => (
