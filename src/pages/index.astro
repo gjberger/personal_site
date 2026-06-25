@@ -1,0 +1,102 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base path="/">
+  <div class="wrap">
+    <img class="portrait" src="/img/me/headshot.png" alt="Gabriel Berger" width="210" height="252" />
+    <h1>Gabriel Berger</h1>
+
+    <p class="lede">
+      I'm an undergraduate at Stanford studying math, computer science, and statistics.
+      Most of what I do is low-level systems work: this past spring I built a RISC-V CPU
+      that runs compiled C, and before that a WiFi driver from scratch.
+    </p>
+
+    <p>
+      I also write code for research labs. At UCSF I rebuilt a sequencing
+      pipeline for leukemia research, and this summer I'm at Stanford's
+      <a href="/research">Alizadeh Lab</a> working on a way to spot a hard-to-find
+      cancer from a blood draw.
+    </p>
+
+    <ul class="links">
+      <li><a href="mailto:gberger@stanford.edu">email <span class="arrow">↗</span></a></li>
+      <li><a href="https://github.com/gjberger">github <span class="arrow">↗</span></a></li>
+      <li><a href="https://www.linkedin.com/in/gabriel-berger-69968a336/">linkedin <span class="arrow">↗</span></a></li>
+      <li><a href="/resume">résumé <span class="arrow">→</span></a></li>
+    </ul>
+
+    <h2>currently</h2>
+
+    <!-- Powerset email gabriel@powerset.co is STAGED — swap the reach-out link to it once forwarding to Gmail is wired. -->
+    <div class="entry">
+      <div class="head">
+        <h3>Powerset</h3>
+        <span class="when">2026</span>
+      </div>
+      <p>
+        Stanford lead and a software engineer (consultant) at Powerset, an
+        early-stage talent firm that invests in young builders. I build the
+        software and data tooling to find them, and run the firm's Stanford
+        presence. If you're building something, I'd like to hear about it.
+        <a href="mailto:gberger@stanford.edu">Reach out.</a>
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="head">
+        <h3>Sequencing pipeline at UCSF</h3>
+        <span class="when">since 2025</span>
+      </div>
+      <p>
+        Rebuilding DAB-seq v2, a C++17 pipeline that turns raw FASTQ reads into
+        per-cell genotypes and antibody-marker profiles for leukemia research. It
+        runs about 10× faster than before and is headed for use across research
+        institutions.
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="head">
+        <h3>Liquid-biopsy research, Stanford Alizadeh Lab</h3>
+        <span class="when">summer 2026</span>
+      </div>
+      <p>
+        Comparing cell-free DNA and RNA to tell Richter transformation apart from
+        the leukemia it comes from. The goal is to catch an aggressive,
+        hard-to-biopsy cancer from a blood draw.
+      </p>
+    </div>
+
+    <div class="entry">
+      <div class="head">
+        <h3>Systems projects</h3>
+        <span class="when">ongoing</span>
+      </div>
+      <p>
+        A RISC-V CPU, a bare-metal WiFi driver, an e-ink dashboard. More on the
+        <a href="/projects">projects</a> page.
+      </p>
+    </div>
+
+    <h2>elsewhere</h2>
+    <p>
+      I'm also a musician: I play alto saxophone, and came up through the SFJAZZ mentee
+      program, the CJC studio band under Dave Eshelman, lessons with Dann Zinn, and
+      combos with Colin Hogan. I also sit silent vipassana meditation, keep picking up
+      languages (Japanese, Spanish, Hebrew), and read more than I probably should.
+    </p>
+
+    <aside class="give-note">
+      <span class="mark">&#9829;</span> I give blood regularly, at
+      <a href="https://stanfordbloodcenter.org/">Stanford Blood Center</a> and
+      <a href="https://www.vitalant.org/">Vitalant</a>, and in 2026 I organized a
+      drive in memory of my mom, who I lost to leukemia. One donation can save up
+      to three lives. If you're eligible,
+      <a href="https://www.vitalant.org/">find a drive</a> or
+      <a href="https://stanfordbloodcenter.org/">book at Stanford</a>. It's one of
+      the easiest meaningful things you can do.
+    </aside>
+  </div>
+</Base>

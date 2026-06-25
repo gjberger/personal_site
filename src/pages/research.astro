@@ -1,0 +1,71 @@
+---
+import Base from "../layouts/Base.astro";
+
+const positions = [
+  {
+    lab: "Alizadeh Lab",
+    org: "Stanford Cancer Institute",
+    role: "Visiting Student Researcher (incoming)",
+    when: "summer 2026",
+    body: `Working on a non-invasive way to characterize Richter transformation, the
+      often-fatal point where chronic lymphocytic leukemia turns into an aggressive
+      lymphoma. Cell types shed DNA and RNA into the blood differently, so measuring
+      cell-free DNA against cell-free RNA can separate the transformed clone from the
+      leukemia it came from. The samples come from a phase-2 trial.`,
+  },
+  {
+    lab: "Smith Lab",
+    org: "UCSF Department of Medicine",
+    role: "Visiting Student Researcher",
+    when: "since 2025",
+    body: `Rebuilding a high-throughput single-cell DNA and antibody sequencing
+      pipeline (DAB-seq v2) for leukemia research, so a patient's samples can be
+      followed across diagnosis, remission, and relapse to study treatment response
+      and resistance. I wrote a modular C++/Python toolchain that runs on Slurm-based
+      HPC, about 10× faster than the old one, and it's headed for use across research
+      institutions.`,
+  },
+  {
+    lab: "Bogyo Lab",
+    org: "Stanford University School of Medicine",
+    role: "Visiting Student Researcher",
+    when: "2022-24",
+    body: `Made and tested peptide-based enzyme inhibitors for drug discovery, aiming
+      at therapeutics for Staphylococcus aureus. I built the compounds end to end
+      (Fmoc solid-phase synthesis from phage and mRNA-display hits, purification, NMR
+      confirmation, enzymatic assays) and co-authored a peer-reviewed paper on
+      antimalarial proteasome inhibitors.`,
+  },
+];
+---
+
+<Base path="/research" title="Research" description="Research by Gabriel Berger across the Alizadeh, Smith, and Bogyo labs: cancer genomics, single-cell sequencing, and drug discovery.">
+  <div class="wrap wrap--wide">
+    <h1>Research</h1>
+    <p class="muted lede">
+      A few labs I've worked in, from writing pipelines to bench chemistry.
+    </p>
+
+    {
+      positions.map((r) => (
+        <div class="entry">
+          <div class="head">
+            <h3>{r.lab} <span class="muted" style="font-weight:400">· {r.org}</span></h3>
+            <span class="when">{r.when}</span>
+          </div>
+          <p class="role">{r.role}</p>
+          <p>{r.body}</p>
+        </div>
+      ))
+    }
+
+    <h2>publications</h2>
+    <div class="pub">
+      J. M. Bennett, K. E. Ward, R. K. Muir, S. Kabeche, E. Yoo, T. Yeo, G. Lam, H. Zhang,
+      J. Almaliti, <span class="you">G. Berger</span>, F. F. Faucher, G. Lin, W. H. Gerwick,
+      E. Yeh, D. A. Fidock, M. Bogyo. “Covalent Macrocyclic Proteasome Inhibitors Mitigate
+      Resistance in <em>Plasmodium falciparum</em>.”
+      <a href="https://pubs.acs.org/doi/10.1021/acsinfecdis.3c00310"><span class="venue">ACS Infectious Diseases</span></a>, 2023.
+    </div>
+  </div>
+</Base>

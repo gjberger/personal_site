@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAB-seq v2 Terminal</title>
+    <title>DAB-seq v2 Terminal · Gabriel Berger</title>
+    <meta name="description" content="An interactive terminal demo of DAB-seq v2 — a C++ single-cell leukemia sequencing pipeline by Gabriel Berger.">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -114,9 +116,21 @@
         }
         .terminal-footer a { color: #0969da; text-decoration: none; }
         .terminal-footer a:hover { text-decoration: underline; }
+
+        .back-link {
+            position: fixed;
+            top: 16px;
+            left: 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #656d76;
+            text-decoration: none;
+        }
+        .back-link:hover { color: #0969da; }
     </style>
 </head>
 <body>
+    <a class="back-link" href="/projects">&larr; gabriel berger / projects</a>
     <div class="terminal-wrapper">
         <div class="terminal-container">
             <div class="terminal-header">
@@ -142,12 +156,12 @@
         </div>
     </div>
 
-    <script>
+    <script is:inline>
         const terminalOutput = document.getElementById('terminal-output');
         const terminalInput = document.getElementById('terminal-input');
         const terminalBody = document.getElementById('terminal-body');
         const promptEl = document.getElementById('prompt');
-        
+
         let commandHistory = [];
         let historyIndex = -1;
         let isProcessing = false;
@@ -283,19 +297,19 @@ ATGTTTTGGCTCAAT,CD117
             addLine(numWithBarcodes + ' have valid cell barcodes');
             addLine(numWithAbPayload + ' have valid ab payloads');
             addLine(numWithBoth + ' have both cell + ab');
-            
+
             await sleep(300);
             addLine('');
             addLine(' cell_id     antibody_barcode     count');
-            
+
             await sleep(400);
-            
+
             filesystem['~/cell_counts'].contents = [
                 'cell_TAGACCATG_TGAACGGTT.csv',
                 'cell_AAACCTGAG_GAAACGAGT.csv',
                 'cell_TCGATCGAT_ATCGATCGA.csv'
             ];
-            
+
             addLine('');
         }
 

@@ -1,0 +1,127 @@
+---
+import Base from "../layouts/Base.astro";
+
+const projects = [
+  {
+    title: "RISC-V RV32I CPU",
+    role: "a processor, from the ISA up",
+    when: "2026",
+    body: `A RISC-V RV32I processor core in RTL: fetch, decode, register file, ALU,
+      the rest. It compiles ordinary C programs and runs them under Verilator. I
+      built it for Stanford's advanced systems course, and I'm now refining the
+      design with Prof. Mark Horowitz, with the goal of an actual silicon tape-out.`,
+    tags: ["RISC-V", "RTL / Verilog", "Verilator", "computer architecture"],
+    actions: [
+      { label: "slides ↗", href: "https://docs.google.com/presentation/d/1eM30zefdneeNq4L18o5cn-lGOrb1QurfjWYZ5y85uEI/edit" },
+    ],
+  },
+  {
+    title: "Bare-metal WiFi driver",
+    role: "CYW43438 on bare metal",
+    when: "2026",
+    body: `Bringing up the Broadcom/Cypress CYW43438 on a Raspberry Pi with no OS: SDIO,
+      Cortex-M3 firmware upload, and a small network stack (WPA2, DHCP, UDP),
+      reverse-engineered from Linux kernel source and datasheets. Mostly this meant
+      reading the datasheet until the hardware finally answered, then documenting the
+      whole bring-up.`,
+    tags: ["C", "bare-metal", "SDIO", "WPA2 / DHCP / UDP", "reverse-engineering"],
+    actions: [],
+  },
+  {
+    title: "DAB-seq v2",
+    role: "single-cell leukemia sequencing pipeline",
+    when: "since 2025",
+    body: `A ground-up C++17 rewrite of a high-throughput pipeline that turns raw
+      FASTQ reads into per-cell genotypes and antibody-marker profiles, with
+      quality-control metrics and visual summaries. It runs on Slurm-based HPC,
+      parallelized across samples and targets for about a 10× speedup, which lets
+      researchers follow a patient's samples from diagnosis through remission to
+      relapse. Built at UCSF and planned for use across research institutions.`,
+    tags: ["C++17", "Python", "Slurm / HPC", "GNU Parallel", "bioinformatics"],
+    actions: [
+      { label: "live terminal demo →", href: "/dabseq" },
+      { label: "github ↗", href: "https://github.com/gjberger/dabseq_v2" },
+    ],
+  },
+  {
+    title: "Calculus, with Physics",
+    role: "a tutoring curriculum",
+    when: "2026",
+    body: `A single-variable calculus curriculum I built for my students, taught
+      alongside physics so the intuition comes before the machinery. The throughline:
+      start from where an idea comes from, not the formula it ends up as.`,
+    tags: ["teaching", "calculus", "curriculum design"],
+    actions: [],
+  },
+  {
+    title: "e-Paper dashboard",
+    role: "a framed information display",
+    when: "2026",
+    body: `A wall-mounted Raspberry Pi dashboard on a Waveshare e-ink panel: weather,
+      calendar, and the day at a glance, rendered as a crisp 1-bit image with Pillow
+      and driven over SPI. Mostly an exercise in doing a lot with 648×480
+      black-and-white pixels.`,
+    tags: ["Python", "Raspberry Pi", "Pillow", "e-ink / SPI"],
+    actions: [],
+  },
+  {
+    title: "Me, Quantified",
+    role: "a self-tracking dashboard",
+    when: "2026",
+    body: `A local dashboard that pulls my Oura and Hevy data through their APIs into
+      one view of sleep, readiness, and training, with a small Flask backend and a
+      React board for course work that auto-imports assignments from GitHub. A study
+      in gluing a few APIs together cleanly: live fetches, a short cache, atomic JSON
+      writes.`,
+    tags: ["Python", "Flask", "React", "REST APIs", "Oura / Hevy"],
+    actions: [
+      { label: "build your own →", href: "/writing/quantified-self" },
+    ],
+  },
+  {
+    title: "Gabe's Cookies",
+    role: "founder",
+    when: "2020-21",
+    body: `An earlier venture in high-end baked goods: I built the brand, recipes,
+      and packaging end to end, and negotiated a discounted shipping contract with
+      UPS. Where I learned that shipping a product means shipping everything around
+      it too.`,
+    tags: ["entrepreneurship", "brand", "ops"],
+    actions: [],
+  },
+];
+---
+
+<Base path="/projects" title="Projects" description="Projects by Gabriel Berger: a RISC-V CPU, a from-scratch WiFi driver, a single-cell sequencing pipeline, a calculus curriculum, and more.">
+  <div class="wrap wrap--wide">
+    <h1>Projects</h1>
+    <p class="muted lede">
+      A few things I've built, from bare-metal systems to genomics to teaching.
+    </p>
+
+    {
+      projects.map((p) => (
+        <div class="entry">
+          <div class="head">
+            <h3>{p.title}</h3>
+            <span class="when">{p.when}</span>
+          </div>
+          <p class="role">{p.role}</p>
+          <p>{p.body}</p>
+          <div class="tags">
+            {p.tags.map((t) => (
+              <span>{t}</span>
+            ))}
+          </div>
+          {p.actions.length > 0 && (
+            <div class="actions">
+              {p.actions.map((a) => (
+                <a href={a.href}>{a.label}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</Base>

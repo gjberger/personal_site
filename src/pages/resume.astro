@@ -1,0 +1,22 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base path="/resume" title="Résumé" description="Résumé of Gabriel Berger, undergraduate at Stanford studying math, computer science, and statistics.">
+  <div class="wrap wrap--wide">
+    <div class="resume-bar">
+      <h1 class="resume-name" style="margin:0">Résumé</h1>
+      <a class="btn" href="/Gabriel_Berger_Resume.pdf" download>download pdf ↓</a>
+    </div>
+
+    <p class="muted">
+      One page. If it doesn't load below, here's the
+      <a href="/Gabriel_Berger_Resume.pdf">PDF</a>.
+    </p>
+
+    <object class="resume-embed" data="/Gabriel_Berger_Resume.pdf" type="application/pdf" title="Gabriel Berger résumé">
+      <p>Your browser can't show the PDF inline.
+        <a href="/Gabriel_Berger_Resume.pdf">Download it here</a>.</p>
+    </object>
+  </div>
+</Base>
