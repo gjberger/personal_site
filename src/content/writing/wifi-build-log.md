@@ -122,7 +122,7 @@ other machines can find it and reach it. Built straight from the RFCs (826, 792,
 
 *Proof it worked: the bare-metal Pi (192.168.8.181) shows up in the router's client list — on the network, with its own IP, no operating system anywhere.*
 
-## Why an LLM, honestly
+## Why an LLM
 The hardware is documented but scattered: tracing GPIO43 to `LPO_IN` across the device
 tree, the datasheet, and the schematic is tedious but doable. The software interface is
 the opposite — proprietary, undocumented, only legible by reading the Linux `brcmfmac`
