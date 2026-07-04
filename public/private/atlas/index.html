@@ -830,6 +830,8 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <h2>Halve the world until it confesses</h2>
   <p class="lede">Binary search is not "check the middle." It is a <b>promise you refuse to break</b>: <i>the answer is inside [lo, hi]</i>. Every comparison is chosen so that, whatever it says, you can throw away half the window and the promise still holds. Watch it race a linear scan on the same array &#8212; same target, same data, one of them provably wasteful.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Given sorted data &mdash; or any yes/no question that flips exactly once &mdash; find the boundary in O(log n).</div><div><span class="fk">SHOWS UP AS</span> Binary Search &middot; Search Insert Position &middot; Koko Eating Bananas &middot; Capacity to Ship Packages</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="invRun">&#9654; RACE</button>
@@ -852,6 +854,8 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <p>Two things make this an interview weapon. First, the <b>invariant discipline</b>: every off-by-one bug in every binary search ever written is a broken promise &#8212; a <span style="font-family:var(--mono);font-size:13px">mid</span> that leaks back into the window, a <span style="font-family:var(--mono);font-size:13px">hi</span> that excludes the answer. Decide what [lo, hi] <i>means</i> before you type, and the loop writes itself.</p>
     <p>Second: flip <b>PREDICATE MODE</b>. The bars stop being values and become answers to a yes/no question &#8212; F F F F <b>T</b> T T T. Any question that flips <i>once</i> and never flips back is binary-searchable, even when there's no array anywhere: the first build that fails, the minimum speed that finishes in time, the largest tile that fits in memory. Rephrase "optimize x" as "is x enough?" and an impossible problem becomes 32 questions. That reframe &#8212; <b>binary search on the answer</b> &#8212; is a full third of the hard problems on your ladder.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>invariant</b> &mdash; the property the loop never lets die; here, &ldquo;the answer is in [lo, hi]&rdquo; &mdash; prove it survives each step and correctness is free</div><div><b>monotone predicate</b> &mdash; a yes/no question that flips false&rarr;true once and never back &mdash; the license for binary-searching an answer space</div><div><b>lower bound</b> &mdash; the first position with value &ge; x (upper bound: first &gt; x) &mdash; most off-by-one bugs are just picking the wrong one</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -892,6 +896,8 @@ int first_true(int lo, int hi, auto&amp;&amp; pred) {   <i>// answer in [lo, hi]
   <h2>One loop, three buckets</h2>
   <p class="lede">DFS, BFS, and Dijkstra are marketed as three algorithms. They are <b>one loop</b>: pull a cell from the frontier, visit its neighbors, repeat. The only thing that changes is the bucket holding the frontier &#8212; a <b>stack</b>, a <b>queue</b>, or a <b>min-heap</b> &#8212; and that single swap changes everything you see below.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Given states and legal moves, decide whether &mdash; and how cheaply &mdash; a goal is reachable.</div><div><span class="fk">SHOWS UP AS</span> Number of Islands &middot; Word Ladder &middot; Rotting Oranges &middot; Network Delay Time</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn togg sel" data-alg="dfs" id="wavDfs">DFS &#183; stack</button>
@@ -916,6 +922,8 @@ int first_true(int lo, int hi, auto&amp;&amp; pred) {   <i>// answer in [lo, hi]
     <p>The shapes are the lesson. <b>DFS</b> is a spelunker: it commits to one corridor to the bitter end, and the path it returns is whatever wandering route it happened to survive &#8212; found &#8801; shortest is <i>false</i>. <b>BFS</b> is a ripple: it exhausts distance k before touching k+1, so the first time it reaches the goal is provably the fewest-steps route. <b>Dijkstra</b> is the same ripple in <i>cost-space</i> instead of step-space. (Give the heap a hunch about direction and you've invented A* &#8212; that's the whole extension.)</p>
     <p>The interview skill is rarely writing the loop &#8212; it's <b>seeing the graph</b> where none was drawn. Word ladders, lock combinations, course prerequisites, "minimum moves to&hellip;": states are nodes, legal moves are edges, and the question "fewest moves?" is the word BFS wearing a costume. Say what the bucket is and why, and the rest is typing.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>frontier</b> &mdash; the discovered-but-unprocessed set; the container holding it (stack / queue / heap) is the entire difference between DFS, BFS, Dijkstra</div><div><b>relaxation</b> &mdash; offering v a better price via u: if dist[u]+w &lt; dist[v], take it</div><div><b>state space</b> &mdash; nodes are situations, edges are legal moves &mdash; the graph is usually implicit, and seeing it is the actual skill</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -963,6 +971,8 @@ std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
   <h2>Remembering is the whole algorithm</h2>
   <p class="lede">DP has a fearsome reputation and a one-sentence definition: <b>recursion that refuses to redo work</b>. Below is naive fib(n) as an actual call tree &#8212; every node one function call, every color one argument. Same color = same computation, repeated. Then flip the switch that remembers.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Count or optimize over exponentially many choices that share subproblems.</div><div><span class="fk">SHOWS UP AS</span> Climbing Stairs &middot; House Robber &middot; Coin Change &middot; Unique Paths</div></div>
+
   <div class="stage">
     <div class="bar">
       <label>n <b id="fibNV" style="color:var(--copper-hi)">10</b> <input type="range" id="fibN" min="5" max="13" step="1" value="10"></label>
@@ -991,6 +1001,8 @@ std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
     <p>Every DP interview reduces to two questions, asked in this order. <b>One: what is the state?</b> &#8212; the arguments of your recursion, the minimum description of "where am I" (a fib argument; a grid cell; <i>(index, remaining capacity)</i> for knapsack). <b>Two: where does the answer sit?</b> &#8212; one corner of the table, or a max over the last row. Answer those and the recurrence is one honest line; filling order and loops are bookkeeping. When you're stuck, you're stuck on question one &#8212; naming the state &#8212; not on "DP".</p>
     <p>The two stages above are the same idea from both ends: memoization is the recursion writing the table lazily on demand; tabulation is you filling it in a deliberate order. Interviews accept either &#8212; say the state out loud, write <span style="font-family:var(--mono);font-size:13px">@cache</span> or the loops, and mention that the tree you didn't build was exponential. Ladder tie-in: 1-D states week 6, 2-D states week 8.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>state</b> &mdash; the minimum information that determines the future &mdash; the arguments of your recursion</div><div><b>memoization</b> &mdash; cache a pure function, top-down; you only ever pay for reachable states</div><div><b>tabulation</b> &mdash; fill the table bottom-up in dependency order &mdash; same math, explicit schedule</div><div><b>optimal substructure</b> &mdash; optimal answers are assembled from optimal sub-answers &mdash; the property that makes DP legal at all</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1041,6 +1053,8 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
   <h2>The oldest trade: memory for time</h2>
   <p class="lede">Half the easy problems on your ladder are one question in a costume: <b>&#8220;have I seen this before?&#8221;</b> An array answers it in O(n) by re-reading its whole life. A hash table answers in O(1) by spending memory: scramble the key into a bucket number, and the answer is waiting in that bucket. Below, watch the buckets fill &#8212; and watch what happens when the scrambling is lazy.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Answer &ldquo;have I seen this?&rdquo; and &ldquo;how many of each?&rdquo; in O(1) per query.</div><div><span class="fk">SHOWS UP AS</span> Two Sum &middot; Contains Duplicate &middot; Group Anagrams &middot; Longest Consecutive Sequence</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="hshAdd1">+ INSERT</button>
@@ -1059,6 +1073,8 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
     <p>The contract has two clauses, and both are yours to keep: the hash must <b>spread</b> (real libraries mix every bit of the key; BAD HASH above keeps only the low bits &#8212; watch the clustering), and the table must <b>grow</b> before chains do (resize at a load threshold; amortized, still O(1)). Break either clause and every &#8220;O(1)&#8221; in your complexity analysis quietly becomes O(n) &#8212; which is precisely the follow-up question interviewers like to ask.</p>
     <p>On the ladder (week 1), the table appears as three reflexes: the <b>seen-set</b> (duplicates, cycles), the <b>complement lookup</b> (two-sum: for each x, is target&minus;x already in the table?), and the <b>frequency map</b> (anagrams, counts, group-by). All three are the same move &#8212; pay one insert now so every future question costs O(1). And know the one thing the table can't do: it has no notion of order. The moment the question says &#8220;nearest,&#8221; &#8220;smallest above,&#8221; or &#8220;in sorted order,&#8221; you want a sorted structure or a heap (Lab 22), not a dict.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>load factor &alpha;</b> &mdash; keys per bucket, n/b &mdash; the expected chain length under a good hash, and the dial you resize on</div><div><b>collision</b> &mdash; two keys, one bucket &mdash; inevitable by pigeonhole; chaining or probing absorbs it, spread keeps it rare</div><div><b>amortized O(1)</b> &mdash; occasional expensive resizes averaged over all inserts &mdash; total work stays linear, so each op is constant on average</div><div><b>expected vs. worst case</b> &mdash; &ldquo;O(1) expected&rdquo; is an average over hash behavior; adversarial keys degrade it to O(n) &mdash; saying both is what sounding senior means</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1108,6 +1124,8 @@ std::pair&lt;int,int&gt; two_sum(const std::vector&lt;int&gt;&amp; xs, int t) {
   <h2>Two pointers, zero regrets</h2>
   <p class="lede">A brute force re-examines; two pointers <b>never look back</b>. The license for that confidence is always some monotone fact &#8212; &#8220;once a window is invalid, growing it can't fix it&#8221; &#8212; that lets you prove entire regions dead without visiting them. Below: the longest run of unrepeated characters, and a converging two-sum. Both pointers only ever move forward; count the steps.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Find the best contiguous window &mdash; or a matching pair in sorted data &mdash; without ever re-scanning.</div><div><span class="fk">SHOWS UP AS</span> Longest Substring Without Repeating Characters &middot; Minimum Window Substring &middot; Container With Most Water</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn togg sel" id="winModeW">WINDOW</button>
@@ -1128,6 +1146,8 @@ std::pair&lt;int,int&gt; two_sum(const std::vector&lt;int&gt;&amp; xs, int t) {
     <p>The two shapes cover week 2 of the ladder between them. <b>The window</b> (L chases R): substrings and subarrays with a constraint &#8212; longest without repeats, shortest with sum &ge; target, at most k distinct. The invariant is &#8220;the window is always valid&#8221;; R expands until it breaks, L contracts until it's repaired, and each index enters and leaves at most once. <b>The converge</b> (L and R close in): pair-hunting in <i>sorted</i> data &#8212; two-sum, container with most water, trapping rain. There the monotone fact is starker: if the sum is too small, <i>nothing</i> paired with the current L can ever work, so L's entire column of possibilities dies in one comparison. It's Lab 17's halving argument wearing running shoes.</p>
     <p>Know when the license is <i>revoked</i>: &#8220;shortest subarray with sum &ge; k&#8221; with <b>negative numbers</b> breaks the window's monotonicity (growing can now fix an invalid window), and the honest answers are prefix sums with a monotonic deque, or a different tool entirely. Saying that unprompted &#8212; &#8220;two pointers needs monotonicity, negatives break it&#8221; &#8212; is the difference between pattern-matching and understanding, and interviewers are listening for exactly it.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>sliding window</b> &mdash; a range [L, R] where R grows and L only chases &mdash; each index enters and leaves once, hence O(n)</div><div><b>monotonicity</b> &mdash; the one-way fact (growing can&rsquo;t fix an invalid window) that licenses never looking back &mdash; negatives revoke it</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1183,6 +1203,8 @@ std::pair&lt;int,int&gt; two_sum_sorted(const std::vector&lt;int&gt;&amp; a, int
   <h2>An array wearing a tree costume</h2>
   <p class="lede">A heap makes exactly one promise &#8212; <b>the smallest thing is on top</b> &#8212; and keeps it lazily: parents beat children, siblings are strangers. That laziness is the speed. And the tree is a costume: the whole thing lives in a flat array where node i's children sit at 2i+1 and 2i+2, no pointers anywhere. Push a value and watch <i>both views move as one</i>.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Repeatedly need the min or max of a changing set &mdash; or the top k of a stream.</div><div><span class="fk">SHOWS UP AS</span> Kth Largest Element &middot; Merge k Sorted Lists &middot; Find Median from Data Stream &middot; Meeting Rooms II</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="hpPush">PUSH RANDOM</button>
@@ -1199,6 +1221,8 @@ std::pair&lt;int,int&gt; two_sum_sorted(const std::vector&lt;int&gt;&amp; a, int
     <p>The costume trick is why heaps are everywhere: an insert touches only the ancestor ladder &#8212; &lceil;log&#8322;n&rceil; slots, 20 for a million items &#8212; and the array layout means those touches are cache-friendly integer arithmetic, not pointer chasing. HEAPIFY is the quieter surprise: building from scratch bottom-up costs O(n), not n&nbsp;log&nbsp;n, because almost all nodes are leaves and sift barely anywhere. Interviewers spring that one as a follow-up; now you've watched it happen.</p>
     <p>Week 5 of the ladder is mostly one pattern: <b>top-k</b>. Keep a heap of size k of the best-so-far, and its top is the <i>worst of the best</i> &#8212; the gatekeeper each new candidate must beat. n&nbsp;log&nbsp;k, tiny memory, works on streams you can't hold. (k large relative to n? Quickselect, next lab, does it in linear time.) The other week-5 shape, intervals, is heaps too: sweep sorted starts, park end-times in a min-heap, and &#8220;rooms needed&#8221; is just the heap's high-water mark. And you've already run the loop that matters most: Dijkstra in Lab 18 &#8212; its bucket is exactly this structure.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>heap property</b> &mdash; every parent &le; its children; nothing promised between siblings &mdash; weaker than sorted, which is exactly why it&rsquo;s cheaper</div><div><b>complete tree</b> &mdash; all levels full, the last packed left &mdash; why the whole thing lives in an array with children at 2i+1, 2i+2</div><div><b>priority queue</b> &mdash; the interface (push, pop-best); a binary heap is its standard implementation &mdash; keep the two words separate</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1247,6 +1271,8 @@ std::vector&lt;int&gt; top_k(const std::vector&lt;int&gt;&amp; xs, size_t k) {
   <h2>Sort half as much as you think</h2>
   <p class="lede">One move powers this whole lab: <b>partition</b> &#8212; pick a pivot, sweep once, and the array splits into smaller-than and larger-than, pivot seated in its final home forever. Recurse on <i>both</i> sides and you invented quicksort. Recurse on <b>one</b> side &#8212; because the k-th element can only be in one of them &#8212; and you get quickselect: the k-th smallest of anything, in linear expected time, no sorting.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Order everything (sort) &mdash; or find just the k-th (select) without ordering everything.</div><div><span class="fk">SHOWS UP AS</span> Kth Largest Element &middot; Sort Colors &middot; Top K Frequent Elements</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="qsSort">&#9654; QUICKSORT</button>
@@ -1265,6 +1291,8 @@ std::vector&lt;int&gt; top_k(const std::vector&lt;int&gt;&amp; xs, size_t k) {
     <p>Three honest facts about sorting in interviews. One: <b>you will call <span style="font-family:var(--mono);font-size:13px">sort()</span>, not write it</b> &#8212; what's tested is knowing the n&nbsp;log&nbsp;n price, and spotting when sorting first turns a hard problem into an easy one (intervals, ladder week 5, is exactly this). Two: <b>the comparison bound is real</b> &#8212; n&nbsp;log&nbsp;n is the floor for comparison sorting, so any claimed faster sort is exploiting structure (counting sort on small ints, radix on fixed-width keys); saying which structure is the whole answer. Three: <b>WORST CASE isn't a party trick</b> &#8212; sorted input with a naive pivot is quicksort's n&sup2;, which is why real libraries randomize or use introsort, and why "how would an adversary hurt this?" is a fair question about any algorithm you name.</p>
     <p>Quickselect is the one to actually carry: &#8220;k-th largest,&#8221; &#8220;median,&#8221; &#8220;top half&#8221; without n&nbsp;log&nbsp;n. The decision rule for week 5-and-beyond: k small or the data streams &rarr; heap (Lab 22, n&nbsp;log&nbsp;k); k anywhere and the data sits in memory &rarr; quickselect (expected O(n)); need the k results <i>in order</i> &rarr; sort and stop apologizing. And name-drop with precision: <span style="font-family:var(--mono);font-size:13px">std::nth_element</span> <i>is</i> quickselect, one call, already in the standard library &#8212; knowing that is worth more than reciting the partition loop.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>partition</b> &mdash; one sweep around a pivot: smaller left, larger right, pivot seated in its final position forever</div><div><b>stable sort</b> &mdash; equal elements keep their original order &mdash; mergesort is, quicksort isn&rsquo;t; it matters whenever you sort by one key of many</div><div><b>introsort</b> &mdash; quicksort that watches its own recursion depth and bails to heapsort &mdash; how std::sort refuses to go quadratic</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1315,6 +1343,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <h2>&#8220;Same tribe?&#8221; in constant time</h2>
   <p class="lede">Connectivity questions don't need the graph &#8212; only a chain of <b>who answers for whom</b>, flattened a little more every time you ask. Below: Kruskal's MST, which is nothing but &#8220;sort the edges, then ask <i>same tribe?</i> n times.&#8221;</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Groups merge over time; answer &ldquo;same group?&rdquo; at any moment, cheaply.</div><div><span class="fk">SHOWS UP AS</span> Accounts Merge &middot; Redundant Connection &middot; Number of Islands II &middot; Min Cost to Connect All Points</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="ufRun">&#9654; BUILD MST</button>
@@ -1330,6 +1360,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <div class="notes">
     <p>The insight to carry: when a problem <b>merges groups over time</b> &#8212; islands appearing, accounts sharing emails, network cables landing &#8212; the answer is a parent array, not a graph traversal. <span style="font-family:var(--mono);font-size:13px">find</span> walks to the root and flattens the path behind it; <span style="font-family:var(--mono);font-size:13px">union</span> points one root at the other. Amortized cost: effectively constant (inverse Ackermann &#8212; say &#8220;&le;4 for any n that fits in the universe&#8221;). Kruskal's greedy is <i>legal</i> by the cut property: the cheapest edge crossing any divide is always safe &#8212; your first exchange argument, one lab early.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>union-find / DSU</b> &mdash; a forest of parent pointers answering same-set? and merge in near-constant amortized time</div><div><b>path compression</b> &mdash; find() re-points every node it visits straight at the root &mdash; the structure flattens as a side effect of being asked</div><div><b>inverse Ackermann &alpha;(n)</b> &mdash; the true amortized cost; grows so slowly it&rsquo;s &le; 4 for any physical input &mdash; say &ldquo;effectively constant&rdquo;</div><div><b>cut property</b> &mdash; the cheapest edge crossing any split of the vertices belongs to some MST &mdash; Kruskal&rsquo;s license</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1374,6 +1406,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <h2>Greed you can prove</h2>
   <p class="lede">Three plausible strategies, one interview classic: schedule the most non-overlapping intervals. Two of these lose badly &#8212; greedy is not a vibe, it's a <b>swap-proof</b>, and only one of them has it.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Maximize how much you take when a local rule might &mdash; might &mdash; be enough.</div><div><span class="fk">SHOWS UP AS</span> Non-overlapping Intervals &middot; Meeting Rooms &middot; Jump Game &middot; Gas Station</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn togg" id="gyES">EARLIEST START</button>
@@ -1390,6 +1424,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <div class="notes">
     <p>Why earliest-finish wins, in one move: take any optimal schedule and swap its first interval for the earliest-finisher &#8212; it ends no later, so everything after still fits. Repeat down the line: optimal morphs into greedy, losing nothing. That's an <b>exchange argument</b>, and it's the entire license. The interview discipline: if you can't sketch the swap in two sentences, don't trust the greedy &#8212; add weights to these same intervals and earliest-finish breaks, and the answer is DP (Lab 19). Greedy-with-a-license runs this whole chapter: Dijkstra, Kruskal, Huffman.</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>exchange argument</b> &mdash; swap any optimal solution&rsquo;s choice for greedy&rsquo;s, show nothing is lost, repeat &mdash; the standard proof that a greedy is legal</div><div><b>activity selection</b> &mdash; this problem&rsquo;s textbook name (also &ldquo;interval scheduling&rdquo;) &mdash; earliest-finish is its provably optimal rule</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -1423,6 +1459,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <h2>Peel the free nodes</h2>
   <p class="lede">Anything with prerequisites &#8212; courses, builds, your own summer &#8212; is a DAG, and ordering it is one move repeated: <b>peel everything that depends on nothing</b>. If the peel ever stalls, you haven't failed &#8212; you've <i>proven a cycle exists</i>. Detection comes free.</p>
 
+  <div class="frame"><div><span class="fk">PROBLEM</span> Order tasks under prerequisites &mdash; and detect when the requirements are impossible.</div><div><span class="fk">SHOWS UP AS</span> Course Schedule I &amp; II &middot; Alien Dictionary &middot; Minimum Height Trees</div></div>
+
   <div class="stage">
     <div class="bar">
       <button class="btn primary" id="toRun">&#9654; PEEL</button>
@@ -1438,6 +1476,8 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <div class="notes">
     <p>Interview reflex: the phrases &#8220;prerequisites,&#8221; &#8220;build order,&#8221; &#8220;must come before&#8221; all mean Kahn's algorithm &#8212; count in-degrees, queue the zeros, peel. Course Schedule I is &#8220;does the peel finish?&#8221;, II is &#8220;print the peel order,&#8221; and alien dictionary is the same peel after you extract the edges. One upgrade worth knowing: process the DAG <i>in peel order</i> and you can DP along it &#8212; longest path in a DAG is exactly that, and &#8220;longest chain of prerequisites&#8221; questions are it in costume (Lab 19 meets this lab).</p>
   </div>
+
+  <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>DAG</b> &mdash; directed acyclic graph &mdash; dependencies with no way to owe yourself</div><div><b>in-degree</b> &mdash; how many unfinished prerequisites still point at a node; zero means free</div><div><b>topological order</b> &mdash; a line-up where every edge points forward &mdash; exists if and only if the graph is a DAG</div></div>
 
   <div class="code6">
     <div class="ctabs">
@@ -2898,6 +2938,11 @@ function whenVisible(el, start, stop){
 .code6 pre b{color:var(--copper-hi);font-weight:500}
 .code6 pre b i{color:var(--copper-hi)}
 #inv .bar sup{font-size:9px}
+.frame{background:var(--panel);border:1px solid var(--line);padding:12px 16px;margin:20px 0 0;max-width:62ch;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+.frame .fk,.terms .fk{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--copper);margin-right:6px;white-space:nowrap}
+.frame b{color:var(--ink);font-weight:600}
+.terms{margin-top:26px;max-width:62ch;border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:var(--ink2);line-height:1.6}
+.terms b{color:var(--ink);font-weight:600}
 </style>
 <script>
 'use strict';
