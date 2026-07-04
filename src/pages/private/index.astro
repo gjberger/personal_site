@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const items = [
+  {
+    title: "The Training Plan",
+    href: "/private/plan/",
+    role: "twelve weeks, tracked",
+    body: `The summer-to-fall plan: the Jetson build ladder, the daily drills, the
+      recruiting timeline, the ADHD scaffolding. Checkboxes sync across my devices,
+      and the week only counts when its ship is public.`,
+  },
+  {
+    title: "The Explorable Atlas",
+    href: "/private/atlas/",
+    role: "sixteen interactive labs",
+    body: `A hands-on tour from a single GPU die to a transformer running in the
+      browser — parallelism, warps, memory, tensor cores, backprop, attention, and
+      CUDA on the Orin. Nothing is a video; every diagram runs, and I drive it.`,
+  },
+];
+---
+
+<Base path="/private" title="Private" description="A private workspace.">
+  <div class="wrap wrap--wide">
+    <h1>Private</h1>
+    <p class="muted lede">
+      A corner of the site kept for myself — the work still in progress, and the
+      structure I use to hold myself to it.
+    </p>
+
+    {
+      items.map((it) => (
+        <div class="entry">
+          <div class="head">
+            <h3><a href={it.href}>{it.title}</a></h3>
+          </div>
+          <p class="role">{it.role}</p>
+          <p>{it.body}</p>
+          <div class="actions">
+            <a href={it.href}>open &rarr;</a>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Base>

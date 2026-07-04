@@ -81,4 +81,4 @@ export default async (request, context) => {
   return loginPage();
 };
 
-export const config = { path: "/private/*" };
+export const config = { path: ["/private", "/private/", "/private/*"] };
