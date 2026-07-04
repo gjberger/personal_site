@@ -258,6 +258,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <a href="#uf">24 &#183; Union-find</a>
   <a href="#greedy">25 &#183; Greedy</a>
   <a href="#topo">26 &#183; Topo order</a>
+  <a href="#tree">27 &#183; Trees</a>
   <div class="rail-ch">NEXT</div>
   <a href="#atlas">The atlas grows</a>
 </nav>
@@ -270,7 +271,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <h1>GPUs, and why<br>they dream in parallel</h1>
     <p class="sub">A hands-on tour from a single transistor-packed die to a neural network training live in your browser. Nothing here is a video &#8212; every diagram runs, and you drive it.</p>
     <div class="chapter-tags">
-      <div class="tag"><b>26 labs</b> &#183; interactive</div>
+      <div class="tag"><b>27 labs</b> &#183; interactive</div>
       <div class="tag"><b>self-paced</b> &#183; come back anytime</div>
       <div class="tag">a living page &#8212; ask Claude for the next chapter</div>
     </div>
@@ -818,7 +819,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <tr><td>Union-find &amp; MST</td><td><a href="#uf">Lab 24</a></td><td class="dt">LIVE</td></tr>
     <tr><td>Greedy &amp; exchange arguments</td><td><a href="#greedy">Lab 25</a></td><td class="dt">LIVE</td></tr>
     <tr><td>Topological order &amp; DAGs</td><td><a href="#topo">Lab 26</a></td><td class="dt">LIVE</td></tr>
-    <tr><td>BSTs / balanced trees</td><td>Lab 20 notes: use sorted containers; the property beats the implementation</td><td class="dt">NOTES</td></tr>
+    <tr><td>Tree recursion &amp; BSTs</td><td><a href="#tree">Lab 27</a></td><td class="dt">LIVE</td></tr>
     <tr><td>Recurrences / master theorem</td><td>low screen yield &#8212; one visual lab away if a "why n log n?" ever stings</td><td class="dt">PARKED</td></tr>
     <tr><td>Bellman-Ford / negative cycles</td><td>fall candidate &#8212; arbitrage detection <i>is</i> negative-cycle finding</td><td class="dt">PARKED</td></tr>
     <tr><td>NP-completeness, max-flow</td><td>near-zero interview yield for SWE/quant screens</td><td class="dt">PARKED</td></tr>
@@ -851,8 +852,11 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   </div>
 
   <div class="notes">
-    <p>Two things make this an interview weapon. First, the <b>invariant discipline</b>: every off-by-one bug in every binary search ever written is a broken promise &#8212; a <span style="font-family:var(--mono);font-size:13px">mid</span> that leaks back into the window, a <span style="font-family:var(--mono);font-size:13px">hi</span> that excludes the answer. Decide what [lo, hi] <i>means</i> before you type, and the loop writes itself.</p>
-    <p>Second: flip <b>PREDICATE MODE</b>. The bars stop being values and become answers to a yes/no question &#8212; F F F F <b>T</b> T T T. Any question that flips <i>once</i> and never flips back is binary-searchable, even when there's no array anywhere: the first build that fails, the minimum speed that finishes in time, the largest tile that fits in memory. Rephrase "optimize x" as "is x enough?" and an impossible problem becomes 32 questions. That reframe &#8212; <b>binary search on the answer</b> &#8212; is a full third of the hard problems on your ladder.</p>
+    <ul>
+      <li><b>The invariant discipline.</b> Every off-by-one in every binary search is a broken promise &#8212; a mid leaking back into the window. Decide what [lo, hi] <i>means</i> before typing; the loop writes itself.</li>
+      <li><b>Predicate mode is the real weapon.</b> Any question that flips once &#8212; first failing build, min speed that finishes, largest tile that fits &#8212; is binary-searchable with no array in sight.</li>
+      <li><b>The reframe:</b> &#8220;optimize x&#8221; &rarr; &#8220;is x enough?&#8221; If that&#8217;s monotone, the answer is 32 questions. A third of your ladder&#8217;s hards are this in costume.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>invariant</b> &mdash; the property the loop never lets die; here, &ldquo;the answer is in [lo, hi]&rdquo; &mdash; prove it survives each step and correctness is free</div><div><b>monotone predicate</b> &mdash; a yes/no question that flips false&rarr;true once and never back &mdash; the license for binary-searching an answer space</div><div><b>lower bound</b> &mdash; the first position with value &ge; x (upper bound: first &gt; x) &mdash; most off-by-one bugs are just picking the wrong one</div></div>
@@ -919,8 +923,12 @@ int first_true(int lo, int hi, auto&amp;&amp; pred) {   <i>// answer in [lo, hi]
   </div>
 
   <div class="notes">
-    <p>The shapes are the lesson. <b>DFS</b> is a spelunker: it commits to one corridor to the bitter end, and the path it returns is whatever wandering route it happened to survive &#8212; found &#8801; shortest is <i>false</i>. <b>BFS</b> is a ripple: it exhausts distance k before touching k+1, so the first time it reaches the goal is provably the fewest-steps route. <b>Dijkstra</b> is the same ripple in <i>cost-space</i> instead of step-space. (Give the heap a hunch about direction and you've invented A* &#8212; that's the whole extension.)</p>
-    <p>The interview skill is rarely writing the loop &#8212; it's <b>seeing the graph</b> where none was drawn. Word ladders, lock combinations, course prerequisites, "minimum moves to&hellip;": states are nodes, legal moves are edges, and the question "fewest moves?" is the word BFS wearing a costume. Say what the bucket is and why, and the rest is typing.</p>
+    <ul>
+      <li><b>DFS</b> commits to one corridor to the bitter end; the path it returns is whatever it survived &#8212; found &ne; shortest.</li>
+      <li><b>BFS</b> exhausts distance k before touching k+1 &#8212; first arrival is provably fewest-steps.</li>
+      <li><b>Dijkstra</b> is the same ripple in cost-space; give the heap a directional hunch and you&#8217;ve invented A*.</li>
+      <li><b>The skill is seeing the graph:</b> word ladders, lock states, prerequisites &#8212; states are nodes, moves are edges. Say which bucket and why; the rest is typing.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>frontier</b> &mdash; the discovered-but-unprocessed set; the container holding it (stack / queue / heap) is the entire difference between DFS, BFS, Dijkstra</div><div><b>Dijkstra&rsquo;s algorithm</b> &mdash; the standard single-source shortest path for non-negative weights: BFS upgraded with a min-heap; negative edges break its promise (that&rsquo;s Bellman-Ford&rsquo;s job)</div><div><b>relaxation</b> &mdash; offering v a better price via u: if dist[u]+w &lt; dist[v], take it</div><div><b>state space</b> &mdash; nodes are situations, edges are legal moves &mdash; the graph is usually implicit, and seeing it is the actual skill</div></div>
@@ -998,8 +1006,11 @@ std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
   </div>
 
   <div class="notes">
-    <p>Every DP interview reduces to two questions, asked in this order. <b>One: what is the state?</b> &#8212; the arguments of your recursion, the minimum description of "where am I" (a fib argument; a grid cell; <i>(index, remaining capacity)</i> for knapsack). <b>Two: where does the answer sit?</b> &#8212; one corner of the table, or a max over the last row. Answer those and the recurrence is one honest line; filling order and loops are bookkeeping. When you're stuck, you're stuck on question one &#8212; naming the state &#8212; not on "DP".</p>
-    <p>The two stages above are the same idea from both ends: memoization is the recursion writing the table lazily on demand; tabulation is you filling it in a deliberate order. Interviews accept either &#8212; say the state out loud, write <span style="font-family:var(--mono);font-size:13px">@cache</span> or the loops, and mention that the tree you didn't build was exponential. Ladder tie-in: 1-D states week 6, 2-D states week 8.</p>
+    <ul>
+      <li><b>Question one: what is the state?</b> The arguments of your recursion &#8212; a fib argument, a grid cell, (index, capacity). Stuck means stuck <i>here</i>, not on &#8220;DP&#8221;.</li>
+      <li><b>Question two: where does the answer sit?</b> A corner of the table, or a max over the last row. Then the recurrence is one honest line; loops are bookkeeping.</li>
+      <li><b>Same idea, both ends:</b> memoization is the table written lazily; tabulation is you filling it deliberately. Say the state out loud, write <span style="font-family:var(--mono);font-size:13px">@cache</span> or the loops, and mention the exponential tree you didn&#8217;t build.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>state</b> &mdash; the minimum information that determines the future &mdash; the arguments of your recursion</div><div><b>memoization</b> &mdash; cache a pure function, top-down; you only ever pay for reachable states</div><div><b>tabulation</b> &mdash; fill the table bottom-up in dependency order &mdash; same math, explicit schedule</div><div><b>optimal substructure</b> &mdash; optimal answers are assembled from optimal sub-answers &mdash; the property that makes DP legal at all</div></div>
@@ -1070,8 +1081,11 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
   </div>
 
   <div class="notes">
-    <p>The contract has two clauses, and both are yours to keep: the hash must <b>spread</b> (real libraries mix every bit of the key; BAD HASH above keeps only the low bits &#8212; watch the clustering), and the table must <b>grow</b> before chains do (resize at a load threshold; amortized, still O(1)). Break either clause and every &#8220;O(1)&#8221; in your complexity analysis quietly becomes O(n) &#8212; which is precisely the follow-up question interviewers like to ask.</p>
-    <p>On the ladder (week 1), the table appears as three reflexes: the <b>seen-set</b> (duplicates, cycles), the <b>complement lookup</b> (two-sum: for each x, is target&minus;x already in the table?), and the <b>frequency map</b> (anagrams, counts, group-by). All three are the same move &#8212; pay one insert now so every future question costs O(1). And know the one thing the table can't do: it has no notion of order. The moment the question says &#8220;nearest,&#8221; &#8220;smallest above,&#8221; or &#8220;in sorted order,&#8221; you want a sorted structure or a heap (Lab 22), not a dict.</p>
+    <ul>
+      <li><b>Two contract clauses:</b> the hash must <b>spread</b> (mix every bit) and the table must <b>grow</b> before chains do. Break either and O(1) quietly becomes O(n) &#8212; the exact follow-up interviewers ask.</li>
+      <li><b>Three reflexes</b> (ladder wk 1): seen-set (dupes, cycles) &middot; complement lookup (two-sum) &middot; frequency map (anagrams, group-by). All one move: pay an insert now, answer in O(1) forever.</li>
+      <li><b>What it can&#8217;t do: order.</b> &#8220;Nearest,&#8221; &#8220;smallest above,&#8221; &#8220;in sorted order&#8221; &rarr; sorted structure or heap (Lab 22), not a dict.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>load factor &alpha;</b> &mdash; keys per bucket, n/b &mdash; the expected chain length under a good hash, and the dial you resize on</div><div><b>collision</b> &mdash; two keys, one bucket &mdash; inevitable by pigeonhole; chaining or probing absorbs it, spread keeps it rare</div><div><b>amortized O(1)</b> &mdash; occasional expensive resizes averaged over all inserts &mdash; total work stays linear, so each op is constant on average</div><div><b>expected vs. worst case</b> &mdash; &ldquo;O(1) expected&rdquo; is an average over hash behavior; adversarial keys degrade it to O(n) &mdash; saying both is what sounding senior means</div></div>
@@ -1143,8 +1157,11 @@ std::pair&lt;int,int&gt; two_sum(const std::vector&lt;int&gt;&amp; xs, int t) {
   </div>
 
   <div class="notes">
-    <p>The two shapes cover week 2 of the ladder between them. <b>The window</b> (L chases R): substrings and subarrays with a constraint &#8212; longest without repeats, shortest with sum &ge; target, at most k distinct. The invariant is &#8220;the window is always valid&#8221;; R expands until it breaks, L contracts until it's repaired, and each index enters and leaves at most once. <b>The converge</b> (L and R close in): pair-hunting in <i>sorted</i> data &#8212; two-sum, container with most water, trapping rain. There the monotone fact is starker: if the sum is too small, <i>nothing</i> paired with the current L can ever work, so L's entire column of possibilities dies in one comparison. It's Lab 17's halving argument wearing running shoes.</p>
-    <p>Know when the license is <i>revoked</i>: &#8220;shortest subarray with sum &ge; k&#8221; with <b>negative numbers</b> breaks the window's monotonicity (growing can now fix an invalid window), and the honest answers are prefix sums with a monotonic deque, or a different tool entirely. Saying that unprompted &#8212; &#8220;two pointers needs monotonicity, negatives break it&#8221; &#8212; is the difference between pattern-matching and understanding, and interviewers are listening for exactly it.</p>
+    <ul>
+      <li><b>The window</b> (L chases R): substrings and subarrays under a constraint. Invariant: &#8220;the window is always valid.&#8221; Each index enters and leaves once &rarr; O(n).</li>
+      <li><b>The converge</b> (ends close in): pair-hunting in sorted data. One comparison kills a whole row of pairs &#8212; Lab 17&#8217;s halving in running shoes.</li>
+      <li><b>License revoked:</b> negative numbers break window monotonicity (&#8220;shortest subarray with sum &ge; k&#8221;) &rarr; prefix sums + monotonic deque. Saying this unprompted is the differentiator.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>sliding window</b> &mdash; a range [L, R] where R grows and L only chases &mdash; each index enters and leaves once, hence O(n)</div><div><b>monotonicity</b> &mdash; the one-way fact (growing can&rsquo;t fix an invalid window) that licenses never looking back &mdash; negatives revoke it</div></div>
@@ -1218,8 +1235,12 @@ std::pair&lt;int,int&gt; two_sum_sorted(const std::vector&lt;int&gt;&amp; a, int
   </div>
 
   <div class="notes">
-    <p>The costume trick is why heaps are everywhere: an insert touches only the ancestor ladder &#8212; &lceil;log&#8322;n&rceil; slots, 20 for a million items &#8212; and the array layout means those touches are cache-friendly integer arithmetic, not pointer chasing. HEAPIFY is the quieter surprise: building from scratch bottom-up costs O(n), not n&nbsp;log&nbsp;n, because almost all nodes are leaves and sift barely anywhere. Interviewers spring that one as a follow-up; now you've watched it happen.</p>
-    <p>Week 5 of the ladder is mostly one pattern: <b>top-k</b>. Keep a heap of size k of the best-so-far, and its top is the <i>worst of the best</i> &#8212; the gatekeeper each new candidate must beat. n&nbsp;log&nbsp;k, tiny memory, works on streams you can't hold. (k large relative to n? Quickselect, next lab, does it in linear time.) The other week-5 shape, intervals, is heaps too: sweep sorted starts, park end-times in a min-heap, and &#8220;rooms needed&#8221; is just the heap's high-water mark. And you've already run the loop that matters most: Dijkstra in Lab 18 &#8212; its bucket is exactly this structure.</p>
+    <ul>
+      <li><b>Why it&#8217;s everywhere:</b> an insert touches one ancestor ladder &#8212; &lceil;log&#8322;n&rceil; slots, 20 for a million items &#8212; in a flat, cache-friendly array.</li>
+      <li><b>Heapify is O(n)</b>, not n log n: almost all nodes are leaves and barely sift. Standard follow-up; you&#8217;ve watched the receipts.</li>
+      <li><b>Top-k</b> (ladder wk 5): a k-sized heap of the best-so-far; its top is the worst-of-the-best gatekeeper. n log k, stream-safe. k large? Quickselect (Lab 23).</li>
+      <li><b>Intervals are heaps too:</b> sweep sorted starts, park end-times in a min-heap &#8212; &#8220;rooms needed&#8221; is the high-water mark. And Dijkstra&#8217;s bucket (Lab 18) is exactly this structure.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>heap property</b> &mdash; every parent &le; its children; nothing promised between siblings &mdash; weaker than sorted, which is exactly why it&rsquo;s cheaper</div><div><b>complete tree</b> &mdash; all levels full, the last packed left &mdash; why the whole thing lives in an array with children at 2i+1, 2i+2</div><div><b>priority queue</b> &mdash; the interface (push, pop-best); a binary heap is its standard implementation &mdash; keep the two words separate</div></div>
@@ -1288,8 +1309,12 @@ std::vector&lt;int&gt; top_k(const std::vector&lt;int&gt;&amp; xs, size_t k) {
   </div>
 
   <div class="notes">
-    <p>Three honest facts about sorting in interviews. One: <b>you will call <span style="font-family:var(--mono);font-size:13px">sort()</span>, not write it</b> &#8212; what's tested is knowing the n&nbsp;log&nbsp;n price, and spotting when sorting first turns a hard problem into an easy one (intervals, ladder week 5, is exactly this). Two: <b>the comparison bound is real</b> &#8212; n&nbsp;log&nbsp;n is the floor for comparison sorting, so any claimed faster sort is exploiting structure (counting sort on small ints, radix on fixed-width keys); saying which structure is the whole answer. Three: <b>WORST CASE isn't a party trick</b> &#8212; sorted input with a naive pivot is quicksort's n&sup2;, which is why real libraries randomize or use introsort, and why "how would an adversary hurt this?" is a fair question about any algorithm you name.</p>
-    <p>Quickselect is the one to actually carry: &#8220;k-th largest,&#8221; &#8220;median,&#8221; &#8220;top half&#8221; without n&nbsp;log&nbsp;n. The decision rule for week 5-and-beyond: k small or the data streams &rarr; heap (Lab 22, n&nbsp;log&nbsp;k); k anywhere and the data sits in memory &rarr; quickselect (expected O(n)); need the k results <i>in order</i> &rarr; sort and stop apologizing. And name-drop with precision: <span style="font-family:var(--mono);font-size:13px">std::nth_element</span> <i>is</i> quickselect, one call, already in the standard library &#8212; knowing that is worth more than reciting the partition loop.</p>
+    <ul>
+      <li><b>You&#8217;ll call sort(), not write it.</b> What&#8217;s tested: the n log n price, and spotting when sorting first turns hard into easy (intervals!).</li>
+      <li><b>The bound is real:</b> n log n is the comparison floor. Any faster sort exploits structure &#8212; counting on small ints, radix on fixed keys &#8212; and naming which is the answer.</li>
+      <li><b>Worst case isn&#8217;t a party trick:</b> sorted input + naive pivot = n&sup2;; real libraries randomize or introsort. &#8220;How would an adversary hurt this?&#8221; is fair game for anything you name.</li>
+      <li><b>Carry quickselect:</b> k small or streaming &rarr; heap; k in-memory &rarr; quickselect, expected O(n); need the results ordered &rarr; sort. And <span style="font-family:var(--mono);font-size:13px">std::nth_element</span> <i>is</i> quickselect &#8212; knowing that beats reciting the loop.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>partition</b> &mdash; one sweep around a pivot: smaller left, larger right, pivot seated in its final position forever</div><div><b>stable sort</b> &mdash; equal elements keep their original order &mdash; mergesort is, quicksort isn&rsquo;t; it matters whenever you sort by one key of many</div><div><b>Lomuto vs. Hoare</b> &mdash; the two partition schemes: Lomuto (used here) &mdash; end pivot, one sweep, easy to write live; Hoare &mdash; two converging pointers, fewer swaps, the 1961 original</div><div><b>introsort</b> &mdash; quicksort that watches its own recursion depth and bails to heapsort (pop a max-heap n times: guaranteed n log n) &mdash; how std::sort refuses to go quadratic</div></div>
@@ -1358,7 +1383,11 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   </div>
 
   <div class="notes">
-    <p>The insight to carry: when a problem <b>merges groups over time</b> &#8212; islands appearing, accounts sharing emails, network cables landing &#8212; the answer is a parent array, not a graph traversal. <span style="font-family:var(--mono);font-size:13px">find</span> walks to the root and flattens the path behind it; <span style="font-family:var(--mono);font-size:13px">union</span> points one root at the other. Amortized cost: effectively constant (inverse Ackermann &#8212; say &#8220;&le;4 for any n that fits in the universe&#8221;). Kruskal's greedy is <i>legal</i> by the cut property: the cheapest edge crossing any divide is always safe &#8212; your first exchange argument, one lab early.</p>
+    <ul>
+      <li><b>The reflex:</b> &#8220;groups merge over time&#8221; &#8212; islands appearing, accounts sharing emails, cables landing &rarr; parent array, not graph traversal.</li>
+      <li><b>find flattens as it climbs; union points root at root.</b> Amortized cost: inverse Ackermann &#8212; effectively constant.</li>
+      <li><b>Kruskal&#8217;s license is the cut property:</b> the cheapest edge crossing any divide is always safe &#8212; your first exchange argument, one lab early.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>minimum spanning tree (MST)</b> &mdash; the cheapest edge set that touches every vertex: exactly n&minus;1 edges, no cycles; &ldquo;spanning&rdquo; = connects everyone, &ldquo;minimum&rdquo; = least total weight</div><div><b>Kruskal vs. Prim</b> &mdash; the two MST greedies: Kruskal sorts edges globally and unions; Prim grows one tree outward with a min-heap (Dijkstra&rsquo;s cousin) &mdash; name both, implement Kruskal</div><div><b>union-find / DSU</b> &mdash; a forest of parent pointers answering same-set? and merge in near-constant amortized time</div><div><b>path compression</b> &mdash; find() re-points every node it visits straight at the root &mdash; the structure flattens as a side effect of being asked</div><div><b>inverse Ackermann &alpha;(n)</b> &mdash; the true amortized cost; grows so slowly it&rsquo;s &le; 4 for any physical input &mdash; say &ldquo;effectively constant&rdquo;</div><div><b>cut property</b> &mdash; the cheapest edge crossing any split of the vertices belongs to some MST &mdash; Kruskal&rsquo;s license</div></div>
@@ -1422,7 +1451,11 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   </div>
 
   <div class="notes">
-    <p>Why earliest-finish wins, in one move: take any optimal schedule and swap its first interval for the earliest-finisher &#8212; it ends no later, so everything after still fits. Repeat down the line: optimal morphs into greedy, losing nothing. That's an <b>exchange argument</b>, and it's the entire license. The interview discipline: if you can't sketch the swap in two sentences, don't trust the greedy &#8212; add weights to these same intervals and earliest-finish breaks, and the answer is DP (Lab 19). Greedy-with-a-license runs this whole chapter: Dijkstra (Lab 18), Kruskal (Lab 24), and Huffman coding &#8212; the greedy that builds optimal compression trees by repeatedly merging the two rarest symbols.</p>
+    <ul>
+      <li><b>The swap-proof:</b> trade any optimal schedule&#8217;s first pick for the earliest-finisher &#8212; it ends no later, so everything after still fits. Induct: optimal morphs into greedy, losing nothing.</li>
+      <li><b>The discipline:</b> can&#8217;t sketch the swap in two sentences &rarr; don&#8217;t trust the greedy. Add weights to these same intervals and earliest-finish dies &rarr; DP (Lab 19).</li>
+      <li><b>Greedy-with-a-license runs the chapter:</b> Dijkstra (Lab 18), Kruskal (Lab 24), and Huffman coding &#8212; merge the two rarest symbols, forever.</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>exchange argument</b> &mdash; swap any optimal solution&rsquo;s choice for greedy&rsquo;s, show nothing is lost, repeat &mdash; the standard proof that a greedy is legal</div><div><b>activity selection</b> &mdash; this problem&rsquo;s textbook name (also &ldquo;interval scheduling&rdquo;) &mdash; earliest-finish is its provably optimal rule</div></div>
@@ -1474,7 +1507,11 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   </div>
 
   <div class="notes">
-    <p>Interview reflex: the phrases &#8220;prerequisites,&#8221; &#8220;build order,&#8221; &#8220;must come before&#8221; all mean Kahn's algorithm &#8212; count in-degrees, queue the zeros, peel. Course Schedule I is &#8220;does the peel finish?&#8221;, II is &#8220;print the peel order,&#8221; and alien dictionary is the same peel after you extract the edges. One upgrade worth knowing: process the DAG <i>in peel order</i> and you can DP along it &#8212; longest path in a DAG is exactly that, and &#8220;longest chain of prerequisites&#8221; questions are it in costume (Lab 19 meets this lab).</p>
+    <ul>
+      <li><b>The reflex:</b> &#8220;prerequisites,&#8221; &#8220;build order,&#8221; &#8220;must come before&#8221; &rarr; Kahn: count in-degrees, queue the zeros, peel.</li>
+      <li><b>Course Schedule I</b> = does the peel finish &middot; <b>II</b> = print the order &middot; <b>alien dictionary</b> = same peel after extracting the edges.</li>
+      <li><b>The upgrade:</b> DP along peel order &#8212; longest path in a DAG is &#8220;longest prerequisite chain&#8221; in costume (Lab 19 meets this lab).</li>
+    </ul>
   </div>
 
   <div class="terms"><div><span class="fk">SAY IT RIGHT</span></div><div><b>DAG</b> &mdash; directed acyclic graph &mdash; dependencies with no way to owe yourself</div><div><b>in-degree</b> &mdash; how many unfinished prerequisites still point at a node; zero means free</div><div><b>Kahn&rsquo;s algorithm</b> &mdash; the peel&rsquo;s formal name: count in-degrees, queue the zeros, remove and repeat &mdash; BFS&rsquo;s bureaucratic sibling</div><div><b>topological order</b> &mdash; a line-up where every edge points forward &mdash; exists if and only if the graph is a DAG</div></div>
@@ -1514,6 +1551,98 @@ def topo(n, adj):
   <div class="try"><b>Try:</b> before peeling, predict which wave RESUME lands in &#8212; it has two masters. Then add the procrastination edge and peel again. The deadlock isn't a bug in the algorithm; it's a true statement about the plan.</div>
 </section>
 
+<!-- ══════════════ LAB 27 ══════════════ -->
+<section class="lab" id="tree">
+  <p class="eyebrow">Chapter 6 &#183; Lab 27 &#183; Trees</p>
+  <h2>Trust the recursion</h2>
+  <p class="lede">You never &#8220;traverse&#8221; a tree in an interview &#8212; you <b>delegate</b>. Assume the call on each child already returns the right answer; your entire job is the base case and the combine step. Watch answers flow <i>up</i> the tree below, one resolved subtree at a time.</p>
+
+  <div class="frame"><div><span class="fk">PROBLEM</span> Answer questions about hierarchical data by delegating to subtrees and combining their reports.</div><div><span class="fk">SHOWS UP AS</span> Invert Binary Tree &middot; Maximum Depth &middot; Validate BST &middot; Diameter of Binary Tree &middot; Kth Smallest in a BST &middot; Lowest Common Ancestor</div></div>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn togg" id="trDepth">MAX DEPTH</button>
+      <button class="btn togg" id="trDia">DIAMETER</button>
+      <button class="btn togg" id="trVal">VALIDATE BST</button>
+      <button class="btn togg" id="trIno">INORDER</button>
+      <span class="spacer"></span>
+      <button class="btn togg" id="trCorrupt">CORRUPT A NODE</button>
+      <span class="readout" id="trRO">pick an operation</span>
+    </div>
+    <canvas id="trC" width="720" height="260" style="width:100%;height:auto" role="img" aria-label="Recursion resolving up a binary search tree"></canvas>
+    <div class="stage-caption">Outline = call made, waiting on children. Fill + badge = subtree resolved, answer reported up. INORDER on a BST lights the nodes strictly left to right &#8212; the sorted-order proof, drawn. CORRUPT plants one bad value: VALIDATE hunts it down by narrowing (lo, hi) bounds, and INORDER's left-to-right sweep visibly breaks.</div>
+  </div>
+
+  <div class="notes">
+    <ul>
+      <li><b>Every tree problem is three sentences:</b> what does null return? what does each child report? how do I combine? Write those first &#8212; the code is transcription.</li>
+      <li><b>Values flow up.</b> Depth = 1 + max(children). Diameter at a node = left height + right height; track the global best <i>while returning height</i> &#8212; the two-numbers trick behind half the tree hards.</li>
+      <li><b>Validate BST is bounds, not neighbors.</b> Each node must sit inside (lo, hi) inherited from its ancestors &#8212; checking only your parent misses grandparent violations. Watch the demo catch one.</li>
+      <li><b>The BST superpower: inorder = sorted.</b> &#8220;K-th smallest in a BST&#8221; is just inorder, stop at k.</li>
+    </ul>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py"><i># the template: base case, delegate, combine</i>
+def depth(node):
+    if not node: return 0               <i># sentence 1: null reports 0</i>
+    L = depth(node.left)                <i># sentence 2: trust the children</i>
+    R = depth(node.right)
+    return 1 + max(L, R)                <i># sentence 3: combine + yourself</i>
+
+def valid_bst(node, lo=float('-inf'), hi=float('inf')):
+    if not node: return True
+    if not (<b>lo &lt; node.val &lt; hi</b>):        <i># bounds from ALL ancestors</i>
+        return False
+    return valid_bst(node.left, lo, node.val) and \
+           valid_bst(node.right, node.val, hi)
+
+def diameter(root):                     <i># the two-numbers trick:</i>
+    best = 0                            <i>#   return height, record best</i>
+    def h(n):
+        nonlocal best
+        if not n: return 0
+        L, R = h(n.left), h(n.right)
+        <b>best = max(best, L + R)</b>         <i># path through n, in edges</i>
+        return 1 + max(L, R)
+    h(root); return best</pre>
+    <pre data-t="cpp"><i>// same three sentences, C++ accent</i>
+int depth(Node* n) {
+    if (!n) return 0;                   <i>// null reports 0</i>
+    return 1 + std::max(depth(n-&gt;left), depth(n-&gt;right));
+}
+
+bool valid_bst(Node* n, long lo = LONG_MIN, long hi = LONG_MAX) {
+    if (!n) return true;
+    if (!(<b>lo &lt; n-&gt;val &amp;&amp; n-&gt;val &lt; hi</b>))   <i>// bounds from ALL ancestors</i>
+        return false;
+    return valid_bst(n-&gt;left, lo, n-&gt;val)
+        &amp;&amp; valid_bst(n-&gt;right, n-&gt;val, hi);
+}
+
+int diameter(Node* root, int&amp; best) {   <i>// returns height, records best</i>
+    if (!root) return 0;
+    int L = diameter(root-&gt;left, best), R = diameter(root-&gt;right, best);
+    <b>best = std::max(best, L + R);</b>       <i>// path through root, in edges</i>
+    return 1 + std::max(L, R);
+}</pre>
+  </div>
+
+  <div class="terms">
+    <div><span class="fk">SAY IT RIGHT</span></div>
+    <div><b>BST</b> &mdash; left subtree &lt; node &lt; right subtree, recursively; equivalently: the inorder walk emits sorted order</div>
+    <div><b>height vs. depth</b> &mdash; height looks down (longest path to a leaf), depth looks up (distance to root); state which one you mean and interviewers relax</div>
+    <div><b>balanced tree</b> &mdash; keeps height O(log n) by rotating on insert (AVL, red-black); in interviews say &ldquo;I&rsquo;d use a sorted map / TreeMap&rdquo; and move on &mdash; nobody writes rotations live</div>
+    <div><b>LCA</b> &mdash; lowest common ancestor: the deepest node with both targets in its subtree; in a BST it&rsquo;s simply the first node whose value falls between them</div>
+  </div>
+
+  <div class="try"><b>Predict, then run:</b> CORRUPT a node, then say which single node VALIDATE will flag and why its (lo, hi) window rejects it &#8212; before pressing the button. Then run INORDER on the corrupted tree and find the moment the left-to-right sweep stutters.</div>
+</section>
+
 <section class="lab" id="atlas">
   <p class="eyebrow">The Atlas</p>
   <h2>This page is alive. What should it grow next?</h2>
@@ -1524,7 +1653,7 @@ def topo(n, adj):
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 3</span><h3>Transformers</h3><p>Tokens, embeddings, attention computed live, and the sampling dials.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 4</span><h3>The math of AI</h3><p>Chain rule with live numbers, loss landscapes, matrices as warps.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 5</span><h3>CUDA on your Jetson</h3><p>Real kernels mapped onto the Orin Nano's 8 SMs; coalescing.</p></div>
-    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster, ten labs plus an honest syllabus map &#8212; every ladder pattern from hashing to union-find, each in Python and C++.</p></div>
+    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster, eleven labs plus an honest syllabus map &#8212; every ladder pattern from hashing to union-find, each in Python and C++.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED &#8212; YOU ASKED</span><h3>Inside the CPU</h3><p>Branch prediction, pipelines, caches &amp; set-associativity &#8212; parked while AI is the focus.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How training runs work</h3><p>Data parallelism, gradients across 10,000 GPUs, why interconnect is destiny.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How SSDs remember</h3><p>Trapping electrons on purpose: floating gates, wear leveling, why drives die.</p></div>
@@ -3926,5 +4055,156 @@ function mix6(h1,h2,t){
   q6('#toReset').addEventListener('click',reset);
   reset();
 }
+}
+</script>
+
+<style>
+/* code builder + notes bullets */
+.code6 .cl{display:block;min-height:1.35em}
+.code6 pre.building .cl{opacity:.13}
+.code6 pre.building .cl.on{opacity:1}
+.code6 pre.building .cl.cur{opacity:1;background:rgba(232,147,80,.12);box-shadow:inset 2px 0 0 var(--copper-hi)}
+.notes ul{margin:0;padding-left:20px}
+.notes li{margin:0 0 9px;max-width:60ch}
+</style>
+<script>
+'use strict';
+{ /* ═══════════ code builder — every .code6 panel ═══════════ */
+const isBlank=el=>el.textContent.replace(/\u200b/g,'').trim()==='';
+document.querySelectorAll('.code6').forEach(box=>{
+  box.querySelectorAll('pre').forEach(pre=>{
+    const lines=pre.innerHTML.split('\n');
+    pre.innerHTML=lines.map(l=>`<span class="cl">${l||'&#8203;'}</span>`).join('');
+  });
+  const tabs=box.querySelector('.ctabs');
+  const mk=(label)=>{ const b=document.createElement('button'); b.className='btn small'; b.innerHTML=label; tabs.appendChild(b); return b; };
+  const spacer=document.createElement('span'); spacer.style.flex='1'; tabs.appendChild(spacer);
+  const bBuild=mk('BUILD &#10142;'), bAll=mk('ALL');
+  const active=()=>box.querySelector('pre.on');
+  bBuild.addEventListener('click',()=>{
+    const pre=active(); if(!pre) return;
+    const cls=[...pre.querySelectorAll('.cl')];
+    let i=+(pre.dataset.idx??-1);
+    if(!pre.classList.contains('building')){ pre.classList.add('building'); i=-1; }
+    do{ i++; }while(i<cls.length&&isBlank(cls[i]));   /* skip blank lines */
+    if(i>=cls.length){ pre.classList.remove('building'); pre.dataset.idx=-1;
+      cls.forEach(c=>c.classList.remove('on','cur')); return; }
+    cls.forEach((c,k)=>{ c.classList.toggle('on',k<i); c.classList.toggle('cur',k===i); });
+    pre.dataset.idx=i;
+  });
+  bAll.addEventListener('click',()=>{
+    const pre=active(); if(!pre) return;
+    pre.classList.remove('building'); pre.dataset.idx=-1;
+    pre.querySelectorAll('.cl').forEach(c=>c.classList.remove('on','cur'));
+  });
+});
+}
+
+{ /* ═══════════ Lab 27 · trees ═══════════ */
+const q6=s=>document.querySelector(s);
+const RM6=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const lerp6=(a,b,t)=>a+(b-a)*t;
+function mix6(h1,h2,t){
+  const p=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const a=p(h1),b=p(h2);
+  return `rgb(${Math.round(lerp6(a[0],b[0],t))},${Math.round(lerp6(a[1],b[1],t))},${Math.round(lerp6(a[2],b[2],t))})`;
+}
+const cv=q6('#trC'), ctx=cv.getContext('2d');
+const BASE=[50,30,70,20,40,60,80,10,25,35,45,55,65,75,85];
+let vals=BASE.slice(), corrupt=false, timer=null;
+let st={}, evs=[], k=0, op=null;
+/* layout: x by inorder rank (BST ⇒ left-to-right = sorted) */
+const pos=[];
+{ let rank=0;
+  (function ino(i){ if(i>14) return; ino(2*i+1);
+    const d=Math.floor(Math.log2(i+1));
+    pos[i]={x:(rank+1)*720/16, y:30+d*62}; rank++;
+    ino(2*i+2); })(0);
+}
+function gen(){
+  evs=[]; const V=vals;
+  if(op==='depth'){
+    (function h(i){ if(i>14) return 0; evs.push({t:'call',i});
+      const L=h(2*i+1), R=h(2*i+2), d=1+Math.max(L,R);
+      evs.push({t:'res',i,badge:'h'+d}); return d; })(0);
+    evs.push({t:'done',msg:'max depth <b>4</b>'});
+  } else if(op==='dia'){
+    let best=0;
+    (function h(i){ if(i>14) return 0; evs.push({t:'call',i});
+      const L=h(2*i+1), R=h(2*i+2);
+      best=Math.max(best,L+R);
+      evs.push({t:'res',i,badge:L+R+'',live:'best so far <b>'+best+'</b>'});
+      return 1+Math.max(L,R); })(0);
+    evs.push({t:'done',msg:'diameter <b>'+best+'</b> edges (badge = path through that node)'});
+  } else if(op==='val'){
+    let ok=true;
+    (function v(i,lo,hi){ if(i>14) return;
+      evs.push({t:'call',i,live:V[i]+' &#8712; ('+(lo===-1e9?'&minus;&infin;':lo)+', '+(hi===1e9?'&infin;':hi)+') ?'});
+      if(!(lo<V[i]&&V[i]<hi)){ ok=false; evs.push({t:'res',i,badge:'&#10007;',bad:true}); return; }
+      v(2*i+1,lo,V[i]); v(2*i+2,V[i],hi);
+      evs.push({t:'res',i,badge:'&#10003;'}); })(0,-1e9,1e9);
+    evs.push({t:'done',msg:ok?'valid BST <b>&#10003;</b>':'<b style="color:var(--copper-hi)">NOT a BST</b> &#8212; bounds caught it; subtree below never even called'});
+  } else if(op==='ino'){
+    const seq=[];
+    (function ino(i){ if(i>14) return; ino(2*i+1);
+      seq.push(V[i]); evs.push({t:'res',i,badge:'#'+seq.length});
+      ino(2*i+2); })(0);
+    let brk=-1;
+    for(let j=1;j<seq.length;j++) if(seq[j]<seq[j-1]){ brk=j; break; }
+    evs.push({t:'done',msg: brk<0?'emitted in sorted order <b>&#10003;</b> &#8212; that IS the BST property'
+      :'<b style="color:var(--copper-hi)">sweep stuttered</b>: &hellip;'+seq[brk-1]+' then '+seq[brk]+' &#8212; sorted no more'});
+  }
+}
+function draw(){
+  ctx.fillStyle='#0F1620'; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.strokeStyle='#243044'; ctx.lineWidth=1;
+  for(let i=1;i<15;i++){
+    const p=pos[i], pp=pos[(i-1)>>1];
+    ctx.beginPath(); ctx.moveTo(pp.x,pp.y); ctx.lineTo(p.x,p.y); ctx.stroke();
+  }
+  for(let i=0;i<15;i++){
+    const p=pos[i], s=st[i]||0;   /* 0 idle · 1 called · 2 resolved */
+    ctx.beginPath(); ctx.arc(p.x,p.y,13,0,7);
+    if(s===2){ ctx.fillStyle=st['bad'+i]?'#B85C1E':mix6('#7FA3E8','#E89350',vals[i]/100); ctx.fill(); }
+    else { ctx.fillStyle='#131C2A'; ctx.fill();
+      ctx.strokeStyle=s===1?'#E89350':'#243044'; ctx.lineWidth=s===1?2:1; ctx.stroke(); }
+    ctx.font='600 10px ui-monospace,Menlo,monospace';
+    ctx.fillStyle=s===2?'#0F1620':'#C9D3E2';
+    ctx.fillText(vals[i],p.x-(vals[i]>9?6:3),p.y+3.5);
+    if(st['b'+i]!==undefined){
+      ctx.fillStyle='#E89350'; ctx.font='9px ui-monospace,Menlo,monospace';
+      ctx.fillText(st['b'+i],p.x-8,p.y+26);
+    }
+  }
+}
+function ro(html){ q6('#trRO').innerHTML=html; }
+function stop(){ if(timer){clearInterval(timer);timer=null;} }
+function apply(e){
+  if(e.t==='call'){ st[e.i]=1; if(e.live) ro(e.live); }
+  else if(e.t==='res'){ st[e.i]=2; st['b'+e.i]=e.badge; if(e.bad) st['bad'+e.i]=1; if(e.live) ro(e.live); }
+  else if(e.t==='done'){ ro(e.msg); }
+}
+function run(newOp,btn){
+  stop(); op=newOp; st={}; k=0; gen(); draw();
+  ['trDepth','trDia','trVal','trIno'].forEach(id=>q6('#'+id).classList.toggle('sel',id===btn));
+  if(RM6){ evs.forEach(apply); draw(); return; }
+  ro('&hellip;');
+  timer=setInterval(()=>{
+    if(k<evs.length){ apply(evs[k++]); draw(); }
+    else stop();
+  },op==='ino'?300:230);
+}
+q6('#trDepth').addEventListener('click',()=>run('depth','trDepth'));
+q6('#trDia').addEventListener('click',()=>run('dia','trDia'));
+q6('#trVal').addEventListener('click',()=>run('val','trVal'));
+q6('#trIno').addEventListener('click',()=>run('ino','trIno'));
+q6('#trCorrupt').addEventListener('click',e=>{
+  corrupt=!corrupt; e.currentTarget.classList.toggle('sel',corrupt);
+  vals=BASE.slice(); if(corrupt) vals[4]=90;   /* 40 → 90: breaks (30,50) */
+  stop(); st={}; op=null; ro(corrupt?'node 40 is now 90 &#8212; predict who catches it':'tree restored');
+  ['trDepth','trDia','trVal','trIno'].forEach(id=>q6('#'+id).classList.remove('sel'));
+  draw();
+});
+draw(); ro('pick an operation');
 }
 </script>
