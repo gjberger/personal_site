@@ -246,6 +246,10 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <div class="rail-ch">CH 5 &#8212; CUDA &#183; JETSON</div>
   <a href="#cuda1">15 &#183; Your first kernel</a>
   <a href="#cuda2">16 &#183; Feeding the beast</a>
+  <div class="rail-ch">CH 6 &#8212; ALGORITHMS</div>
+  <a href="#inv">17 &#183; Invariants</a>
+  <a href="#wave">18 &#183; Graph ripples</a>
+  <a href="#memo">19 &#183; Remembering (DP)</a>
   <div class="rail-ch">NEXT</div>
   <a href="#atlas">The atlas grows</a>
 </nav>
@@ -254,11 +258,11 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
 <header id="hero">
   <canvas id="heroCanvas" aria-hidden="true"></canvas>
   <div class="inner">
-    <p class="eyebrow">The Explorable Atlas &#183; Second Edition &#183; Five Chapters</p>
+    <p class="eyebrow">The Explorable Atlas &#183; Third Edition &#183; Six Chapters</p>
     <h1>GPUs, and why<br>they dream in parallel</h1>
     <p class="sub">A hands-on tour from a single transistor-packed die to a neural network training live in your browser. Nothing here is a video &#8212; every diagram runs, and you drive it.</p>
     <div class="chapter-tags">
-      <div class="tag"><b>16 labs</b> &#183; interactive</div>
+      <div class="tag"><b>19 labs</b> &#183; interactive</div>
       <div class="tag"><b>self-paced</b> &#183; come back anytime</div>
       <div class="tag">a living page &#8212; ask Claude for the next chapter</div>
     </div>
@@ -788,6 +792,217 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
 </section>
 
 <!-- &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; ATLAS &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; -->
+<!-- ══════════════ LAB 17 ══════════════ -->
+<section class="lab" id="inv">
+  <p class="eyebrow">Chapter 6 &#183; Lab 17 &#183; Invariants</p>
+  <h2>Halve the world until it confesses</h2>
+  <p class="lede">Binary search is not "check the middle." It is a <b>promise you refuse to break</b>: <i>the answer is inside [lo, hi]</i>. Every comparison is chosen so that, whatever it says, you can throw away half the window and the promise still holds. Watch it race a linear scan on the same array &#8212; same target, same data, one of them provably wasteful.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="invRun">&#9654; RACE</button>
+      <button class="btn" id="invStep">STEP</button>
+      <button class="btn" id="invNew">NEW TARGET</button>
+      <button class="btn togg" id="invPred">PREDICATE MODE</button>
+      <span class="spacer"></span>
+      <span class="readout">linear <b id="invLin">0</b> &#183; binary <span class="bv" id="invBin">0</span> &#183; window <b id="invWin">64</b></span>
+    </div>
+    <canvas id="invC" width="720" height="250" style="width:100%;height:auto" role="img" aria-label="Linear scan racing binary search on a sorted array"></canvas>
+    <div class="bar" style="margin:14px 0 0">
+      <label>N = 2<sup id="invExpV">6</sup> <input type="range" id="invExp" min="6" max="32" step="1" value="6"></label>
+      <span class="spacer"></span>
+      <span class="readout">worst case &#8212; linear <b id="invWorstL">64</b> &#183; binary <span class="bv" id="invWorstB">6</span> steps</span>
+    </div>
+    <div class="stage-caption">Top row: the linear scan, paying one comparison per element. Bottom row: the dimmed bars are <b>dead</b> &#8212; provably outside [lo, hi], never to be touched again. The copper bar is the next question. Drag the slider to N = 4 billion: linear needs 4 billion steps, binary needs 32.</div>
+  </div>
+
+  <div class="notes">
+    <p>Two things make this an interview weapon. First, the <b>invariant discipline</b>: every off-by-one bug in every binary search ever written is a broken promise &#8212; a <span style="font-family:var(--mono);font-size:13px">mid</span> that leaks back into the window, a <span style="font-family:var(--mono);font-size:13px">hi</span> that excludes the answer. Decide what [lo, hi] <i>means</i> before you type, and the loop writes itself.</p>
+    <p>Second: flip <b>PREDICATE MODE</b>. The bars stop being values and become answers to a yes/no question &#8212; F F F F <b>T</b> T T T. Any question that flips <i>once</i> and never flips back is binary-searchable, even when there's no array anywhere: the first build that fails, the minimum speed that finishes in time, the largest tile that fits in memory. Rephrase "optimize x" as "is x enough?" and an impossible problem becomes 32 questions. That reframe &#8212; <b>binary search on the answer</b> &#8212; is a full third of the hard problems on your ladder.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py"><i># first index where pred(i) is True — the only form you need</i>
+def first_true(lo, hi, pred):          <i># answer in [lo, hi]</i>
+    while lo &lt; hi:
+        mid = (lo + hi) // 2
+        if pred(mid):
+            <b>hi = mid</b>       <i># mid might BE the answer — keep it</i>
+        else:
+            <b>lo = mid + 1</b>  <i># mid is proven false — discard it</i>
+    return lo                          <i># lo == hi: the promise, kept</i>
+
+<i># find x in sorted a:  first_true(0, len(a), lambda i: a[i] >= x)</i></pre>
+    <pre data-t="cpp"><i>// same invariant, same two lines that matter</i>
+int first_true(int lo, int hi, auto&amp;&amp; pred) {   <i>// answer in [lo, hi]</i>
+    while (lo &lt; hi) {
+        int mid = lo + (hi - lo) / 2;  <i>// no overflow, unlike (lo+hi)/2</i>
+        if (pred(mid)) <b>hi = mid;</b>       <i>// mid might be the answer</i>
+        else           <b>lo = mid + 1;</b>  <i>// mid is proven false</i>
+    }
+    return lo;
+}
+<i>// the STL already knows this form:</i>
+<i>//   std::lower_bound(a.begin(), a.end(), x)  — first element >= x</i>
+<i>//   std::partition_point(f, l, pred)         — first_true, verbatim</i></pre>
+  </div>
+
+  <div class="try"><b>Try:</b> STEP through a binary run and, before each step, say out loud which half dies and why the promise survives. Then set the slider to 32: four billion elements, thirty-two questions. That ratio &#8212; not the code &#8212; is what the interviewer is checking you feel.</div>
+</section>
+
+<!-- ══════════════ LAB 18 ══════════════ -->
+<section class="lab" id="wave">
+  <p class="eyebrow">Chapter 6 &#183; Lab 18 &#183; Graph search</p>
+  <h2>One loop, three buckets</h2>
+  <p class="lede">DFS, BFS, and Dijkstra are marketed as three algorithms. They are <b>one loop</b>: pull a cell from the frontier, visit its neighbors, repeat. The only thing that changes is the bucket holding the frontier &#8212; a <b>stack</b>, a <b>queue</b>, or a <b>min-heap</b> &#8212; and that single swap changes everything you see below.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn togg sel" data-alg="dfs" id="wavDfs">DFS &#183; stack</button>
+      <button class="btn togg" data-alg="bfs" id="wavBfs">BFS &#183; queue</button>
+      <button class="btn togg" data-alg="dij" id="wavDij">DIJKSTRA &#183; heap</button>
+      <span class="spacer"></span>
+      <button class="btn togg sel" data-map="open" id="wavOpen">OPEN</button>
+      <button class="btn togg" data-map="walls" id="wavWalls">WALLS</button>
+      <button class="btn togg" data-map="swamp" id="wavSwamp">SWAMP</button>
+    </div>
+    <canvas id="wavC" width="720" height="408" style="width:100%;height:auto" role="img" aria-label="Graph search frontier expanding across a grid"></canvas>
+    <div class="bar" style="margin:14px 0 0">
+      <button class="btn primary" id="wavRun">&#9654; SEARCH</button>
+      <button class="btn" id="wavReset">RESET</button>
+      <span class="spacer"></span>
+      <span class="readout">explored <b id="wavExp">0</b> &#183; path cost <span class="bv" id="wavCost">&mdash;</span></span>
+    </div>
+    <div class="stage-caption">Blue wash = visited, brighter = earlier. Copper rim = the frontier. Murky green = swamp (costs 5&times; to cross). Watch BFS on SWAMP march proudly straight through the expensive mud &#8212; it counts <i>steps</i>, not <i>cost</i>. Dijkstra, same loop with a heap, walks around it.</div>
+  </div>
+
+  <div class="notes">
+    <p>The shapes are the lesson. <b>DFS</b> is a spelunker: it commits to one corridor to the bitter end, and the path it returns is whatever wandering route it happened to survive &#8212; found &#8801; shortest is <i>false</i>. <b>BFS</b> is a ripple: it exhausts distance k before touching k+1, so the first time it reaches the goal is provably the fewest-steps route. <b>Dijkstra</b> is the same ripple in <i>cost-space</i> instead of step-space. (Give the heap a hunch about direction and you've invented A* &#8212; that's the whole extension.)</p>
+    <p>The interview skill is rarely writing the loop &#8212; it's <b>seeing the graph</b> where none was drawn. Word ladders, lock combinations, course prerequisites, "minimum moves to&hellip;": states are nodes, legal moves are edges, and the question "fewest moves?" is the word BFS wearing a costume. Say what the bucket is and why, and the rest is typing.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">import heapq
+def dijkstra(adj, s):                  <i># adj[u] = [(v, w), ...]</i>
+    dist = {s: 0}
+    pq = [(0, s)]                      <b><i># the bucket. that's the algorithm.</i></b>
+    while pq:
+        d, u = heapq.heappop(pq)
+        if d &gt; dist[u]: continue       <i># stale entry — skip</i>
+        for v, w in adj[u]:
+            if d + w &lt; dist.get(v, 1e18):
+                dist[v] = d + w
+                heapq.heappush(pq, (dist[v], v))
+    return dist
+<i># BFS: pq → collections.deque, popleft(), all w == 1</i>
+<i># DFS: pq → plain list, pop()  — and the guarantees evaporate</i></pre>
+    <pre data-t="cpp">#include &lt;queue&gt;
+#include &lt;vector&gt;
+using P = std::pair&lt;long long, int&gt;;             <i>// (dist, node)</i>
+std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
+    std::vector&lt;long long&gt; dist(adj.size(), LLONG_MAX);
+    std::priority_queue&lt;P, std::vector&lt;P&gt;, std::greater&lt;&gt;&gt; pq; <b><i>// the bucket</i></b>
+    dist[s] = 0; pq.push({0, s});
+    while (!pq.empty()) {
+        auto [d, u] = pq.top(); pq.pop();
+        if (d &gt; dist[u]) continue;               <i>// stale entry — skip</i>
+        for (auto [v, w] : adj[u])
+            if (d + w &lt; dist[v]) { dist[v] = d + w; pq.push({dist[v], v}); }
+    }
+    return dist;
+}
+<i>// BFS: pq → std::queue, all w == 1 · DFS: → std::stack (or recursion)</i></pre>
+  </div>
+
+  <div class="try"><b>Try:</b> run all three on SWAMP and read the two numbers each leaves behind &#8212; cells explored vs. path cost. DFS explores least here and pays most; Dijkstra explores most and pays least. That trade is the entire theory of search, in two integers.</div>
+</section>
+
+<!-- ══════════════ LAB 19 ══════════════ -->
+<section class="lab" id="memo">
+  <p class="eyebrow">Chapter 6 &#183; Lab 19 &#183; Dynamic programming</p>
+  <h2>Remembering is the whole algorithm</h2>
+  <p class="lede">DP has a fearsome reputation and a one-sentence definition: <b>recursion that refuses to redo work</b>. Below is naive fib(n) as an actual call tree &#8212; every node one function call, every color one argument. Same color = same computation, repeated. Then flip the switch that remembers.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <label>n <b id="fibNV" style="color:var(--copper-hi)">10</b> <input type="range" id="fibN" min="5" max="13" step="1" value="10"></label>
+      <button class="btn togg" id="fibMemo">MEMOIZE</button>
+      <button class="btn primary" id="fibPlay">&#9654; REPLAY CALLS</button>
+      <span class="spacer"></span>
+      <span class="readout">calls: naive <b id="fibCn">&mdash;</b> &#183; memoized <span class="bv" id="fibCm">&mdash;</span></span>
+    </div>
+    <canvas id="fibC" width="720" height="270" style="width:100%;height:auto" role="img" aria-label="Recursion tree of naive fibonacci, collapsing under memoization"></canvas>
+    <div class="stage-caption">Every same-colored subtree is the same answer being re-derived from scratch. MEMOIZE keeps only the first of each color; the hollow dots are cache hits &#8212; a lookup, not a subtree. The tree of <span id="fibCap1">177</span> calls becomes <span id="fibCap2">19</span>.</div>
+  </div>
+
+  <div class="stage" style="margin-top:18px">
+    <div class="bar">
+      <button class="btn primary" id="dpFill">&#9654; FILL THE TABLE</button>
+      <button class="btn" id="dpGreedy">GREEDY</button>
+      <button class="btn" id="dpReset">RESET</button>
+      <span class="spacer"></span>
+      <span class="readout">work <b id="dpWork">0</b> / 70 cells &#183; greedy <b id="dpGcost">&mdash;</b> vs optimal <span class="bv" id="dpOpt">&mdash;</span></span>
+    </div>
+    <canvas id="dpC" width="720" height="310" style="width:100%;height:auto" role="img" aria-label="Minimum path sum table filling cell by cell"></canvas>
+    <div class="stage-caption">Cheapest top-left &rarr; bottom-right path, moving only right or down. Each cell needs one fact: <span style="font-family:var(--mono)">cost + min(from-above, from-left)</span>. 70 cells of work stands in for the <b>5,005</b> complete paths a brute force would walk. GREEDY always grabs the locally cheaper neighbor &#8212; watch it lose to the table.</div>
+  </div>
+
+  <div class="notes">
+    <p>Every DP interview reduces to two questions, asked in this order. <b>One: what is the state?</b> &#8212; the arguments of your recursion, the minimum description of "where am I" (a fib argument; a grid cell; <i>(index, remaining capacity)</i> for knapsack). <b>Two: where does the answer sit?</b> &#8212; one corner of the table, or a max over the last row. Answer those and the recurrence is one honest line; filling order and loops are bookkeeping. When you're stuck, you're stuck on question one &#8212; naming the state &#8212; not on "DP".</p>
+    <p>The two stages above are the same idea from both ends: memoization is the recursion writing the table lazily on demand; tabulation is you filling it in a deliberate order. Interviews accept either &#8212; say the state out loud, write <span style="font-family:var(--mono);font-size:13px">@cache</span> or the loops, and mention that the tree you didn't build was exponential. Ladder tie-in: 1-D states week 6, 2-D states week 8.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">from functools import cache
+
+@cache                                 <i># memoization: the tree, pruned</i>
+def fib(n):
+    return n if n &lt; 2 else fib(n-1) + fib(n-2)
+
+def min_path(g):                       <i># tabulation: the table, filled</i>
+    R, C = len(g), len(g[0])
+    dp = [[0]*C for _ in range(R)]
+    for r in range(R):
+        for c in range(C):
+            best = min(<b>dp[r-1][c]</b> if r else 1e18,
+                       <b>dp[r][c-1]</b> if c else 1e18)
+            dp[r][c] = g[r][c] + (0 if r == c == 0 else best)
+    return dp[-1][-1]                  <i># the answer sits in the corner</i></pre>
+    <pre data-t="cpp">#include &lt;vector&gt;
+long long fib(int n, std::vector&lt;long long&gt;&amp; m) {   <i>// memoization</i>
+    if (n &lt; 2) return n;
+    if (m[n] != -1) return m[n];                    <i>// cache hit — no subtree</i>
+    return m[n] = fib(n-1, m) + fib(n-2, m);
+}
+
+long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
+    size_t R = g.size(), C = g[0].size();           <i>// tabulation</i>
+    std::vector&lt;std::vector&lt;long long&gt;&gt; dp(R, std::vector&lt;long long&gt;(C));
+    for (size_t r = 0; r &lt; R; ++r)
+        for (size_t c = 0; c &lt; C; ++c) {
+            long long up   = r ? <b>dp[r-1][c]</b> : LLONG_MAX;
+            long long left = c ? <b>dp[r][c-1]</b> : LLONG_MAX;
+            dp[r][c] = g[r][c] + ((r||c) ? std::min(up,left) : 0);
+        }
+    return dp[R-1][C-1];
+}</pre>
+  </div>
+
+  <div class="try"><b>Try:</b> naive mode, slide n from 10 to 13 and watch the call counter roughly double per notch &#8212; that's O(&phi;&#8319;) happening to you personally. Then MEMOIZE and slide again: the counter barely moves. One switch, exponential &rarr; linear. That gap is why "have we computed this before?" is the most valuable question in the interview.</div>
+</section>
+
 <section class="lab" id="atlas">
   <p class="eyebrow">The Atlas</p>
   <h2>This page is alive. What should it grow next?</h2>
@@ -798,6 +1013,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 3</span><h3>Transformers</h3><p>Tokens, embeddings, attention computed live, and the sampling dials.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 4</span><h3>The math of AI</h3><p>Chain rule with live numbers, loss landscapes, matrices as warps.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 5</span><h3>CUDA on your Jetson</h3><p>Real kernels mapped onto the Orin Nano's 8 SMs; coalescing.</p></div>
+    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster: binary search as a kept promise, graph ripples in three buckets, DP as refusing to redo work &#8212; each in Python and C++.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED &#8212; YOU ASKED</span><h3>Inside the CPU</h3><p>Branch prediction, pipelines, caches &amp; set-associativity &#8212; parked while AI is the focus.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How training runs work</h3><p>Data parallelism, gradients across 10,000 GPUs, why interconnect is destiny.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How SSDs remember</h3><p>Trapping electrons on purpose: floating gates, wear leveling, why drives die.</p></div>
@@ -809,7 +1025,8 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
 
 <footer>
   THE EXPLORABLE ATLAS &#183; built by Claude for Gabriel &#183; numbers are representative of ~2023-era flagship hardware (AD102 / H100 class); stylized where noted, honest everywhere.<br>
-  To extend: &#8220;add a chapter on ___ to the Atlas&#8221; &#183; to fix or tune anything: just describe it.
+  To extend: &#8220;add a chapter on ___ to the Atlas&#8221; &#183; to fix or tune anything: just describe it.<br>
+  Third Edition, 2026-07-04: Chapter 6 (Algorithms) &#8212; the interview-canon booster paired with the Training Plan's drill ladder, &sect;04.
 </footer>
 </main>
 
@@ -2198,4 +2415,408 @@ function whenVisible(el, start, stop){
   draw();
 }
 
+</script>
+
+<style>
+/* ---------- Chapter 6 additions ---------- */
+.code6{background:var(--stage);border-radius:4px;padding:16px 20px;margin-top:26px;overflow-x:auto;max-width:820px}
+.code6 .ctabs{display:flex;gap:8px}
+.code6 pre{display:none;font-family:var(--mono);font-size:12.5px;line-height:1.75;color:#C9D3E2;margin:12px 0 0;tab-size:4}
+.code6 pre.on{display:block}
+.code6 pre i{color:#67748A;font-style:normal}
+.code6 pre b{color:var(--copper-hi);font-weight:500}
+.code6 pre b i{color:var(--copper-hi)}
+#inv .bar sup{font-size:9px}
+</style>
+<script>
+'use strict';
+{ /* ═══════════ Chapter 6 · shared ═══════════ */
+const q6 = s => document.querySelector(s);
+const RM6 = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C6 = { bg:'#0F1620', line:'#243044', dim:'#22314A', dead:'#161F2E', bar:'#3A4A66',
+             txt:'#93A1B5', cu:'#B85C1E', cuh:'#E89350', bl:'#2453B8', blh:'#7FA3E8' };
+const lerp6=(a,b,t)=>a+(b-a)*t;
+function mix6(h1,h2,t){
+  const p=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const a=p(h1),b=p(h2);
+  return `rgb(${Math.round(lerp6(a[0],b[0],t))},${Math.round(lerp6(a[1],b[1],t))},${Math.round(lerp6(a[2],b[2],t))})`;
+}
+
+/* code tabs */
+document.querySelectorAll('.code6').forEach(box=>{
+  box.querySelectorAll('.ctabs .btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      box.querySelectorAll('.ctabs .btn').forEach(b=>b.classList.toggle('sel',b===btn));
+      box.querySelectorAll('pre').forEach(p=>p.classList.toggle('on',p.dataset.t===btn.dataset.t));
+    });
+  });
+});
+
+/* ═══════════ Lab 17 · invariants ═══════════ */
+{
+  const cv=q6('#invC'), ctx=cv.getContext('2d'), N=64;
+  const vals=Array.from({length:N},(_,i)=>6+i*2+((i*7)%3));
+  let t=41, pred=false, timer=null;
+  let lin, bin;
+  function reset(newT){
+    if(newT!==undefined) t=newT;
+    lin={i:0,cnt:0,done:false};
+    bin={lo:0,hi:pred?N:N-1,cnt:0,done:false,mid:-1};
+    stopRun(); draw(); readout();
+  }
+  function stepLin(){
+    if(lin.done) return;
+    lin.cnt++;
+    const hit = pred ? (lin.i>=t) : (vals[lin.i]===vals[t]);
+    if(hit){ lin.done=true; } else { lin.i++; if(lin.i>=N){lin.done=true;} }
+  }
+  function stepBin(){
+    if(bin.done) return;
+    if(pred){ /* first_true on [lo,hi) */
+      if(bin.lo>=bin.hi){ bin.done=true; return; }
+      bin.cnt++; bin.mid=(bin.lo+bin.hi)>>1;
+      if(bin.mid>=t) bin.hi=bin.mid; else bin.lo=bin.mid+1;
+      if(bin.lo>=bin.hi) bin.done=true;
+    } else {
+      if(bin.lo>bin.hi){ bin.done=true; return; }
+      bin.cnt++; bin.mid=(bin.lo+bin.hi)>>1;
+      if(vals[bin.mid]===vals[t]){ bin.done=true; }
+      else if(vals[bin.mid]<vals[t]) bin.lo=bin.mid+1;
+      else bin.hi=bin.mid-1;
+    }
+  }
+  function step(){ stepLin(); stepBin(); draw(); readout();
+    if(lin.done&&bin.done) stopRun(); }
+  function stopRun(){ if(timer){clearInterval(timer);timer=null;} }
+  function run(){
+    stopRun();
+    if(RM6){ while(!(lin.done&&bin.done)) {stepLin();stepBin();} draw(); readout(); return; }
+    timer=setInterval(step,240);
+  }
+  function draw(){
+    const W=cv.width,H=cv.height,bw=W/N;
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,W,H);
+    ctx.font='10px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+    ctx.fillText('LINEAR — one comparison per element',8,16);
+    ctx.fillText(pred?'BINARY — first TRUE in F F F … T T T':'BINARY — the window [lo, hi]',8,140);
+    const rows=[{y0:24,y1:118,st:lin,kind:'lin'},{y0:148,y1:242,st:bin,kind:'bin'}];
+    for(const r of rows){
+      for(let i=0;i<N;i++){
+        const h = pred? (r.y1-r.y0)*0.55 : ((vals[i]/vals[N-1])*(r.y1-r.y0-8)+6);
+        const x=i*bw+1, y=r.y1-h, w=bw-2;
+        let col=C6.bar;
+        if(pred) col = i>=t ? '#33507E' : C6.bar;
+        if(r.kind==='lin'){
+          if(i<lin.i) col=C6.dead;
+          if(i===lin.i&&!allDone(lin)) col=C6.cu;
+          if(lin.done&&i===lin.i&&(pred? lin.i>=t : true)&&lin.i<N) col=C6.cuh;
+        } else {
+          const inWin = pred ? (i>=bin.lo&&i<bin.hi) : (i>=bin.lo&&i<=bin.hi);
+          if(!inWin&&!bin.done) col=C6.dead;
+          if(!bin.done&&i===bin.mid) col=C6.cu;
+          if(bin.done){ const f=pred?bin.lo:bin.mid; col = i===f?C6.blh:(C6.dead); }
+        }
+        ctx.fillStyle=col; ctx.fillRect(x,y,w,h);
+      }
+      /* target marker */
+      ctx.fillStyle=C6.cuh;
+      ctx.beginPath();
+      const tx=t*bw+bw/2;
+      ctx.moveTo(tx,r.y1+3); ctx.lineTo(tx-4,r.y1+9); ctx.lineTo(tx+4,r.y1+9); ctx.fill();
+    }
+    function allDone(s){return s.done;}
+  }
+  function readout(){
+    q6('#invLin').textContent=lin.cnt;
+    q6('#invBin').textContent=bin.cnt;
+    q6('#invWin').textContent=pred?Math.max(bin.hi-bin.lo,bin.done?1:0):Math.max(bin.hi-bin.lo+1,0);
+  }
+  q6('#invStep').addEventListener('click',()=>{stopRun();step();});
+  q6('#invRun').addEventListener('click',run);
+  q6('#invNew').addEventListener('click',()=>reset(3+Math.floor(Math.random()*(N-6))));
+  q6('#invPred').addEventListener('click',e=>{
+    pred=!pred; e.currentTarget.classList.toggle('sel',pred); reset();
+  });
+  const exp=q6('#invExp');
+  function worst(){
+    const e=+exp.value; q6('#invExpV').textContent=e;
+    q6('#invWorstL').textContent=Math.pow(2,e).toLocaleString('en-US');
+    q6('#invWorstB').textContent=e;
+  }
+  exp.addEventListener('input',worst);
+  worst(); reset();
+}
+
+/* ═══════════ Lab 18 · graph ripples ═══════════ */
+{
+  const cv=q6('#wavC'), ctx=cv.getContext('2d');
+  const W=30,H=17,CELL=24, S={x:2,y:8}, G={x:27,y:8};
+  let alg='dfs', map='open', cost=[], run=null;
+  function buildMap(){
+    cost=Array.from({length:H},()=>Array(W).fill(1));
+    if(map==='walls'){
+      for(let y=0;y<H;y++){ if(y<13) cost[y][8]=-1; if(y>3) cost[y][15]=-1; if(y<13) cost[y][22]=-1; }
+    }
+    if(map==='swamp'){
+      for(let y=4;y<=12;y++) for(let x=10;x<=19;x++) cost[y][x]=5;
+    }
+  }
+  function newRun(){
+    run={ pop:new Array(W*H).fill(-1), par:new Array(W*H).fill(-1),
+          dist:new Array(W*H).fill(Infinity), inF:new Set(),
+          frontier:[], head:0, n:0, done:false, path:null, pathCost:null };
+    const s=S.y*W+S.x;
+    run.dist[s]=0; run.frontier.push(alg==='dij'?[0,s]:s); run.inF.add(s);
+  }
+  const nbr=[[0,-1],[1,0],[0,1],[-1,0]];
+  function popNext(){
+    const r=run;
+    if(alg==='dfs') return r.frontier.pop();
+    if(alg==='bfs') return r.head<r.frontier.length ? r.frontier[r.head++] : undefined;
+    /* dijkstra: lazy linear extract-min */
+    let bi=-1,bd=Infinity;
+    for(let i=0;i<r.frontier.length;i++){ const e=r.frontier[i]; if(e&&e[0]<bd){bd=e[0];bi=i;} }
+    if(bi<0) return undefined;
+    const [,u]=r.frontier[bi]; r.frontier[bi]=null;
+    return u;
+  }
+  function expand(){
+    const r=run;
+    let u=popNext();
+    while(u!==undefined && r.pop[u]!==-1) u=popNext();   /* skip stale */
+    if(u===undefined){ r.done=true; return; }
+    r.pop[u]=r.n++;
+    if(u===G.y*W+G.x){ r.done=true; trace(u); return; }
+    const ux=u%W, uy=(u/W)|0;
+    for(const [dx,dy] of nbr){
+      const x=ux+dx,y=uy+dy;
+      if(x<0||y<0||x>=W||y>=H) continue;
+      const c=cost[y][x]; if(c<0) continue;
+      const v=y*W+x;
+      if(r.pop[v]!==-1) continue;
+      if(alg==='dij'){
+        const nd=r.dist[u]+c;
+        if(nd<r.dist[v]){ r.dist[v]=nd; r.par[v]=u; r.frontier.push([nd,v]); r.inF.add(v); }
+      } else {
+        if(!r.inF.has(v)){ r.dist[v]=r.dist[u]+c; r.par[v]=u; r.frontier.push(v); r.inF.add(v); }
+      }
+    }
+  }
+  function trace(u){
+    const r=run, path=[]; let c=0, v=u;
+    while(v!==-1){ path.push(v); if(v!==S.y*W+S.x) c+=cost[(v/W)|0][v%W]; v=r.par[v]; }
+    r.path=path.reverse(); r.pathCost=c;
+  }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const maxPop=Math.max(run?run.n:1,1);
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+      const px=x*CELL, py=y*CELL, c=cost[y][x];
+      let col='#131C2A';
+      if(c<0) col='#0A0F16';
+      else if(c>1) col='#1B2A22';
+      const idx=y*W+x;
+      if(run&&run.pop[idx]!==-1){
+        col=mix6('#7FA3E8','#22314A',Math.min(run.pop[idx]/maxPop,1));
+        if(c>1) col=mix6('#6E9E7A','#1B2A22',Math.min(run.pop[idx]/maxPop,1));
+      }
+      ctx.fillStyle=col; ctx.fillRect(px+1,py+1,CELL-2,CELL-2);
+      if(run&&run.pop[idx]===-1&&run.inF.has(idx)&&!run.done){
+        ctx.strokeStyle=C6.cu; ctx.lineWidth=1.5; ctx.strokeRect(px+2,py+2,CELL-4,CELL-4);
+      }
+    }
+    if(run&&run.path){
+      ctx.strokeStyle=C6.cuh; ctx.lineWidth=3; ctx.lineJoin='round'; ctx.beginPath();
+      run.path.forEach((v,i)=>{
+        const x=(v%W)*CELL+CELL/2, y=((v/W)|0)*CELL+CELL/2;
+        i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+      });
+      ctx.stroke();
+    }
+    /* start & goal */
+    ctx.fillStyle=C6.cuh; ctx.fillRect(S.x*CELL+6,S.y*CELL+6,CELL-12,CELL-12);
+    ctx.strokeStyle=C6.cuh; ctx.lineWidth=2; ctx.strokeRect(G.x*CELL+5,G.y*CELL+5,CELL-10,CELL-10);
+    ctx.font='10px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+    ctx.fillText('S',S.x*CELL+9,S.y*CELL-2); ctx.fillText('G',G.x*CELL+9,G.y*CELL-2);
+  }
+  function readout(){
+    q6('#wavExp').textContent=run?run.n:0;
+    q6('#wavCost').textContent=(run&&run.pathCost!=null)?run.pathCost:'—';
+  }
+  let raf=null;
+  function animate(){
+    if(RM6){ while(!run.done) expand(); draw(); readout(); return; }
+    cancelAnimationFrame(raf);
+    const tick=()=>{
+      for(let i=0;i<4&&!run.done;i++) expand();
+      draw(); readout();
+      if(!run.done) raf=requestAnimationFrame(tick);
+    };
+    raf=requestAnimationFrame(tick);
+  }
+  function fullReset(){ cancelAnimationFrame(raf); buildMap(); newRun(); draw(); readout(); }
+  [['wavDfs','dfs'],['wavBfs','bfs'],['wavDij','dij']].forEach(([id,a])=>{
+    q6('#'+id).addEventListener('click',()=>{
+      alg=a;
+      ['wavDfs','wavBfs','wavDij'].forEach(i2=>q6('#'+i2).classList.toggle('sel',i2===id));
+      fullReset();
+    });
+  });
+  [['wavOpen','open'],['wavWalls','walls'],['wavSwamp','swamp']].forEach(([id,m])=>{
+    q6('#'+id).addEventListener('click',()=>{
+      map=m;
+      ['wavOpen','wavWalls','wavSwamp'].forEach(i2=>q6('#'+i2).classList.toggle('sel',i2===id));
+      fullReset();
+    });
+  });
+  q6('#wavRun').addEventListener('click',()=>{ fullReset(); animate(); });
+  q6('#wavReset').addEventListener('click',fullReset);
+  fullReset();
+}
+
+/* ═══════════ Lab 19 · DP ═══════════ */
+{
+  /* --- stage A: fib call tree --- */
+  const cv=q6('#fibC'), ctx=cv.getContext('2d');
+  let n=10, memo=false, nodes=[], leafX=0, shown=0, raf=null;
+  function fibv(k){ let a=0,b=1; for(let i=0;i<k;i++)[a,b]=[b,a+b]; return a; }
+  function build(){
+    nodes=[]; leafX=0;
+    const seen=new Set(), maxD={d:0};
+    (function rec(arg,depth,parent){
+      const me={arg,depth,parent,stub:false,x:0,i:nodes.length};
+      nodes.push(me); maxD.d=Math.max(maxD.d,depth);
+      const isLeaf = arg<2 || (memo&&seen.has(arg));
+      if(memo&&seen.has(arg)&&arg>=2) me.stub=true;
+      if(isLeaf){ me.x=leafX++; }
+      else{
+        seen.add(arg);
+        const l=rec(arg-1,depth+1,me), r=rec(arg-2,depth+1,me);
+        me.x=(l.x+r.x)/2;
+      }
+      if(arg<2) seen.add(arg);
+      return me;
+    })(n,0,null);
+    const W=cv.width-30, H=cv.height-30;
+    const lx=Math.max(leafX-1,1), dd=Math.max(maxD.d,1);
+    nodes.forEach(m=>{ m.px=15+m.x/lx*W; m.py=15+m.depth/dd*H; });
+    shown=nodes.length;
+  }
+  function counts(){
+    const naive=2*fibv(n+1)-1, mm=2*n-1;
+    q6('#fibCn').textContent=naive.toLocaleString('en-US');
+    q6('#fibCm').textContent=mm;
+    q6('#fibCap1').textContent=naive.toLocaleString('en-US');
+    q6('#fibCap2').textContent=mm;
+  }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.lineWidth=0.6; ctx.strokeStyle=C6.line;
+    for(let i=1;i<Math.min(shown,nodes.length);i++){
+      const m=nodes[i]; if(!m.parent) continue;
+      ctx.beginPath(); ctx.moveTo(m.parent.px,m.parent.py); ctx.lineTo(m.px,m.py); ctx.stroke();
+    }
+    const r=nodes.length>400?1.6:(nodes.length>150?2.4:3.4);
+    for(let i=0;i<Math.min(shown,nodes.length);i++){
+      const m=nodes[i], col=mix6('#7FA3E8','#E89350',m.arg/Math.max(n,1));
+      ctx.beginPath(); ctx.arc(m.px,m.py,m.stub?r+0.8:r,0,7);
+      if(m.stub){ ctx.strokeStyle=col; ctx.lineWidth=1.2; ctx.stroke(); }
+      else{ ctx.fillStyle=col; ctx.fill(); }
+    }
+  }
+  function replay(){
+    cancelAnimationFrame(raf);
+    if(RM6){ shown=nodes.length; draw(); return; }
+    shown=0;
+    const per=Math.max(1,Math.ceil(nodes.length/120));
+    const tick=()=>{ shown=Math.min(shown+per,nodes.length); draw();
+      if(shown<nodes.length) raf=requestAnimationFrame(tick); };
+    raf=requestAnimationFrame(tick);
+  }
+  function refresh(){ build(); counts(); draw(); }
+  q6('#fibN').addEventListener('input',e=>{ n=+e.target.value; q6('#fibNV').textContent=n; refresh(); });
+  q6('#fibMemo').addEventListener('click',e=>{ memo=!memo; e.currentTarget.classList.toggle('sel',memo); refresh(); replay(); });
+  q6('#fibPlay').addEventListener('click',replay);
+  refresh();
+
+  /* --- stage B: min-path table --- */
+  const dv=q6('#dpC'), dtx=dv.getContext('2d');
+  const R=7,C=10,CW=72,CH=44,OX=0,OY=2;
+  let seed=42; const lcg=()=>((seed=(seed*1103515245+12345)&0x7fffffff)>>16);
+  const g=Array.from({length:R},()=>Array.from({length:C},()=>1+lcg()%9));
+  let dp=null, filled=0, opt=null, greedy=null, fraf=null;
+  function solve(){
+    dp=Array.from({length:R},()=>Array(C).fill(0));
+    for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+      const up=r?dp[r-1][c]:Infinity, lf=c?dp[r][c-1]:Infinity;
+      dp[r][c]=g[r][c]+((r||c)?Math.min(up,lf):0);
+    }
+  }
+  function pathBack(){
+    let r=R-1,c=C-1; const p=[[r,c]];
+    while(r||c){
+      const up=r?dp[r-1][c]:Infinity, lf=c?dp[r][c-1]:Infinity;
+      if(up<=lf) r--; else c--;
+      p.push([r,c]);
+    }
+    return p.reverse();
+  }
+  function greedyPath(){
+    let r=0,c=0,cost=g[0][0]; const p=[[0,0]];
+    while(r<R-1||c<C-1){
+      const right=c<C-1?g[r][c+1]:Infinity, down=r<R-1?g[r+1][c]:Infinity;
+      if(right<=down) c++; else r++;
+      cost+=g[r][c]; p.push([r,c]);
+    }
+    return {p,cost};
+  }
+  function ddraw(){
+    dtx.fillStyle=C6.bg; dtx.fillRect(0,0,dv.width,dv.height);
+    for(let r=0;r<R;r++)for(let c=0;c<C;c++){
+      const x=OX+c*CW, y=OY+r*CH, k=r*C+c;
+      dtx.fillStyle = k<filled ? '#1A2637' : '#131C2A';
+      dtx.fillRect(x+1,y+1,CW-2,CH-2);
+      dtx.font='9px ui-monospace,Menlo,monospace'; dtx.fillStyle=C6.txt;
+      dtx.fillText(g[r][c],x+6,y+13);
+      if(k<filled){
+        dtx.font='600 15px ui-monospace,Menlo,monospace'; dtx.fillStyle='#C9D3E2';
+        const s=String(dp[r][c]); dtx.fillText(s,x+CW/2-s.length*4.5,y+CH/2+8);
+        /* arrow from chosen parent */
+        if(r||c){
+          const up=r?dp[r-1][c]:Infinity, lf=c?dp[r][c-1]:Infinity;
+          dtx.strokeStyle=C6.line; dtx.lineWidth=1.4; dtx.beginPath();
+          if(up<=lf){ dtx.moveTo(x+CW/2,y+2); dtx.lineTo(x+CW/2,y+8); }
+          else{ dtx.moveTo(x+2,y+CH/2); dtx.lineTo(x+8,y+CH/2); }
+          dtx.stroke();
+        }
+      }
+    }
+    const rim=(p,col,dash)=>{
+      dtx.strokeStyle=col; dtx.lineWidth=2.4; dtx.setLineDash(dash?[5,4]:[]);
+      p.forEach(([r,c])=>dtx.strokeRect(OX+c*CW+3,OY+r*CH+3,CW-6,CH-6));
+      dtx.setLineDash([]);
+    };
+    if(greedy) rim(greedy.p,'#7FA3E8',true);
+    if(opt) rim(opt,C6.cuh,false);
+  }
+  function fill(){
+    cancelAnimationFrame(fraf); solve(); opt=null;
+    if(RM6){ filled=R*C; ddraw(); ro(); return; }
+    filled=0;
+    const tick=()=>{ filled=Math.min(filled+1,R*C); ddraw(); ro();
+      if(filled<R*C) fraf=requestAnimationFrame(tick);
+      else { opt=pathBack(); ddraw(); ro(); } };
+    fraf=requestAnimationFrame(tick);
+  }
+  function ro(){
+    q6('#dpWork').textContent=filled;
+    q6('#dpOpt').textContent=(opt&&dp)?dp[R-1][C-1]:'—';
+    q6('#dpGcost').textContent=greedy?greedy.cost:'—';
+  }
+  q6('#dpFill').addEventListener('click',fill);
+  q6('#dpGreedy').addEventListener('click',()=>{ greedy=greedyPath(); ddraw(); ro(); });
+  q6('#dpReset').addEventListener('click',()=>{ cancelAnimationFrame(fraf); filled=0; opt=null; greedy=null; dp=null; ddraw(); ro(); });
+  ddraw(); ro();
+}
+}
 </script>
