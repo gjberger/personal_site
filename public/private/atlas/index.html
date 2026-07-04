@@ -862,14 +862,14 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
       <span class="spacer"></span>
       <span class="readout">worst case &#8212; linear <b id="invWorstL">64</b> &#183; binary <span class="bv" id="invWorstB">6</span> steps</span>
     </div>
-    <div class="stage-caption">Top row: the linear scan, paying one comparison per element. Bottom row: the dimmed bars are <b>dead</b> &#8212; provably outside [lo, hi], never to be touched again. The copper bar is the next question. Drag the slider to N = 4 billion: linear needs 4 billion steps, binary needs 32.</div>
+    <div class="stage-caption">Top row: the linear scan, paying one comparison per element. Bottom row: the dimmed bars are <b>dead</b> &#8212; provably outside [lo, hi], never to be touched again. The copper bar is the next question. Drag the slider to N = 4 billion: linear needs 4 billion steps, binary needs 32. PREDICATE MODE: same bars, new meaning &#8212; each bar now answers &#8220;is a[i] &ge; target?&#8221;, reading NO&#8230;NO YES&#8230;YES left to right; binary search finds the first YES. No values anywhere &#8212; only a question that flips once.</div>
   </div>
 
   <div class="notes">
     <ul>
       <li><b>The invariant discipline.</b> Every off-by-one in every binary search is a broken promise &#8212; a mid leaking back into the window. Decide what [lo, hi] <i>means</i> before typing; the loop writes itself.</li>
-      <li><b>Predicate mode is the real weapon.</b> Any question that flips once &#8212; first failing build, min speed that finishes, largest tile that fits &#8212; is binary-searchable with no array in sight.</li>
-      <li><b>The reframe:</b> &#8220;optimize x&#8221; &rarr; &#8220;is x enough?&#8221; If that&#8217;s monotone, the answer is 32 questions. A third of your ladder&#8217;s hards are this in costume.</li>
+      <li><b>Predicate mode, concretely.</b> Koko has 8 hours to finish the bananas. Speed 4? NO. Speed 5? NO. Speed 6? YES. Speed 9? still YES. Down the speed axis the answers read NO NO&#8230;NO YES YES&#8230;YES &#8212; one flip, never back. Binary search never needed an array; it needs exactly this shape.</li>
+      <li><b>The LeetCode move:</b> asked to <i>minimize</i> something (speed, days, ship capacity)? Ask instead: &#8220;given a candidate x, can I <i>check</i> it quickly?&#8221; Cheap check + one flip = binary-search the answer space. You just converted <i>optimize</i> (hard) into <i>decide</i> (easy), 32 times.</li>
     </ul>
   </div>
 
@@ -903,6 +903,7 @@ int first_true(int lo, int hi, auto&amp;&amp; pred) {   <i>// answer in [lo, hi]
 <i>// the STL already knows this form:</i>
 <i>//   std::lower_bound(a.begin(), a.end(), x)  — first element >= x</i>
 <i>//   std::partition_point(f, l, pred)         — first_true, verbatim</i></pre>
+    <script type="application/json" class="say" data-t="py">["One function covers every binary search you will ever write: find the first index where a yes/no question says YES.", "The contract: the flip point lives somewhere in [lo, hi]. Every line after this exists to never break that sentence.", "Loop while more than one candidate survives. When lo == hi there is nothing left to ask.", "Ask in the middle &mdash; the only question whose answer kills half the window whichever way it comes back.", "Put the question to the middle index.", "YES: mid might itself be the first YES, so it must stay inside. Shrink to [lo, mid] &mdash; half the world dead, promise intact.", "NO: mid is now proven to sit in the NO region&hellip;", "&hellip;so the first YES is strictly right of it. lo = mid + 1 discards mid too &mdash; that asymmetry with hi = mid is exactly why this never infinite-loops.", "The window is one cell, and the invariant says the answer is inside. So this IS the answer &mdash; no final check, no +1 guesswork.", "Value-search is one particular question: &ldquo;is a[i] &ge; x?&rdquo;. Koko is another: &ldquo;can she finish at speed i?&rdquo;. Same ten lines, forever."]</script>
   </div>
 
   <div class="try"><b>Try:</b> STEP through a binary run and, before each step, say out loud which half dies and why the promise survives. Then set the slider to 32: four billion elements, thirty-two questions. That ratio &#8212; not the code &#8212; is what the interviewer is checking you feel.</div>
@@ -982,6 +983,7 @@ std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
     return dist;
 }
 <i>// BFS: pq → std::queue, all w == 1 · DFS: → std::stack (or recursion)</i></pre>
+    <script type="application/json" class="say" data-t="py">["heapq is Python&rsquo;s min-heap &mdash; the bucket that always hands you the closest unfinished node.", "Adjacency list in, cheapest distances out. s is where the ripple starts.", "The only fact known at the start: the source is 0 away from itself.", "This line is the algorithm&rsquo;s entire identity. Swap the heap for a queue: BFS. For a stack: DFS. Nothing else changes.", "Keep pulling while offers remain on the table.", "Take the cheapest offer anywhere. Greedy &mdash; and legal only because edges are non-negative: no later path can undercut a settled one.", "The lazy-heap trick: outdated offers are never deleted, just ignored when they surface. Far cheaper than a real decrease-key.", "Fan out over u&rsquo;s neighbors, each with an edge cost.", "Relaxation &mdash; the only arithmetic in the file: is going through u a better deal for v?", "If yes, record the better price&hellip;", "&hellip;and put the new offer on the table. The old one just became the stale entry that line 7 will swallow.", "dist now holds the provably cheapest cost to every reachable node.", "Unit weights make the heap pointless: a plain queue already keeps arrival order = distance order. That is BFS, derived.", "A stack explores by mood, not by distance. It still visits everything &mdash; it just promises nothing about the path it took."]</script>
   </div>
 
   <div class="try"><b>Try:</b> run all three on SWAMP and read the two numbers each leaves behind &#8212; cells explored vs. path cost. DFS explores least here and pays most; Dijkstra explores most and pays least. That trade is the entire theory of search, in two integers.</div>
@@ -1071,6 +1073,7 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
         }
     return dp[R-1][C-1];
 }</pre>
+    <script type="application/json" class="say" data-t="py">["The entire memoization machine ships in the standard library.", "One decorator means &ldquo;never compute the same call twice.&rdquo; The 177-node tree above collapses to 19 because of this line alone.", "The state is just n &mdash; one integer fully describes where you are. Naming the state is question one of every DP interview.", "Written as if recomputation were free. The cache makes that lie true.", "Same idea from the other end: instead of recursing down and caching, fill the table upward in an order where every dependency is already done.", "Table dimensions = size of the state space. R&times;C states, R&times;C cells of work &mdash; the cost is visible before you run anything.", "Allocate explicitly what the recursion would have hidden inside its cache.", "Row by row, left to right &mdash; chosen so &lsquo;above&rsquo; and &lsquo;left&rsquo; are always final before anyone asks for them.", "The fill order is the only real design decision in tabulation.", "Each cell asks one local question: which neighbor was cheaper to arrive from &mdash; above&hellip;", "&hellip;or left? Off-grid neighbors get infinity so they lose automatically &mdash; cleaner than special-casing row 0 and column 0.", "The recurrence, verbatim: my own cost plus the best way anyone could have reached me. Only the origin pays nothing extra.", "Question two of every DP interview: where does the answer sit? Here &mdash; the far corner."]</script>
   </div>
 
   <div class="try"><b>Try:</b> naive mode, slide n from 10 to 13 and watch the call counter roughly double per notch &#8212; that's O(&phi;&#8319;) happening to you personally (&phi; &asymp; 1.618, the golden ratio &#8212; fib's own growth rate). Then MEMOIZE and slide again: the counter barely moves. One switch, exponential &rarr; linear. That gap is why "have we computed this before?" is the most valuable question in the interview.</div>
@@ -1145,6 +1148,7 @@ std::pair&lt;int,int&gt; two_sum(const std::vector&lt;int&gt;&amp; xs, int t) {
 }
 <i>// need order (nearest / smallest-above / sorted walk)? std::map — O(log n),</i>
 <i>// but it can answer questions unordered_map can't even hear.</i></pre>
+    <script type="application/json" class="say" data-t="py">["Three shapes cover most of week 1. All are one trade: spend an insert now, answer questions in O(1) forever.", "A set is a hash table with no values &mdash; pure membership.", "One pass; the table remembers so the loop never looks back.", "Against a list this question costs O(n). Here it costs O(1). That asymmetry is the entire data structure.", "Record x after checking, so the check honestly means &lsquo;seen BEFORE me&rsquo;.", "Two-sum &mdash; the most-asked interview question on earth &mdash; is reflex #2 wearing a crown.", "Map value &rarr; index, because the answer wants positions back.", "For every x the partner is fully determined: it must equal t &minus; x. There is nothing to search for.", "So ask the table whether that exact partner already walked past. One O(1) probe replaces an O(n) scan.", "Insert x only after the check: guarantees the partner has a smaller index and dodges the x == t&minus;x self-pairing bug.", "Reflex #3: counting is hashing where the value is a tally.", "Anagrams: two strings match iff their letter counts match. One line, no sorting, O(n)."]</script>
   </div>
 
   <div class="try"><b>Try:</b> insert ~30 keys with a good hash and read the longest chain. RESET, toggle BAD HASH, insert the same count &#8212; same n, same &alpha;, triple the chain. Then say, out loud, why "it's a hash map so it's O(1)" is a claim about the hash function, not the data structure. That sentence is a quant-dev screen question almost verbatim.</div>
@@ -1227,6 +1231,7 @@ std::pair&lt;int,int&gt; two_sum_sorted(const std::vector&lt;int&gt;&amp; a, int
     }
     return {-1,-1};
 }</pre>
+    <script type="application/json" class="say" data-t="py">["The window pattern in its purest form: longest stretch of the string with no repeated character.", "Three pieces of state: where each character last appeared, the window&rsquo;s left edge, the best length so far.", "R is the engine &mdash; it visits every index exactly once, no exceptions, no rewinds.", "A repeat only matters if the old copy sits INSIDE the current window &mdash; the last[ch] &ge; L half of this check is the part people forget.", "Jump L straight past the old copy &mdash; never step it. Every skipped cell is provably useless: any window holding both copies is already invalid.", "Update the sighting AFTER the check, so the check always compares against the character&rsquo;s previous life.", "By this line the window is guaranteed valid &mdash; so measuring here is always fair. That placement discipline is the whole skeleton.", "n moves for R, at most n total for L: O(n) with an alphabet-sized map.", "Second shape: pointers converging from both ends of SORTED data.", "Start at the extremes &mdash; the widest possible pair.", "They never cross; every pair gets at most one audition.", "The candidate pair&rsquo;s sum.", "Exact hit &mdash; done.", "Too small? a[L] just failed with the LARGEST partner available &mdash; so it pairs with nothing at all. One comparison kills an entire row of pairs.", "Too big is the mirror: a[R] can never work with anyone. Retire it.", "Pointers met: all n(n&minus;1)/2 pairs ruled out in at most n&minus;1 comparisons."]</script>
   </div>
 
   <div class="try"><b>Try:</b> STEP the window and, at each leap of L, name the cell it skipped and the reason it's provably useless. Then run CONVERGE and count moves: n=16 elements, &le;15 comparisons, versus the 120 pairs brute force would check. The ratio is small here &#8212; at n=10&#8309; it's the difference between an accepted OA and a timeout.</div>
@@ -1299,6 +1304,7 @@ std::vector&lt;int&gt; top_k(const std::vector&lt;int&gt;&amp; xs, size_t k) {
     return {out.rbegin(), out.rend()};
 }
 <i>// std::make_heap / push_heap / pop_heap: the same machine, exposed.</i></pre>
+    <script type="application/json" class="say" data-t="py">["Python ships a min-heap only. No flag changes that &mdash; internalize it before it bites you mid-interview.", "A heap is just a list. The tree is an interpretation, not a structure.", "Bottom-up heapify is O(n), not n log n &mdash; nearly all nodes are leaves that barely move.", "A new value rides its ancestor ladder up: at most log n rungs.", "The root is the minimum by contract; popping promotes the last leaf and sinks it back down.", "THE heap interview pattern: hold the k best of a stream too big to keep.", "The heap will contain exactly the current top k. Nothing else, ever.", "One pass over the stream.", "Until we have k, admission is free.", "After that, h[0] &mdash; the WORST of the best &mdash; is the gatekeeper. Beat it: replace in one O(log k) move. Fail: you were never top-k material.", "Total n log k. For k=10 on a million items, ~23&times; cheaper than sorting everything.", "Python&rsquo;s max-heap idiom is negation. Ugly, universal, and mentioning it casually signals you&rsquo;ve actually used the thing."]</script>
   </div>
 
   <div class="try"><b>Try:</b> PUSH until the readout shows a sift that used all &lceil;log&#8322;n&rceil; swaps, then one that used zero &#8212; both legal, both leave the promise intact. Then HEAPIFY 15 FRESH a few times and watch the swap count: never more than n, usually far less. Explaining <i>why</i> heapify is O(n) &#8212; "the expensive nodes are rare" &#8212; is a standard follow-up, and you've now seen the receipts.</div>
@@ -1375,6 +1381,7 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
 }
 <i>// std::sort: introsort — quicksort that watches its own recursion depth</i>
 <i>// and bails to heapsort before an adversary can make it quadratic.</i></pre>
+    <script type="application/json" class="say" data-t="py">["Randomized pivots are the defense: no adversarial input can reliably feed you bad ones.", "The ask: k-th smallest without paying n log n to order elements you don&rsquo;t care about.", "The live region &mdash; the k-th is always somewhere inside it.", "No recursion needed: one shrinking window.", "One partition permanently seats one element at position p.", "Landed exactly on k? The seated element IS the k-th smallest. Often embarrassingly fast.", "Seated too early? Everything at or left of p is too small to be the k-th &mdash; the entire left side goes dark forever.", "Too late is the mirror image. Either way half the world dies &mdash; binary search with earned halves.", "Lomuto&rsquo;s scheme: the simplest correct partition, the one to write under pressure.", "Park the pivot at the end, out of the sweep&rsquo;s way.", "store is the boundary: everything left of it is proven smaller than the pivot.", "March i across the region exactly once.", "Smaller than the pivot?", "Swap it into the small zone and grow the boundary. Larger elements just get walked past &mdash; they are already on the correct side of store.", "Sweep done: drop the pivot precisely on the boundary. Smalls left, bigs right.", "That seat is final for all time. Quicksort recurses on both sides of it; quickselect on only one."]</script>
   </div>
 
   <div class="try"><b>Try:</b> SHUFFLE, then QUICKSELECT with k=24 and watch how much of the array never lights up at all &#8212; that darkness is the linear-time argument, visible. Then WORST CASE and let the counter run: same algorithm, adversarial input, 4&times; the comparisons on just 48 elements. Close the loop from Lab 17: quickselect is binary search where you <i>earn</i> the halves.</div>
@@ -1442,6 +1449,7 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
     }
 };
 <i>// kruskal: sort edges by weight, keep those where unite() says true</i></pre>
+    <script type="application/json" class="say" data-t="py">["The entire data structure is one array. That is not a simplification &mdash; that is all of it.", "Everyone begins as their own root: n tribes of one.", "find answers one question: who ultimately speaks for x?", "Climb the parent chain until someone speaks for themselves &mdash; the root.", "The magic line: while climbing, re-point x at its grandparent. The path halves behind you &mdash; the structure gets faster BECAUSE it is used.", "Take the step up.", "The root is the tribe&rsquo;s name. Two nodes are connected iff their finds agree.", "union: merge two tribes &mdash; if they really are two.", "Resolve both to roots first. Always compare roots, never members.", "Same root already? This edge would close a cycle. Refusing it is Kruskal&rsquo;s entire cycle detection &mdash; one equality check.", "Different tribes: one root now answers to the other. A single pointer write merges whole groups.", "Kruskal in one comment: sort edges by weight, keep those union accepts. n&minus;1 acceptances later, you hold the MST."]</script>
   </div>
 
   <div class="try"><b>Predict, then STEP:</b> before each edge lands, call it &#8212; kept or refused? You'll be right every time once you're reading colors instead of geometry. That's the whole data structure.</div>
@@ -1500,6 +1508,7 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
     return done;
 }
 <i>// weighted? greedy loses its license → DP (Lab 19)</i></pre>
+    <script type="application/json" class="say" data-t="py">["Max non-overlapping intervals: &ldquo;how many meetings fit in one room?&rdquo;", "Sorting by END is the entire algorithm. Finishing earliest leaves the most future &mdash; the exchange argument in six words.", "t = when the room frees up. Minus infinity: it starts free.", "Consider candidates in the blessed order only.", "Starts after the room is free? Take it &mdash; no lookahead &mdash; and the room is busy until its end. The swap-proof guarantees lookahead was never needed.", "The count is provably the maximum. Not a heuristic &mdash; a theorem.", "Add weights and this dies: one fat meeting can outvalue two thin ones. License revoked &rarr; DP over the same end-sorted order."]</script>
   </div>
 
   <div class="try"><b>Predict first:</b> before running anything, rank the three strategies. Then run all three. Most people rank shortest-first too high &#8212; watch exactly which two intervals it wastes its picks on.</div>
@@ -1565,6 +1574,7 @@ def topo(n, adj):
     if (<b>(int)order.size() != n</b>) return {};   <i>// empty ⇒ cycle. free.</i>
     return order;
 }</pre>
+    <script type="application/json" class="say" data-t="py">["A queue because we peel in waves &mdash; though any container is legal here; order within a wave never matters.", "n tasks; adj[u] lists who is waiting on u.", "in-degree: how many prerequisites still point at each node.", "One pass over the edges to count the pointing fingers&hellip;", "&hellip;each edge u&rarr;v is one more thing v waits for.", "Seed with everything that waits on nothing. If nothing is free even now, the graph was doomed from the start.", "The order we are building &mdash; the answer itself.", "Peel until no one is free.", "A free task runs and joins the order.", "Its completion releases its dependents:", "one fewer finger pointing at each v&hellip;", "&hellip;and any v hitting zero becomes free. This one line is the entire propagation.", "If some tasks never freed, they wait on each other &mdash; a cycle, proven without ever searching for one. Detection came free."]</script>
   </div>
 
   <div class="try"><b>Try:</b> before peeling, predict which wave RESUME lands in &#8212; it has two masters. Then add the procrastination edge and peel again. The deadlock isn't a bug in the algorithm; it's a true statement about the plan.</div>
@@ -1649,6 +1659,7 @@ int diameter(Node* root, int&amp; best) {   <i>// returns height, records best</
     <b>best = std::max(best, L + R);</b>       <i>// path through root, in edges</i>
     return 1 + std::max(L, R);
 }</pre>
+    <script type="application/json" class="say" data-t="py">["Every tree function is the same three sentences. Learn the template once and the problems become fill-in-the-blank.", "Max depth &mdash; the hello-world of trees.", "Sentence 1: what does nothing report? Empty tree, depth 0. Half of all tree bugs are a wrong base case.", "Sentence 2: DO NOT trace this call. Assume it returns the correct left depth. That refusal to trace is the entire technique.", "Same trust on the right.", "Sentence 3: the taller child, plus me. Three sentences &mdash; whole function.", "BST validation: each node must live inside an interval carved by ALL its ancestors.", "Empty trees break no rules.", "One check against the inherited window. Comparing only to your parent is the classic wrong answer &mdash; a grandchild can violate a grandparent.", "Outside the window: invalid, all the way up.", "Going left, my value becomes the new ceiling&hellip;", "&hellip;going right, the new floor. The window narrows on the way down; violations have nowhere to hide.", "Diameter: the longest node-to-node path &mdash; which may never touch the root. That is the trap.", "So carry a side-channel: return one number (height), record another (best path).", "The helper does the real work.", "nonlocal: the recursion writes its observation to shared state as it unwinds.", "Empty contributes no height.", "Trust both children to report their reach.", "The path through me = left height + right height, in edges. Check it HERE &mdash; nobody above me can see both my arms at once.", "Upward I report only height. My parent needs my reach, not my diameter.", "The answer was collected on the side. Return-one-thing-record-another is the trick behind half the tree hards."]</script>
   </div>
 
   <div class="terms">
@@ -4125,36 +4136,50 @@ function mix6(h1,h2,t){
 .code6 pre.building .cl.cur{opacity:1;background:rgba(232,147,80,.12);box-shadow:inset 2px 0 0 var(--copper-hi)}
 .notes ul{margin:0;padding-left:20px}
 .notes li{margin:0 0 9px;max-width:60ch}
+.code6 .say6{display:none;margin-top:12px;padding:11px 15px;border-left:3px solid var(--copper);background:rgba(184,92,30,.08);color:#C3CCDA;font:14px/1.65 'Plex Sans','Helvetica Neue',Arial,sans-serif;max-width:70ch;min-height:1.6em}
+.code6 .say6.vis{display:block}
 </style>
 <script>
 'use strict';
-{ /* ═══════════ code builder — every .code6 panel ═══════════ */
+{ /* ═══════════ code builder v2 — narrated construction ═══════════ */
 const isBlank=el=>el.textContent.replace(/\u200b/g,'').trim()==='';
 document.querySelectorAll('.code6').forEach(box=>{
+  const says={};
+  box.querySelectorAll('script.say').forEach(sc=>{ try{ says[sc.dataset.t]=JSON.parse(sc.textContent); }catch(err){} });
   box.querySelectorAll('pre').forEach(pre=>{
     const lines=pre.innerHTML.split('\n');
     pre.innerHTML=lines.map(l=>`<span class="cl">${l||'&#8203;'}</span>`).join('');
+    pre._say=says[pre.dataset.t]||null;
   });
   const tabs=box.querySelector('.ctabs');
-  const mk=(label)=>{ const b=document.createElement('button'); b.className='btn small'; b.innerHTML=label; tabs.appendChild(b); return b; };
+  const mk=l=>{ const b=document.createElement('button'); b.className='btn small'; b.innerHTML=l; tabs.appendChild(b); return b; };
   const spacer=document.createElement('span'); spacer.style.flex='1'; tabs.appendChild(spacer);
   const bBuild=mk('BUILD &#10142;'), bAll=mk('ALL');
+  const say=document.createElement('div'); say.className='say6'; box.appendChild(say);
   const active=()=>box.querySelector('pre.on');
+  function narrate(pre,i,cls){
+    let k=-1;
+    for(let j=0;j<=i;j++) if(!isBlank(cls[j])) k++;
+    let txt=pre._say&&pre._say[k];
+    if(!txt){ const c=cls[i].querySelector('i'); txt=c?c.textContent.replace(/^[#/ ]+/,''):''; }
+    say.innerHTML=txt||'&nbsp;'; say.classList.add('vis');
+  }
   bBuild.addEventListener('click',()=>{
     const pre=active(); if(!pre) return;
     const cls=[...pre.querySelectorAll('.cl')];
     let i=+(pre.dataset.idx??-1);
     if(!pre.classList.contains('building')){ pre.classList.add('building'); i=-1; }
-    do{ i++; }while(i<cls.length&&isBlank(cls[i]));   /* skip blank lines */
+    do{ i++; }while(i<cls.length&&isBlank(cls[i]));
     if(i>=cls.length){ pre.classList.remove('building'); pre.dataset.idx=-1;
-      cls.forEach(c=>c.classList.remove('on','cur')); return; }
-    cls.forEach((c,k)=>{ c.classList.toggle('on',k<i); c.classList.toggle('cur',k===i); });
-    pre.dataset.idx=i;
+      cls.forEach(c=>c.classList.remove('on','cur')); say.classList.remove('vis'); return; }
+    cls.forEach((c,k2)=>{ c.classList.toggle('on',k2<i); c.classList.toggle('cur',k2===i); });
+    pre.dataset.idx=i; narrate(pre,i,cls);
   });
   bAll.addEventListener('click',()=>{
     const pre=active(); if(!pre) return;
     pre.classList.remove('building'); pre.dataset.idx=-1;
     pre.querySelectorAll('.cl').forEach(c=>c.classList.remove('on','cur'));
+    say.classList.remove('vis');
   });
 });
 }
