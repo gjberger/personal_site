@@ -56,6 +56,9 @@ td.dt{font-family:var(--mono);font-size:12px;color:var(--copper);white-space:now
 .tier .t p{font-size:14px;color:var(--ink2);margin:0}
 footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);line-height:1.8}
 .small{font-size:13.5px;color:var(--ink2)}
+.dstrip{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--ink2);border-top:1px dashed var(--line);margin-top:12px;padding-top:8px;letter-spacing:.02em}
+.dstrip b{color:var(--copper);font-weight:500;letter-spacing:.1em}
+.dstrip i{color:var(--blue);font-style:normal}
 </style>
 
 <main>
@@ -102,7 +105,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w1b"><span class="tag">STUDY</span><span class="txt">Atlas Ch 1 + Ch 5 end to end, doing every checkpoint</span></label>
     <label class="ck"><input type="checkbox" data-k="w1c"><span class="tag">DRILL</span><span class="txt">Green Book ch. 2 (brainteasers), timed sets &middot; LC &times;4: arrays &amp; hashing &middot; <span class="mono">drill-log.md</span> started (format in &sect;04)</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w1s"><span class="tag">SHIP</span><span class="txt">Public repo <span class="mono">jetson-lab</span> with the benchmark table in the README</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb ch.2 &middot; TUE lc arrays <i>py</i> &middot; THU lc hashing <i>c++</i> &middot; FRI retests+review &middot; SAT lc pair &middot; SUN floor &middot; &#8627; Atlas L20</div></div></div>
 
   <div class="wk"><h3>Week 2 <span class="wdate">JUL 13 &ndash; JUL 19</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w2a"><span class="tag">BUILD</span><span class="txt">Matmul ladder: naive &rarr; coalesced &rarr; shared-memory tiled (Atlas Lab 16). Measure each. Compare against cuBLAS and feel appropriate humility</span></label>
@@ -110,7 +113,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w2c"><span class="tag">DRILL</span><span class="txt">Green Book ch. 4 probability part 1 &middot; LC &times;4: two pointers + sliding window &middot; mental math daily (grid in &sect;04)</span></label>
     <label class="ck"><input type="checkbox" data-k="w2x"><span class="tag">C++</span><span class="txt">Bridge #1: RAII &#8212; write a <span class="mono">CudaBuffer</span> class that owns cudaMallocManaged/cudaFree; no raw allocs in the repo from here on</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w2s"><span class="tag">SHIP</span><span class="txt"><b>Resume done</b> (systems-flavored, Jetson repo on it) + matmul numbers in the repo</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb ch.4 pt 1 &middot; TUE+THU lc window <i>py/c++</i> &middot; FRI retests+review &middot; SAT lc pair &middot; &#8627; L21</div></div></div>
 
   <div class="wk"><h3>Week 3 <span class="wdate">JUL 20 &ndash; JUL 26</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w3a"><span class="tag">BUILD</span><span class="txt">Roofline model of the Orin Nano from your own measurements (arithmetic intensity vs the ~68 GB/s ceiling)</span></label>
@@ -118,7 +121,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w3c"><span class="tag">DRILL</span><span class="txt">Green Book probability part 2 &middot; LC &times;4: stack + binary search (ladder, &sect;04)</span></label>
     <label class="ck"><input type="checkbox" data-k="w3x"><span class="tag">C++</span><span class="txt">Bridge #2: move semantics + rule of five &#8212; the benchmark harness becomes a class; understand why copying a device buffer should be <span class="mono">= delete</span></span></label>
     <label class="ck ship"><input type="checkbox" data-k="w3s"><span class="tag">SHIP</span><span class="txt">500-word note: &ldquo;The roofline of my $250 supercomputer&rdquo; &#8212; post it (blog/GitHub/X, anywhere public)</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb ch.4 pt 2 &middot; TUE lc stack <i>py</i> &middot; THU lc bsearch <i>c++</i> &middot; FRI retests+review &middot; SAT lc pair &middot; &#8627; L17</div></div></div>
 
   <div class="wk"><h3>Week 4 <span class="wdate">JUL 27 &ndash; AUG 2</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w4a"><span class="tag">BUILD</span><span class="txt">Write softmax, then single-head attention as CUDA kernels (Atlas Lab 10 is your spec); verify against PyTorch</span></label>
@@ -126,7 +129,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w4c"><span class="tag">DRILL</span><span class="txt">Green Book ch. 5 (stochastic processes) part 1; mental math daily</span></label>
     <label class="ck"><input type="checkbox" data-k="w4x"><span class="tag">C++</span><span class="txt">Bridge #3: templates &#8212; one templated launch helper (tile size as a template param); look at what nvcc actually instantiates</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w4s"><span class="tag">SHIP</span><span class="txt"><b>First 5 quant applications out</b> (with referrals where you have any) + attention kernel in the repo</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb ch.5 pt 1 &middot; TUE lc lists <i>py</i> &middot; THU lc trees <i>c++</i> &middot; FRI retests+review &middot; SAT lc pair &middot; &#8627; L18</div></div></div>
 
   <div class="wk"><h3>Week 5 <span class="wdate">AUG 3 &ndash; AUG 9</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w5a"><span class="tag">BUILD</span><span class="txt">Run a small LLM on the Orin (llama.cpp, e.g. a 1&ndash;3B model): measure tokens/sec at 4 quantization levels</span></label>
@@ -134,7 +137,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w5c"><span class="tag">DRILL</span><span class="txt">Timed mixed sets: 20 problems across everything so far; log every miss</span></label>
     <label class="ck"><input type="checkbox" data-k="w5x"><span class="tag">C++</span><span class="txt">Bridge #4: STL &#8212; redo one analysis script in C++ with vector/algorithm instead of Python, once, to feel where each shines</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w5s"><span class="tag">SHIP</span><span class="txt">Chart + note: &ldquo;tokens/sec vs bits on a Jetson Orin Nano&rdquo; &#8212; this is a genuinely useful public datapoint</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb mixed, timed &middot; TUE lc heaps <i>py</i> &middot; THU lc intervals <i>c++</i> &middot; SAT lc pair &middot; &#8627; L22&middot;L25</div></div></div>
 
   <div class="wk"><h3>Week 6 <span class="wdate">AUG 10 &ndash; AUG 16</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w6a"><span class="tag">BUILD</span><span class="txt">KV-cache experiment: context length vs latency &amp; memory on the Orin; find where it falls over and say why</span></label>
@@ -142,68 +145,57 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="w6c"><span class="tag">DRILL</span><span class="txt">Green Book stochastic part 2 + market-making games with a friend or Claude</span></label>
     <label class="ck"><input type="checkbox" data-k="w6x"><span class="tag">C++</span><span class="txt">Bridge #5: interview C++ &#8212; virtual dispatch, unique_ptr vs shared_ptr, what "the memory model" means; 10 rapid-fire questions with Claude</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w6s"><span class="tag">SHIP</span><span class="txt"><b>10 more applications</b> (quant + any early frontier-lab postings)</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MON+WED gb ch.5 pt 2 &middot; TUE lc graphs <i>py</i> &middot; THU lc 1-D DP <i>c++</i> &middot; SAT market-making &middot; &#8627; L18&middot;L19&middot;L24&middot;L26</div></div></div>
 
   <div class="wk"><h3>Week 7 <span class="wdate">AUG 17 &ndash; AUG 23</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w7a"><span class="tag">BUILD</span><span class="txt">None. This is the application + mock-interview sprint</span></label>
     <label class="ck"><input type="checkbox" data-k="w7b"><span class="tag">STUDY</span><span class="txt">Your own mistake log, cover to cover &#8212; it is now your most valuable document</span></label>
     <label class="ck"><input type="checkbox" data-k="w7c"><span class="tag">DRILL</span><span class="txt">2 mock quant interviews (peer or platform) + 1 mock coding interview, all timed and out loud</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w7s"><span class="tag">SHIP</span><span class="txt">Every remaining target firm applied to; tracker sheet live; <b>message Stuart Sul</b> &#8212; coffee re Hazy, repo links attached</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MOCK SPRINT &middot; lc timed randoms daily &middot; 2 weekday mocks + SAT full mock &middot; FRI review as usual</div></div></div>
 
   <div class="wk"><h3>Week 8 <span class="wdate">AUG 24 &ndash; AUG 30</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w8a"><span class="tag">BUILD</span><span class="txt">Patch week: whatever the mocks exposed (speed? combinatorics? DP?) gets the build hours</span></label>
     <label class="ck"><input type="checkbox" data-k="w8b"><span class="tag">STUDY</span><span class="txt">OA practice under real conditions &#8212; camera on, timer on, no music</span></label>
     <label class="ck"><input type="checkbox" data-k="w8c"><span class="tag">DRILL</span><span class="txt">Daily timed sets continue; mental math should feel boringly easy by now</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w8s"><span class="tag">SHIP</span><span class="txt">Mistake-log v2: every miss categorized, with the fix written next to it</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; OA-condition sets &middot; lc patch week + 2-D DP &middot; FRI retests+review &middot; &#8627; L19&middot;L23</div></div></div>
 
   <div class="wk"><h3>Week 9 <span class="wdate">AUG 31 &ndash; SEP 6</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w9a"><span class="tag">BUILD</span><span class="txt">Stat-ML begins: linear/ridge/logistic <b>from scratch in numpy</b> on real market data (returns, not prices &#8212; learn why the hard way)</span></label>
     <label class="ck"><input type="checkbox" data-k="w9b"><span class="tag">STUDY</span><span class="txt">Bias/variance, cross-validation done right, why financial data breaks IID assumptions</span></label>
     <label class="ck"><input type="checkbox" data-k="w9c"><span class="tag">DRILL</span><span class="txt">Maintenance: 15 min/day; interviews may already be landing</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w9s"><span class="tag">SHIP</span><span class="txt">Repo: a tiny, honest backtest with train/test hygiene documented</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; MAINTENANCE 15-MIN &middot; mm daily &middot; FRI retests &middot; 1 lc hard/wk</div></div></div>
 
   <div class="wk"><h3>Week 10 <span class="wdate">SEP 7 &ndash; SEP 13</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w10a"><span class="tag">BUILD</span><span class="txt">Break your own backtest: lookahead, survivorship, overfitting, regime change &#8212; find all four in your week-9 work</span></label>
     <label class="ck"><input type="checkbox" data-k="w10b"><span class="tag">STUDY</span><span class="txt">Time-series validation (walk-forward); read one Lopez de Prado chapter</span></label>
     <label class="ck"><input type="checkbox" data-k="w10c"><span class="tag">DRILL</span><span class="txt">Maintenance + any live OAs</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w10s"><span class="tag">SHIP</span><span class="txt">Note: &ldquo;Five ways my backtest lied to me&rdquo; + <b>research emails out: Chris R&eacute; (via/cc Stuart), Dawson, Dennis Sun</b> &#8212; portfolio links included</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; maintenance &middot; live OAs replace that day&#39;s set 1:1 &middot; FRI retests</div></div></div>
 
   <div class="wk"><h3>Week 11 <span class="wdate">SEP 14 &ndash; SEP 20</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w11a"><span class="tag">BUILD</span><span class="txt">Fall setup: classes locked (EE271? CS143?), CS140E TA confirmed with Dawson, research scope agreed &#8212; <b>Hazy first choice</b> &#8212; if it's happening</span></label>
     <label class="ck"><input type="checkbox" data-k="w11b"><span class="tag">STUDY</span><span class="txt">Interview-season reading only: your logs, your repos' READMEs (you will be asked about every line)</span></label>
     <label class="ck"><input type="checkbox" data-k="w11c"><span class="tag">DRILL</span><span class="txt">Full mock superday if any onsite is scheduled</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w11s"><span class="tag">SHIP</span><span class="txt">Fall plan on one page; all balls (SCI wrap, Powerset cadence, UCSF) explicitly parked or scheduled</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; interview season &middot; your logs + READMEs only &middot; mock superday if an onsite is booked</div></div></div>
 
   <div class="wk"><h3>Week 12 <span class="wdate">SEP 21 &ndash; SEP 27</span></h3><div class="rows">
     <label class="ck"><input type="checkbox" data-k="w12a"><span class="tag">BUILD</span><span class="txt">Buffer week &#8212; it exists because week 6 or 8 didn't go to plan, and that's fine</span></label>
     <label class="ck"><input type="checkbox" data-k="w12b"><span class="tag">STUDY</span><span class="txt">Retrospective with Claude: what shipped, what stalled, what the mocks say about odds</span></label>
     <label class="ck"><input type="checkbox" data-k="w12c"><span class="tag">DRILL</span><span class="txt">Keep the daily 15 through interview season &#8212; recall decays in weeks</span></label>
     <label class="ck ship"><input type="checkbox" data-k="w12s"><span class="tag">SHIP</span><span class="txt">Training Plan v2 (fall edition): stat-ML depth, research thread, compiler if bandwidth is real</span></label>
-  </div></div>
+  <div class="dstrip"><b>DRILL</b> &middot; keep the daily 15 &middot; FRI retro &middot; ship plan v2</div></div></div>
 </section>
 
 <section>
   <p class="eyebrow">04 &middot; The daily mechanics</p>
   <h2>Every day pre-decided: clocks, reps, and the log</h2>
-  <p>The twelve weeks above say <i>what</i>; this section removes the last daily decision about <i>when and how long</i>. Per your own operating layer (&sect;05): starting is the hard part, and every unmade decision is a start. So the drill half-hour is a fixed grid &#8212; you look up the row, you don't choose.</p>
+  <p>The twelve weeks above say <i>what</i>; this section removes the last daily decision about <i>when and how long</i>. Per your own operating layer (&sect;05): starting is the hard part, and every unmade decision is a start. So the drill half-hour is a fixed strip, printed on every week card above &#8212; you read the line, you don't choose.</p>
 
-  <h3 style="font-size:20px;margin:22px 0 4px">The week, one row per day</h3>
-  <div class="tbl-wrap"><table>
-    <tr><th>Day</th><th>Opener</th><th>The set (to ~30 min total)</th></tr>
-    <tr><td class="dt">MON</td><td>Mental math, 10 min<br>(Zetamac, 120s rounds)</td><td><b>Green Book set</b> &#8212; the week's chapter, 20 min. The clock is the unit, not the count: &asymp;3&ndash;5 brainteasers, 2&ndash;3 stochastic</td></tr>
-    <tr><td class="dt">TUE</td><td>Mental math, 5 min</td><td><b>One LC medium</b> on the full 25-min clock &#8212; the week's pattern (ladder below)</td></tr>
-    <tr><td class="dt">WED</td><td>Mental math, 10 min</td><td><b>Green Book set</b>, 20 min</td></tr>
-    <tr><td class="dt">THU</td><td>Mental math, 5 min</td><td><b>One LC medium</b>, full clock</td></tr>
-    <tr><td class="dt">FRI</td><td>Mental math, 10 min</td><td><b>Retest every open ☐ in the drill log</b>, timed, 20 min &#8212; then straight into the 20-minute review (&sect;05)</td></tr>
-    <tr><td class="dt">SAT</td><td>&mdash;</td><td><b>One long rep, out loud:</b> wks 1&ndash;5 an OA-style LC pair (2 mediums, 45 min straight, no music); wk 6+ a market-making game or full mock. Post-gym window if it's a gym day</td></tr>
-    <tr><td class="dt">SUN</td><td>&mdash;</td><td><b>The floor only:</b> 1 GB problem <i>or</i> 10 min at the bench. Nothing else is scheduled, on purpose</td></tr>
-  </table></div>
-  <p class="small">Glue the 30 minutes to the same trigger every day (first coffee, or walking in from SCI) &#8212; the trigger is the alarm, the grid is the answer. <b>Weeks 8&ndash;12 (maintenance):</b> drop the WED set, keep everything else &#8212; that's the "15 min/day" the week cards call for, made concrete. Live OAs replace that day's set 1:1.</p>
+  <p><b>The shape, every week:</b> a 5&ndash;10 min mental-math opener, then one set &#8212; ~30 min total, glued to the same daily trigger (first coffee, or walking in from SCI). The specifics live in each card's <span class="mono">DRILL</span> strip. Saturday is the long rep, out loud; Sunday is the floor only. Weeks 8&ndash;12 drop WED &#8212; that's maintenance &#8212; and live OAs replace that day's set 1:1.</p>
 
   <h3 style="font-size:20px;margin:26px 0 4px">How long you get, per rep</h3>
   <p>Unbounded time on one problem is how a 30-minute drill becomes a 90-minute guilt session. Every rep has a clock, and an expired clock has a defined next move:</p>
@@ -221,19 +213,9 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
 
   <div class="callout blue"><b>The weekly arithmetic, with receipts:</b> drills 5&times;30 min + Saturday's long rep &asymp; 3.5 h (that's the "daily 30" budget). BUILD 2&times;75 min &asymp; 2.5 h. STUDY one 75&ndash;90 min block. Friday review 20 min. Total &asymp; 8 focused hours plus the drills &#8212; exactly the budget this plan promised in its own header. If a week doesn't fit, the two-miss rule (&sect;05) shrinks scope; the grid itself doesn't stretch.</div>
 
-  <h3 style="font-size:20px;margin:26px 0 4px">The LeetCode ladder (starts week 1 now, not week 3)</h3>
-  <p>Company-tagged lists only (Citadel, HRT, Jane Street &#8212; you have premium). Four mediums a week &#8212; one each Tue/Thu on the daily clock, a timed pair Saturday &#8212; walking patterns the way the Green Book walks chapters. Change from v1.2: six patterns need six weeks of runway before the week-7 mock sprint, so the ladder starts day one.</p>
-  <div class="tbl-wrap"><table>
-    <tr><th>Wk</th><th>Pattern</th><th>Wk</th><th>Pattern</th></tr>
-    <tr><td class="dt">1</td><td>Arrays &amp; hashing (warmup)</td><td class="dt">7</td><td><b>Mock sprint</b> &#8212; timed random mediums, no new topic</td></tr>
-    <tr><td class="dt">2</td><td>Two pointers + sliding window</td><td class="dt">8</td><td>Patch week (what the mocks exposed) + 2-D DP</td></tr>
-    <tr><td class="dt">3</td><td>Stack + binary search</td><td class="dt">9&ndash;12</td><td>Maintenance: company sets, <b>re-do every logged miss</b>, 1 hard/wk</td></tr>
-    <tr><td class="dt">4</td><td>Linked lists + trees (BFS/DFS)</td><td class="dt"></td><td></td></tr>
-    <tr><td class="dt">5</td><td>Heaps + intervals</td><td class="dt"></td><td></td></tr>
-    <tr><td class="dt">6</td><td>Graphs (BFS/DFS/union-find) + 1-D DP</td><td class="dt"></td><td></td></tr>
-  </table></div>
+  
   <div class="callout"><b>The back-and-forth rule (languages).</b> Tuesday's medium in <b>Python</b>, Thursday's in <b>C++</b> &#8212; a bridge rep in disguise; Saturday's pair alternates. Retest a miss in the language you missed it in. By week 6 all eight ladder patterns should exist twice in your hands: quant-dev screens want the C++, lab screens want the Python, and you want the moment the syntax stops mattering. Each Atlas Ch 6 lab carries the canonical implementation in both, side by side, close enough to diff by eye.</div>
-  <p class="small">When a pattern refuses to click from problems alone, it has a visual home in the <a href="https://claude.ai/code/artifact/c648ddc7-1dde-4527-928c-68ce4009518e">Atlas</a>, Chapter 6 (the CS161 booster): hashing &rarr; Lab 20, two pointers &rarr; Lab 21, binary search &rarr; Lab 17, trees &amp; graphs &rarr; Lab 18, heaps &rarr; Lab 22, DP &rarr; Lab 19, sorting/selection &rarr; Lab 23. Twenty minutes driving the visual beats two more failed mediums.</p>
+  <p class="small">When a pattern refuses to click from problems alone, it has a visual home in the <a href="https://claude.ai/code/artifact/c648ddc7-1dde-4527-928c-68ce4009518e">Atlas</a>, Chapter 6 (the CS161 booster): hashing &rarr; Lab 20, two pointers &rarr; Lab 21, binary search &rarr; Lab 17, trees &amp; graphs &rarr; Lab 18, heaps &rarr; Lab 22, DP &rarr; Lab 19, sorting/selection &rarr; Lab 23, union-find &rarr; Lab 24, greedy/intervals &rarr; Lab 25, toposort &rarr; Lab 26. Twenty minutes driving the visual beats two more failed mediums.</p>
 
   <h3 style="font-size:20px;margin:26px 0 4px">The drill log: one file, five categories, two retests</h3>
   <p>The plan says "mistake log" five times; here is what it actually is. One file, <span class="mono">drill-log.md</span>, in the <span class="mono">jetson-lab</span> repo &#8212; greppable, versioned, and visible to Claude. One line per miss, written <b>within 60 seconds</b> of the miss:</p>
@@ -343,7 +325,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
   <p class="small">This page and the <a href="https://claude.ai/code/artifact/c648ddc7-1dde-4527-928c-68ce4009518e">Atlas</a> redeploy to fixed URLs &#8212; bookmark both. Checkboxes live in this browser's storage.</p>
 </section>
 
-<footer>THE TRAINING PLAN v1.3 &middot; built 2026-07-03 &middot; rev 2026-07-04: daily grid + per-rep clocks, LC ladder from week 1, drill-log spec (five categories, two retests), the anchor slot, Atlas Ch 6 cross-links &middot; v1.2 rev: Hazy/R&eacute; anchor via Stuart Sul, C&rarr;C++ bridge, class-of-2028 timeline, ADHD operating layer (week-0 setup + rules of engagement) &middot; for the love of the game &#8212; and a top offer, since we're being honest.</footer>
+<footer>THE TRAINING PLAN v1.4 &middot; built 2026-07-03 &middot; rev 2026-07-04: DRILL strip on every week card (the grid, folded in), per-rep clocks, drill-log spec (five categories, two retests), the anchor slot, Atlas Ch 6 &#8212; ten labs, syllabus-mapped &middot; v1.2 rev: Hazy/R&eacute; anchor via Stuart Sul, C&rarr;C++ bridge, class-of-2028 timeline, ADHD operating layer (week-0 setup + rules of engagement) &middot; for the love of the game &#8212; and a top offer, since we're being honest.</footer>
 </main>
 
 <script>

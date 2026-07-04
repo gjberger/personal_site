@@ -247,6 +247,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <a href="#cuda1">15 &#183; Your first kernel</a>
   <a href="#cuda2">16 &#183; Feeding the beast</a>
   <div class="rail-ch">CH 6 &#8212; ALGORITHMS</div>
+  <a href="#c6map">the syllabus map</a>
   <a href="#inv">17 &#183; Invariants</a>
   <a href="#wave">18 &#183; Graph ripples</a>
   <a href="#memo">19 &#183; Remembering (DP)</a>
@@ -254,6 +255,9 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <a href="#win">21 &#183; Two pointers</a>
   <a href="#heap">22 &#183; Heaps</a>
   <a href="#part">23 &#183; Partition</a>
+  <a href="#uf">24 &#183; Union-find</a>
+  <a href="#greedy">25 &#183; Greedy</a>
+  <a href="#topo">26 &#183; Topo order</a>
   <div class="rail-ch">NEXT</div>
   <a href="#atlas">The atlas grows</a>
 </nav>
@@ -266,7 +270,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <h1>GPUs, and why<br>they dream in parallel</h1>
     <p class="sub">A hands-on tour from a single transistor-packed die to a neural network training live in your browser. Nothing here is a video &#8212; every diagram runs, and you drive it.</p>
     <div class="chapter-tags">
-      <div class="tag"><b>23 labs</b> &#183; interactive</div>
+      <div class="tag"><b>26 labs</b> &#183; interactive</div>
       <div class="tag"><b>self-paced</b> &#183; come back anytime</div>
       <div class="tag">a living page &#8212; ask Claude for the next chapter</div>
     </div>
@@ -797,6 +801,30 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
 
 <!-- &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; ATLAS &#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552;&#9552; -->
 <!-- ══════════════ LAB 17 ══════════════ -->
+<!-- ══════════════ CH 6 SYLLABUS MAP ══════════════ -->
+<section class="lab" id="c6map">
+  <p class="eyebrow">Chapter 6 &#183; The syllabus</p>
+  <h2>CS161, mapped honestly</h2>
+  <p class="lede">What's covered, where, and what's parked on purpose. Parked &ne; never &#8212; say the word and it grows.</p>
+  <div class="tbl-wrap" style="margin-top:26px"><table style="max-width:820px;font-size:14px">
+    <tr><th>Topic</th><th>Where</th><th>Status</th></tr>
+    <tr><td>Arrays &amp; hashing</td><td><a href="#hash">Lab 20</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Two pointers &amp; windows</td><td><a href="#win">Lab 21</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Binary search &amp; invariants</td><td><a href="#inv">Lab 17</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Sorting, selection, comparison bound</td><td><a href="#part">Lab 23</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Heaps &amp; priority queues</td><td><a href="#heap">Lab 22</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Graph search + Dijkstra</td><td><a href="#wave">Lab 18</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Dynamic programming</td><td><a href="#memo">Lab 19</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Union-find &amp; MST</td><td><a href="#uf">Lab 24</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Greedy &amp; exchange arguments</td><td><a href="#greedy">Lab 25</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>Topological order &amp; DAGs</td><td><a href="#topo">Lab 26</a></td><td class="dt">LIVE</td></tr>
+    <tr><td>BSTs / balanced trees</td><td>Lab 20 notes: use sorted containers; the property beats the implementation</td><td class="dt">NOTES</td></tr>
+    <tr><td>Recurrences / master theorem</td><td>low screen yield &#8212; one visual lab away if a "why n log n?" ever stings</td><td class="dt">PARKED</td></tr>
+    <tr><td>Bellman-Ford / negative cycles</td><td>fall candidate &#8212; arbitrage detection <i>is</i> negative-cycle finding</td><td class="dt">PARKED</td></tr>
+    <tr><td>NP-completeness, max-flow</td><td>near-zero interview yield for SWE/quant screens</td><td class="dt">PARKED</td></tr>
+  </table></div>
+</section>
+
 <section class="lab" id="inv">
   <p class="eyebrow">Chapter 6 &#183; Lab 17 &#183; Invariants</p>
   <h2>Halve the world until it confesses</h2>
@@ -1281,6 +1309,171 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
   <div class="try"><b>Try:</b> SHUFFLE, then QUICKSELECT with k=24 and watch how much of the array never lights up at all &#8212; that darkness is the linear-time argument, visible. Then WORST CASE and let the counter run: same algorithm, adversarial input, 4&times; the comparisons on just 48 elements. Close the loop from Lab 17: quickselect is binary search where you <i>earn</i> the halves.</div>
 </section>
 
+<!-- ══════════════ LAB 24 ══════════════ -->
+<section class="lab" id="uf">
+  <p class="eyebrow">Chapter 6 &#183; Lab 24 &#183; Union-find</p>
+  <h2>&#8220;Same tribe?&#8221; in constant time</h2>
+  <p class="lede">Connectivity questions don't need the graph &#8212; only a chain of <b>who answers for whom</b>, flattened a little more every time you ask. Below: Kruskal's MST, which is nothing but &#8220;sort the edges, then ask <i>same tribe?</i> n times.&#8221;</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="ufRun">&#9654; BUILD MST</button>
+      <button class="btn" id="ufStep">STEP</button>
+      <button class="btn" id="ufReset">NEW POINTS</button>
+      <span class="spacer"></span>
+      <span class="readout">asked <b id="ufAsk">0</b> &#183; kept <span class="bv" id="ufKeep">0</span>/23 &#183; refused <b id="ufRef">0</b></span>
+    </div>
+    <canvas id="ufC" width="720" height="300" style="width:100%;height:auto" role="img" aria-label="Kruskal's algorithm merging components on a point set"></canvas>
+    <div class="stage-caption">Edges arrive cheapest-first. Same color = same tribe: those edges are <b>refused</b> (faint dashes) &#8212; they'd close a cycle. Different tribes merge on contact. 23 acceptances later: the minimum spanning tree, guaranteed.</div>
+  </div>
+
+  <div class="notes">
+    <p>The insight to carry: when a problem <b>merges groups over time</b> &#8212; islands appearing, accounts sharing emails, network cables landing &#8212; the answer is a parent array, not a graph traversal. <span style="font-family:var(--mono);font-size:13px">find</span> walks to the root and flattens the path behind it; <span style="font-family:var(--mono);font-size:13px">union</span> points one root at the other. Amortized cost: effectively constant (inverse Ackermann &#8212; say &#8220;&le;4 for any n that fits in the universe&#8221;). Kruskal's greedy is <i>legal</i> by the cut property: the cheapest edge crossing any divide is always safe &#8212; your first exchange argument, one lab early.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">class DSU:
+    def __init__(self, n): self.p = list(range(n))
+    def find(self, x):
+        while self.p[x] != x:
+            <b>self.p[x] = self.p[self.p[x]]</b>   <i># flatten as you climb</i>
+            x = self.p[x]
+        return x
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb: return False           <i># same tribe — cycle</i>
+        self.p[ra] = rb; return True
+
+<i># kruskal: for w,u,v in sorted(edges): keep edge if dsu.union(u,v)</i></pre>
+    <pre data-t="cpp">struct DSU {
+    std::vector&lt;int&gt; p;
+    DSU(int n) : p(n) { std::iota(p.begin(), p.end(), 0); }
+    int find(int x) {
+        while (p[x] != x) { <b>p[x] = p[p[x]];</b> x = p[x]; }  <i>// flatten</i>
+        return x;
+    }
+    bool unite(int a, int b) {
+        a = find(a); b = find(b);
+        if (a == b) return false;           <i>// same tribe — cycle</i>
+        p[a] = b; return true;
+    }
+};
+<i>// kruskal: sort edges by weight, keep those where unite() says true</i></pre>
+  </div>
+
+  <div class="try"><b>Predict, then STEP:</b> before each edge lands, call it &#8212; kept or refused? You'll be right every time once you're reading colors instead of geometry. That's the whole data structure.</div>
+</section>
+
+<!-- ══════════════ LAB 25 ══════════════ -->
+<section class="lab" id="greedy">
+  <p class="eyebrow">Chapter 6 &#183; Lab 25 &#183; Greedy</p>
+  <h2>Greed you can prove</h2>
+  <p class="lede">Three plausible strategies, one interview classic: schedule the most non-overlapping intervals. Two of these lose badly &#8212; greedy is not a vibe, it's a <b>swap-proof</b>, and only one of them has it.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn togg" id="gyES">EARLIEST START</button>
+      <button class="btn togg" id="gySH">SHORTEST FIRST</button>
+      <button class="btn togg" id="gyEF">EARLIEST FINISH</button>
+      <button class="btn" id="gyReset">RESET</button>
+      <span class="spacer"></span>
+      <span class="readout">kept &#8212; start <b id="gyR1">?</b> &#183; short <b id="gyR2">?</b> &#183; finish <span class="bv" id="gyR3">?</span> (max possible: 7)</span>
+    </div>
+    <canvas id="gyC" width="720" height="150" style="width:100%;height:auto" role="img" aria-label="Interval scheduling under three greedy strategies"></canvas>
+    <div class="stage-caption">Copper = kept, dark = refused, outline = being considered. Same ten intervals every run &#8212; only the order of asking changes.</div>
+  </div>
+
+  <div class="notes">
+    <p>Why earliest-finish wins, in one move: take any optimal schedule and swap its first interval for the earliest-finisher &#8212; it ends no later, so everything after still fits. Repeat down the line: optimal morphs into greedy, losing nothing. That's an <b>exchange argument</b>, and it's the entire license. The interview discipline: if you can't sketch the swap in two sentences, don't trust the greedy &#8212; add weights to these same intervals and earliest-finish breaks, and the answer is DP (Lab 19). Greedy-with-a-license runs this whole chapter: Dijkstra, Kruskal, Huffman.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">def max_meetings(iv):
+    iv.sort(key=lambda x: <b>x[1]</b>)          <i># by END. that's the theorem.</i>
+    done, t = 0, float('-inf')
+    for s, e in iv:
+        if s &gt;= t: done, t = done + 1, e
+    return done
+<i># weighted intervals? the swap-proof dies → DP over end-sorted + bisect</i></pre>
+    <pre data-t="cpp">int max_meetings(std::vector&lt;std::pair&lt;int,int&gt;&gt; iv) {
+    std::sort(iv.begin(), iv.end(),
+        [](auto&amp; a, auto&amp; b){ return <b>a.second &lt; b.second</b>; }); <i>// by END</i>
+    int done = 0, t = INT_MIN;
+    for (auto [s, e] : iv)
+        if (s &gt;= t) { ++done; t = e; }
+    return done;
+}
+<i>// weighted? greedy loses its license → DP (Lab 19)</i></pre>
+  </div>
+
+  <div class="try"><b>Predict first:</b> before running anything, rank the three strategies. Then run all three. Most people rank shortest-first too high &#8212; watch exactly which two intervals it wastes its picks on.</div>
+</section>
+
+<!-- ══════════════ LAB 26 ══════════════ -->
+<section class="lab" id="topo">
+  <p class="eyebrow">Chapter 6 &#183; Lab 26 &#183; Topological order</p>
+  <h2>Peel the free nodes</h2>
+  <p class="lede">Anything with prerequisites &#8212; courses, builds, your own summer &#8212; is a DAG, and ordering it is one move repeated: <b>peel everything that depends on nothing</b>. If the peel ever stalls, you haven't failed &#8212; you've <i>proven a cycle exists</i>. Detection comes free.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="toRun">&#9654; PEEL</button>
+      <button class="btn togg" id="toCycle">ADD THE PROCRASTINATION EDGE</button>
+      <button class="btn" id="toReset">RESET</button>
+      <span class="spacer"></span>
+      <span class="readout" id="toRO">waves <b>0</b> &#183; ordered <b>0</b>/10</span>
+    </div>
+    <canvas id="toC" width="720" height="240" style="width:100%;height:auto" role="img" aria-label="Kahn's algorithm peeling a DAG of the summer plan"></canvas>
+    <div class="stage-caption">Your actual pipeline. Each wave (numbered) is everything currently free &#8212; peel it, arrows die, new nodes free up. The toggle adds OFFER &rarr; JETSON: &#8220;I'll build once I have the offer.&#8221; Run the peel and watch the whole plan deadlock &#8212; nothing is free, ever. That stall <i>is</i> the cycle proof.</div>
+  </div>
+
+  <div class="notes">
+    <p>Interview reflex: the phrases &#8220;prerequisites,&#8221; &#8220;build order,&#8221; &#8220;must come before&#8221; all mean Kahn's algorithm &#8212; count in-degrees, queue the zeros, peel. Course Schedule I is &#8220;does the peel finish?&#8221;, II is &#8220;print the peel order,&#8221; and alien dictionary is the same peel after you extract the edges. One upgrade worth knowing: process the DAG <i>in peel order</i> and you can DP along it &#8212; longest path in a DAG is exactly that, and &#8220;longest chain of prerequisites&#8221; questions are it in costume (Lab 19 meets this lab).</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">from collections import deque
+def topo(n, adj):
+    indeg = [0]*n
+    for u in range(n):
+        for v in adj[u]: indeg[v] += 1
+    q = deque(i for i in range(n) if indeg[i] == 0)   <i># the free nodes</i>
+    order = []
+    while q:
+        u = q.popleft(); order.append(u)
+        for v in adj[u]:
+            indeg[v] -= 1
+            if indeg[v] == 0: q.append(v)             <i># newly freed</i>
+    return order if <b>len(order) == n</b> else None        <i># None ⇒ cycle. free.</i></pre>
+    <pre data-t="cpp">std::vector&lt;int&gt; topo(int n, const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; adj) {
+    std::vector&lt;int&gt; indeg(n, 0), order;
+    for (int u = 0; u &lt; n; ++u) for (int v : adj[u]) ++indeg[v];
+    std::queue&lt;int&gt; q;
+    for (int i = 0; i &lt; n; ++i) if (!indeg[i]) q.push(i);  <i>// free nodes</i>
+    while (!q.empty()) {
+        int u = q.front(); q.pop(); order.push_back(u);
+        for (int v : adj[u]) if (--indeg[v] == 0) q.push(v);
+    }
+    if (<b>(int)order.size() != n</b>) return {};   <i>// empty ⇒ cycle. free.</i>
+    return order;
+}</pre>
+  </div>
+
+  <div class="try"><b>Try:</b> before peeling, predict which wave RESUME lands in &#8212; it has two masters. Then add the procrastination edge and peel again. The deadlock isn't a bug in the algorithm; it's a true statement about the plan.</div>
+</section>
+
 <section class="lab" id="atlas">
   <p class="eyebrow">The Atlas</p>
   <h2>This page is alive. What should it grow next?</h2>
@@ -1291,7 +1484,7 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 3</span><h3>Transformers</h3><p>Tokens, embeddings, attention computed live, and the sampling dials.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 4</span><h3>The math of AI</h3><p>Chain rule with live numbers, loss landscapes, matrices as warps.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 5</span><h3>CUDA on your Jetson</h3><p>Real kernels mapped onto the Orin Nano's 8 SMs; coalescing.</p></div>
-    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster, seven labs: invariants, graph ripples, DP, hashing, two pointers, heaps, partition &#8212; every ladder pattern, each in Python and C++.</p></div>
+    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster, ten labs plus an honest syllabus map &#8212; every ladder pattern from hashing to union-find, each in Python and C++.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED &#8212; YOU ASKED</span><h3>Inside the CPU</h3><p>Branch prediction, pipelines, caches &amp; set-associativity &#8212; parked while AI is the focus.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How training runs work</h3><p>Data parallelism, gradients across 10,000 GPUs, why interconnect is destiny.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How SSDs remember</h3><p>Trapping electrons on purpose: floating gates, wear leveling, why drives die.</p></div>
@@ -3457,6 +3650,236 @@ function mix6(h1,h2,t){
   q6('#qsWorst').addEventListener('click',()=>{ cancelAnimationFrame(raf); vals=Array.from({length:N},(_,i)=>i+1); play('sort'); });
   q6('#qsShuf').addEventListener('click',()=>{ cancelAnimationFrame(raf); shuffle(); view=vals.slice(); seated=new Set(); dead=new Set(); range=null; pivot=-1; cmp=0; draw(); ro(); });
   shuffle(); view=vals.slice(); draw(); ro();
+}
+}
+</script>
+
+<script>
+'use strict';
+{ /* ═══════════ Chapter 6 · Labs 24–26 ═══════════ */
+const q6 = s => document.querySelector(s);
+const RM6 = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C6 = { bg:'#0F1620', line:'#243044', dim:'#22314A', dead:'#161F2E', bar:'#3A4A66',
+             txt:'#93A1B5', cu:'#B85C1E', cuh:'#E89350', blh:'#7FA3E8' };
+const PAL=['#7FA3E8','#E89350','#6E9E7A','#B48EAD','#8FBCBB','#EBCB8B','#D08770','#5E81AC'];
+const lerp6=(a,b,t)=>a+(b-a)*t;
+function mix6(h1,h2,t){
+  const p=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const a=p(h1),b=p(h2);
+  return `rgb(${Math.round(lerp6(a[0],b[0],t))},${Math.round(lerp6(a[1],b[1],t))},${Math.round(lerp6(a[2],b[2],t))})`;
+}
+
+/* ═══════════ Lab 24 · union-find / kruskal ═══════════ */
+{
+  const cv=q6('#ufC'), ctx=cv.getContext('2d'), N=24;
+  let pts=[], ops=[], idx=0, par=[], timer=null;
+  function find(x){ while(par[x]!==x){ par[x]=par[par[x]]; x=par[x]; } return x; }
+  function gen(seed){
+    let s=seed>>>0||42; const lcg=()=>((s=(s*1103515245+12345)&0x7fffffff)>>16);
+    pts=Array.from({length:N},()=>({x:34+lcg()%(720-68), y:26+lcg()%(300-56)}));
+    const es=[];
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      es.push([Math.hypot(dx,dy),i,j]);
+    }
+    es.sort((a,b)=>a[0]-b[0]);
+    /* precompute kept/refused with a scratch DSU */
+    const p2=Array.from({length:N},(_,i)=>i);
+    const f2=x=>{ while(p2[x]!==x){ p2[x]=p2[p2[x]]; x=p2[x]; } return x; };
+    ops=[]; let kept=0;
+    for(const [,u,v] of es){
+      const ru=f2(u), rv=f2(v);
+      if(ru!==rv){ p2[ru]=rv; ops.push({u,v,keep:true}); if(++kept===N-1) break; }
+      else ops.push({u,v,keep:false});
+    }
+    reset();
+  }
+  function reset(){
+    stop(); idx=0; par=Array.from({length:N},(_,i)=>i); draw(); ro();
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function step(){
+    if(idx>=ops.length){ stop(); return; }
+    const o=ops[idx++];
+    if(o.keep) par[find(o.u)]=find(o.v);
+    draw(); ro();
+    if(idx>=ops.length) stop();
+  }
+  function run(){ stop(); if(RM6){ while(idx<ops.length) { const o=ops[idx++]; if(o.keep) par[find(o.u)]=find(o.v); } draw(); ro(); return; } timer=setInterval(step,150); }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    for(let k=0;k<idx;k++){
+      const o=ops[k], a=pts[o.u], b=pts[o.v];
+      if(o.keep){
+        ctx.strokeStyle=PAL[find(o.u)%8]; ctx.lineWidth=1.8; ctx.setLineDash([]);
+      } else {
+        ctx.strokeStyle='rgba(147,161,181,0.14)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+      }
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    /* highlight the edge just processed */
+    if(idx>0){
+      const o=ops[idx-1], a=pts[o.u], b=pts[o.v];
+      ctx.strokeStyle=o.keep?'#F4F6F9':C6.cuh; ctx.lineWidth=o.keep?2.5:1.5;
+      if(!o.keep) ctx.setLineDash([3,4]);
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    pts.forEach((p,i)=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,4.5,0,7);
+      ctx.fillStyle=PAL[find(i)%8]; ctx.fill();
+    });
+  }
+  function ro(){
+    let kept=0,ref=0;
+    for(let k=0;k<idx;k++) ops[k].keep?kept++:ref++;
+    q6('#ufAsk').textContent=idx; q6('#ufKeep').textContent=kept; q6('#ufRef').textContent=ref;
+  }
+  q6('#ufRun').addEventListener('click',run);
+  q6('#ufStep').addEventListener('click',()=>{stop();step();});
+  q6('#ufReset').addEventListener('click',()=>gen(Math.floor(Math.random()*1e9)));
+  gen(42);
+}
+
+/* ═══════════ Lab 25 · greedy intervals ═══════════ */
+{
+  const cv=q6('#gyC'), ctx=cv.getContext('2d');
+  const IV=[[0,94],[1,10],[9,13],[12,22],[25,35],[34,39],[38,48],[50,60],[62,72],[96,99]];
+  /* display lanes, precomputed greedily by start */
+  const lane=[]; {
+    const ends=[];
+    IV.map((v,i)=>[v[0],v[1],i]).sort((a,b)=>a[0]-b[0]).forEach(([s,e,i])=>{
+      let L=0; while(L<ends.length&&ends[L]>s) L++;
+      ends[L]=e; lane[i]=L;
+    });
+  }
+  let state=IV.map(()=>0), cand=-1, timer=null;   /* 0 pending · 1 kept · 2 refused */
+  const res={es:'?',sh:'?',ef:'?'};
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const X=t=>8+t*7.04, H=30, Y=l=>16+l*40;
+    IV.forEach(([s,e],i)=>{
+      const x=X(s), w=Math.max(X(e)-x,10), y=Y(lane[i]);
+      ctx.fillStyle=state[i]===1?C6.cu:(state[i]===2?C6.dead:C6.bar);
+      ctx.fillRect(x,y,w,H);
+      if(i===cand){ ctx.strokeStyle='#F4F6F9'; ctx.lineWidth=2; ctx.strokeRect(x,y,w,H); }
+      ctx.fillStyle=state[i]===2?'#4A5568':'#E9EDF3';
+      ctx.font='9px ui-monospace,Menlo,monospace';
+      ctx.fillText(s+'–'+e,x+4,y+H/2+3);
+    });
+  }
+  function ro(){
+    q6('#gyR1').textContent=res.es; q6('#gyR2').textContent=res.sh; q6('#gyR3').textContent=res.ef;
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} cand=-1; }
+  function runStrat(key,slot,btn){
+    stop();
+    ['gyES','gySH','gyEF'].forEach(id=>q6('#'+id).classList.toggle('sel',id===btn));
+    state=IV.map(()=>0);
+    const order=IV.map((v,i)=>i).sort((a,b)=>key(IV[a])-key(IV[b]));
+    const steps=[]; let t=-Infinity, kept=0;
+    for(const i of order){
+      const ok=IV[i][0]>=t;
+      steps.push([i,ok]);
+      if(ok){ t=IV[i][1]; kept++; }
+    }
+    res[slot]=kept;
+    if(RM6){ steps.forEach(([i,ok])=>state[i]=ok?1:2); draw(); ro(); return; }
+    let k=0;
+    timer=setInterval(()=>{
+      if(k<steps.length){
+        const [i,ok]=steps[k++]; cand=i; state[i]=ok?1:2; draw();
+      } else { stop(); draw(); ro(); }
+    },420);
+    ro();
+  }
+  q6('#gyES').addEventListener('click',()=>runStrat(v=>v[0],'es','gyES'));
+  q6('#gySH').addEventListener('click',()=>runStrat(v=>v[1]-v[0],'sh','gySH'));
+  q6('#gyEF').addEventListener('click',()=>runStrat(v=>v[1],'ef','gyEF'));
+  q6('#gyReset').addEventListener('click',()=>{ stop(); state=IV.map(()=>0); res.es=res.sh=res.ef='?';
+    ['gyES','gySH','gyEF'].forEach(id=>q6('#'+id).classList.remove('sel')); draw(); ro(); });
+  draw(); ro();
+}
+
+/* ═══════════ Lab 26 · topological order ═══════════ */
+{
+  const cv=q6('#toC'), ctx=cv.getContext('2d');
+  const NODES=[
+    {n:'JETSON',x:64,y:52},{n:'KERNELS',x:214,y:52},{n:'COFFEE',x:372,y:52},{n:'RÉ EMAIL',x:530,y:52},
+    {n:'RESUME',x:96,y:168},{n:'APPS',x:226,y:168},{n:'OA',x:330,y:168},
+    {n:'PHONE',x:428,y:168},{n:'ONSITE',x:538,y:168},{n:'OFFER',x:652,y:168}
+  ];
+  const BASE=[[0,1],[1,2],[2,3],[1,3],[1,4],[4,5],[5,6],[6,7],[7,8],[8,9]];
+  const CYC=[9,0];
+  let cycle=false, wave=NODES.map(()=>0), timer=null, deadlock=false;
+  const edges=()=>cycle?BASE.concat([CYC]):BASE;
+  function box(i){ const w=NODES[i].n.length*7.5+18; return {x:NODES[i].x-w/2,y:NODES[i].y-13,w,h:26}; }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    for(const [u,v] of edges()){
+      const a=NODES[u], b=NODES[v], isCyc=(u===CYC[0]&&v===CYC[1]);
+      const peeled=wave[u]>0;
+      ctx.strokeStyle=isCyc?C6.cuh:(peeled?'rgba(147,161,181,0.15)':'#4A5A76');
+      ctx.lineWidth=isCyc?1.6:1.3;
+      if(isCyc) ctx.setLineDash([5,4]);
+      const bx=box(v);
+      /* trim line endpoints to box edges, roughly */
+      const dx=b.x-a.x, dy=b.y-a.y, L=Math.hypot(dx,dy);
+      const ex=b.x-dx/L*(bx.w/2+6), ey=b.y-dy/L*16;
+      ctx.beginPath(); ctx.moveTo(a.x+dx/L*(box(u).w/2+4),a.y+dy/L*14); ctx.lineTo(ex,ey); ctx.stroke();
+      /* arrowhead */
+      const ang=Math.atan2(dy,dx);
+      ctx.beginPath(); ctx.moveTo(ex,ey);
+      ctx.lineTo(ex-7*Math.cos(ang-0.42),ey-7*Math.sin(ang-0.42));
+      ctx.lineTo(ex-7*Math.cos(ang+0.42),ey-7*Math.sin(ang+0.42));
+      ctx.fillStyle=ctx.strokeStyle; ctx.fill();
+      ctx.setLineDash([]);
+    }
+    NODES.forEach((nd,i)=>{
+      const b=box(i);
+      if(wave[i]>0){ ctx.fillStyle=mix6('#7FA3E8','#E89350',(wave[i]-1)/7); }
+      else ctx.fillStyle='#131C2A';
+      ctx.fillRect(b.x,b.y,b.w,b.h);
+      ctx.strokeStyle=deadlock&&wave[i]===0?C6.cuh:C6.line; ctx.lineWidth=deadlock&&wave[i]===0?2:1;
+      ctx.strokeRect(b.x,b.y,b.w,b.h);
+      ctx.font='600 10px ui-monospace,Menlo,monospace';
+      ctx.fillStyle=wave[i]>0?'#0F1620':'#C9D3E2';
+      ctx.fillText(nd.n,b.x+9,nd.y+3.5);
+      if(wave[i]>0){
+        ctx.fillStyle='#0F1620'; ctx.font='700 9px ui-monospace,Menlo,monospace';
+        ctx.fillText(wave[i],b.x+3,b.y+9);
+      }
+    });
+  }
+  function ro(msg){
+    const done=wave.filter(w=>w>0).length, W=Math.max(0,...wave);
+    q6('#toRO').innerHTML = msg || ('waves <b>'+W+'</b> &#183; ordered <b>'+done+'</b>/10');
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function reset(){ stop(); wave=NODES.map(()=>0); deadlock=false; draw(); ro(); }
+  function peel(){
+    stop(); wave=NODES.map(()=>0); deadlock=false;
+    const E=edges();
+    let w=0;
+    const stepWave=()=>{
+      const indeg=NODES.map(()=>0);
+      for(const [u,v] of E) if(wave[u]===0&&wave[v]===0) indeg[v]++;
+      const free=NODES.map((_,i)=>i).filter(i=>wave[i]===0&&indeg[i]===0);
+      if(free.length===0){
+        if(wave.some(x=>x===0)){ deadlock=true; draw();
+          ro('<span style="color:var(--copper-hi)">CYCLE PROVEN</span> &#183; zero free nodes &#183; '+wave.filter(x=>x>0).length+'/10 ordered'); }
+        stop(); return;
+      }
+      w++; free.forEach(i=>wave[i]=w); draw(); ro();
+    };
+    if(RM6){ for(let k=0;k<12;k++) stepWave(); return; }
+    stepWave(); timer=setInterval(stepWave,750);
+  }
+  q6('#toRun').addEventListener('click',peel);
+  q6('#toCycle').addEventListener('click',e=>{ cycle=!cycle; e.currentTarget.classList.toggle('sel',cycle); reset(); });
+  q6('#toReset').addEventListener('click',reset);
+  reset();
 }
 }
 </script>
