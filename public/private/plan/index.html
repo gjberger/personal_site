@@ -249,10 +249,10 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <li><b>Friday review, 20 minutes.</b> Three questions, written where Claude can see them: What shipped? What stalled and why (be specific &#8212; "tired" is allowed, "busy" is not, name what ate the time)? What's the ONE build for next week?</li>
     <li><b>The two-miss rule.</b> Miss two SHIPs in a row &rarr; the plan is wrong, not you. Shrink scope with Claude (drop STUDY, halve BUILD) rather than silently abandoning the whole thing. Plans die of shame, not of difficulty.</li>
     <li><b>Drills are exempt from negotiation</b> from now until your last interview. 15&ndash;30 min/day. Recall is a muscle with a ~2-week half-life.</li>
-    <li><b>Want a robot?</b> Ask Claude to "set up a weekly Friday check-in for the training plan" &#8212; a scheduled agent can pull this page's state, ask the three questions, and nag you about unchecked SHIPs. Say the word and it exists.</li>
+    <li><b>The witness rule.</b> The Friday review isn't done until it's <i>sent</i> &#8212; to whoever holds the anchor slot. A review nobody sees is a diary; a review someone expects is a deadline.</li>
   </ul>
 
-  <label class="ck ship" style="margin:16px 0 8px;max-width:68ch"><input type="checkbox" data-k="anchor"><span class="tag">ANCHOR</span><span class="txt"><b>The open slot: a human anchor for the drill track.</b> The gym survives because Nina expects you; Hazy runs through Stuart. The drills currently report to nobody &#8212; that is this plan's one unfilled position. Fill it with a name: a mock partner, a body double from the house, or one friend who sees the Friday review. This box stays unchecked until a specific person has said yes.</span></label>
+  <label class="ck ship" style="margin:16px 0 8px;max-width:68ch"><input type="checkbox" data-k="anchor"><span class="tag">ANCHOR</span><span class="txt"><b>The anchor: Logan Graves &#8212; pending the ask.</b> The gym survives because Nina expects you; Hazy runs through Stuart; the drills report to Logan once he says yes. The ask is one text (Week 0 list, above) and the job is small: he sees the Friday review, and roasts a silent week. Check this box when he agrees &#8212; not before.</span></label>
 
   <h3 style="font-size:22px;margin:30px 0 4px">The ADHD operating layer</h3>
   <p class="small" style="margin-bottom:14px">Everything above assumes the hours exist. This section makes them exist. Design around three facts instead of fighting them: <b>starting is the hard part</b> (not capacity), <b>unstructured time evaporates</b>, and <b>novelty is fuel, not the enemy</b>.</p>
@@ -263,7 +263,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <label class="ck"><input type="checkbox" data-k="s2"><span class="txt"><b>Create <span class="mono">NEXT.md</span> in the repo.</b> The exit ritual: never end a session without writing the literal next command or step. Re-entry cost &#8212; reloading context &#8212; is the ADHD tax; this is the toll pass. Tomorrow starts by reading one line, not by deciding anything.</span></label>
     <label class="ck"><input type="checkbox" data-k="s3"><span class="txt"><b>Choose the phone's parking spot</b> &#8212; another room, during blocks only. Physical distance beats app blockers and grayscale, which negotiate with the same brain that's trying to escape. You don't need to "get rid of" it; you need it to cost a walk.</span></label>
     <label class="ck"><input type="checkbox" data-k="s4"><span class="txt"><b>Build the bench.</b> Jetson plugged in, <span class="mono">tmux new -s lab</span> that never dies, repo open. Walking up to a ready bench is a 10-second start; a cold start is a 15-minute one, and 15-minute starts don't happen on tired days.</span></label>
-    <label class="ck"><input type="checkbox" data-k="s5"><span class="txt"><b>Turn on the robot:</b> tell Claude "set up the weekly Friday check-in." External expectation is the only accountability that survives motivation dips &#8212; it's why the gym works and the reading list doesn't.</span></label>
+    <label class="ck"><input type="checkbox" data-k="s5"><span class="txt"><b>Send the Logan text.</b> One message: &#8220;keep me accountable this summer &#8212; I&#8217;ll send you my Friday review every week; roast me if it&#8217;s empty.&#8221; External expectation is the only accountability that survives motivation dips &#8212; it's why the gym works and the reading list doesn't.</span></label>
     <label class="ck"><input type="checkbox" data-k="s6"><span class="txt"><b>Recruit one body double</b> for one block/week &#8212; a friend working in parallel, in person or on a call. Weirdly effective, zero prep, and Sigma Tau gives you a house full of candidates.</span></label>
     <label class="ck"><input type="checkbox" data-k="s7"><span class="txt"><b>Write the bad-day minimum on a sticky note:</b> "1 Green Book problem OR 10 minutes at the bench counts." Never-zero beats always-perfect; consistency is the floor, not the ceiling.</span></label>
   </div>
@@ -319,7 +319,7 @@ footer{padding:36px 0;font-family:var(--mono);font-size:12px;color:var(--slate);
     <li>"quiz me, green book chapter 4, timed" &#8212; drill partner</li>
     <li>"add a chapter on ___ to the Atlas" &#8212; when a STUDY block needs visuals</li>
     <li>"the plan is too heavy/light, rescale week N" &#8212; the two-miss rule in action</li>
-    <li>"set up the weekly Friday check-in" &#8212; automation, on request</li>
+    <li>"draft the Logan text" &#8212; if the ask needs words</li>
     <li>"review my kernel/resume/backtest" &#8212; before anything ships</li>
   </ul>
   <p class="small">This page and the <a href="https://claude.ai/code/artifact/c648ddc7-1dde-4527-928c-68ce4009518e">Atlas</a> redeploy to fixed URLs &#8212; bookmark both. Checkboxes live in this browser's storage.</p>
