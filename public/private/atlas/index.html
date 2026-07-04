@@ -835,6 +835,20 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
 
   <div class="stage">
     <div class="bar">
+      <span class="readout" style="font-size:13px">DISCOVER &#183; I&#39;m holding a number from 1 to 128. <b id="ggMsg">Find it.</b></span>
+    </div>
+    <div class="bar" style="margin:12px 0 0">
+      <label>your guess <b id="ggV" style="color:var(--copper-hi)">64</b> <input type="range" id="ggS" min="1" max="128" step="1" value="64"></label>
+      <button class="btn primary" id="ggGo">GUESS</button>
+      <button class="btn" id="ggNew">NEW NUMBER</button>
+      <span class="spacer"></span>
+      <span class="readout">guesses <b id="ggN">0</b> &#183; a robot needs &le; <span class="bv">7</span></span>
+    </div>
+    <div class="stage-caption">No theory yet &#8212; play until your strategy feels automatic. If you&#39;re always splitting what&#39;s left in half, you already invented this lab; everything below is your instinct, formalized.</div>
+  </div>
+
+  <div class="stage">
+    <div class="bar">
       <button class="btn primary" id="invRun">&#9654; RACE</button>
       <button class="btn" id="invStep">STEP</button>
       <button class="btn" id="invNew">NEW TARGET</button>
@@ -997,8 +1011,12 @@ std::vector&lt;long long&gt; dijkstra(const auto&amp; adj, int s) {
     <div class="bar">
       <button class="btn primary" id="dpFill">&#9654; FILL THE TABLE</button>
       <button class="btn" id="dpGreedy">GREEDY</button>
+      <button class="btn togg" id="dpWalk">WALK IT</button>
+      <button class="btn" id="dpR">&rarr;</button>
+      <button class="btn" id="dpD">&darr;</button>
       <button class="btn" id="dpReset">RESET</button>
       <span class="spacer"></span>
+      <span class="readout" id="dpWalkRO"></span>
       <span class="readout">work <b id="dpWork">0</b> / 70 cells &#183; greedy <b id="dpGcost">&mdash;</b> vs optimal <span class="bv" id="dpOpt">&mdash;</span></span>
     </div>
     <canvas id="dpC" width="720" height="310" style="width:100%;height:auto" role="img" aria-label="Minimum path sum table filling cell by cell"></canvas>
@@ -1439,15 +1457,16 @@ int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, en
 
   <div class="stage">
     <div class="bar">
+      <button class="btn togg" id="gyHand">PICK BY HAND</button>
       <button class="btn togg" id="gyES">EARLIEST START</button>
       <button class="btn togg" id="gySH">SHORTEST FIRST</button>
       <button class="btn togg" id="gyEF">EARLIEST FINISH</button>
       <button class="btn" id="gyReset">RESET</button>
       <span class="spacer"></span>
-      <span class="readout">kept &#8212; start <b id="gyR1">?</b> &#183; short <b id="gyR2">?</b> &#183; finish <span class="bv" id="gyR3">?</span> (max possible: 7)</span>
+      <span class="readout">kept &#8212; you <b id="gyR0">?</b> &#183; start <b id="gyR1">?</b> &#183; short <b id="gyR2">?</b> &#183; finish <span class="bv" id="gyR3">?</span> (max: 7)</span>
     </div>
     <canvas id="gyC" width="720" height="150" style="width:100%;height:auto" role="img" aria-label="Interval scheduling under three greedy strategies"></canvas>
-    <div class="stage-caption">Copper = kept, dark = refused, outline = being considered. Same ten intervals every run &#8212; only the order of asking changes.</div>
+    <div class="stage-caption">Copper = kept, dark = refused, outline = being considered. Same ten intervals every run &#8212; only the order of asking changes. PICK BY HAND first: click intervals, build your best conflict-free set, then let the strategies humble you (or not).</div>
   </div>
 
   <div class="notes">
@@ -3389,7 +3408,7 @@ document.querySelectorAll('.code6').forEach(box=>{
   const R=7,C=10,CW=72,CH=44,OX=0,OY=2;
   let seed=42; const lcg=()=>((seed=(seed*1103515245+12345)&0x7fffffff)>>16);
   const g=Array.from({length:R},()=>Array.from({length:C},()=>1+lcg()%9));
-  let dp=null, filled=0, opt=null, greedy=null, fraf=null;
+  let dp=null, filled=0, opt=null, greedy=null, walk=null, fraf=null;
   function solve(){
     dp=Array.from({length:R},()=>Array(C).fill(0));
     for(let r=0;r<R;r++)for(let c=0;c<C;c++){
@@ -3441,11 +3460,12 @@ document.querySelectorAll('.code6').forEach(box=>{
       p.forEach(([r,c])=>dtx.strokeRect(OX+c*CW+3,OY+r*CH+3,CW-6,CH-6));
       dtx.setLineDash([]);
     };
+    if(walk) rim(walk.p,'#F4F6F9',false);
     if(greedy) rim(greedy.p,'#7FA3E8',true);
     if(opt) rim(opt,C6.cuh,false);
   }
   function fill(){
-    cancelAnimationFrame(fraf); solve(); opt=null;
+    cancelAnimationFrame(fraf); solve(); opt=null; walk=null;
     if(RM6){ filled=R*C; ddraw(); ro(); return; }
     filled=0;
     const tick=()=>{ filled=Math.min(filled+1,R*C); ddraw(); ro();
@@ -3457,10 +3477,25 @@ document.querySelectorAll('.code6').forEach(box=>{
     q6('#dpWork').textContent=filled;
     q6('#dpOpt').textContent=(opt&&dp)?dp[R-1][C-1]:'—';
     q6('#dpGcost').textContent=greedy?greedy.cost:'—';
+    const w=q6('#dpWalkRO');
+    if(w) w.innerHTML = walk ? ('you: <b>'+walk.cost+'</b>'+((walk.r===R-1&&walk.c===C-1)?(dp?' vs optimal <span class="bv">'+dp[R-1][C-1]+'</span> — now FILL to see why':''):' — reach the corner')) : '';
   }
+  function wstep(dr,dc){
+    if(!walk) return;
+    if(walk.r===R-1&&walk.c===C-1) return;
+    const nr=walk.r+dr,nc=walk.c+dc;
+    if(nr>=R||nc>=C) return;
+    walk.r=nr; walk.c=nc; walk.cost+=g[nr][nc]; walk.p.push([nr,nc]);
+    if(nr===R-1&&nc===C-1) solve();
+    ddraw(); ro();
+  }
+  q6('#dpWalk').addEventListener('click',e=>{ cancelAnimationFrame(fraf); filled=0; opt=null; greedy=null; dp=null;
+    walk={p:[[0,0]],r:0,c:0,cost:g[0][0]}; e.currentTarget.classList.add('sel'); ddraw(); ro(); });
+  q6('#dpR').addEventListener('click',()=>wstep(0,1));
+  q6('#dpD').addEventListener('click',()=>wstep(1,0));
   q6('#dpFill').addEventListener('click',fill);
   q6('#dpGreedy').addEventListener('click',()=>{ greedy=greedyPath(); ddraw(); ro(); });
-  q6('#dpReset').addEventListener('click',()=>{ cancelAnimationFrame(fraf); filled=0; opt=null; greedy=null; dp=null; ddraw(); ro(); });
+  q6('#dpReset').addEventListener('click',()=>{ cancelAnimationFrame(fraf); filled=0; opt=null; greedy=null; dp=null; walk=null; q6('#dpWalk').classList.remove('sel'); ddraw(); ro(); });
   ddraw(); ro();
 }
 }
@@ -3928,8 +3963,8 @@ function mix6(h1,h2,t){
       ends[L]=e; lane[i]=L;
     });
   }
-  let state=IV.map(()=>0), cand=-1, timer=null;   /* 0 pending · 1 kept · 2 refused */
-  const res={es:'?',sh:'?',ef:'?'};
+  let state=IV.map(()=>0), cand=-1, timer=null, manual=false;   /* 0 pending · 1 kept · 2 refused */
+  const res={you:'?',es:'?',sh:'?',ef:'?'};
   function draw(){
     ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
     const X=t=>8+t*7.04, H=30, Y=l=>16+l*40;
@@ -3944,11 +3979,11 @@ function mix6(h1,h2,t){
     });
   }
   function ro(){
-    q6('#gyR1').textContent=res.es; q6('#gyR2').textContent=res.sh; q6('#gyR3').textContent=res.ef;
+    q6('#gyR0').textContent=res.you; q6('#gyR1').textContent=res.es; q6('#gyR2').textContent=res.sh; q6('#gyR3').textContent=res.ef;
   }
   function stop(){ if(timer){clearInterval(timer);timer=null;} cand=-1; }
   function runStrat(key,slot,btn){
-    stop();
+    stop(); manual=false; q6('#gyHand').classList.remove('sel');
     ['gyES','gySH','gyEF'].forEach(id=>q6('#'+id).classList.toggle('sel',id===btn));
     state=IV.map(()=>0);
     const order=IV.map((v,i)=>i).sort((a,b)=>key(IV[a])-key(IV[b]));
@@ -3968,10 +4003,34 @@ function mix6(h1,h2,t){
     },420);
     ro();
   }
+  const overlap=(a,b)=>IV[a][0]<IV[b][1]&&IV[b][0]<IV[a][1];
+  q6('#gyHand').addEventListener('click',e=>{
+    stop(); manual=!manual; e.currentTarget.classList.toggle('sel',manual);
+    ['gyES','gySH','gyEF'].forEach(id=>q6('#'+id).classList.remove('sel'));
+    state=IV.map(()=>0); cand=-1; res.you=manual?0:'?'; draw(); ro();
+  });
+  cv.addEventListener('click',e=>{
+    if(!manual) return;
+    const r=cv.getBoundingClientRect();
+    const mx=(e.clientX-r.left)*cv.width/r.width, my=(e.clientY-r.top)*cv.height/r.height;
+    const X=t=>8+t*7.04, Y=l=>16+l*40;
+    let hit=-1;
+    IV.forEach(([s2,e2],i)=>{
+      const x=X(s2), w=Math.max(X(e2)-x,10), y=Y(lane[i]);
+      if(mx>=x&&mx<=x+w&&my>=y&&my<=y+30) hit=i;
+    });
+    if(hit<0) return;
+    if(state[hit]===1) state[hit]=0;
+    else {
+      if(IV.some((_,j)=>state[j]===1&&j!==hit&&overlap(hit,j))){ cand=hit; draw(); cand=-1; return; }
+      state[hit]=1;
+    }
+    res.you=state.filter(v2=>v2===1).length; draw(); ro();
+  });
   q6('#gyES').addEventListener('click',()=>runStrat(v=>v[0],'es','gyES'));
   q6('#gySH').addEventListener('click',()=>runStrat(v=>v[1]-v[0],'sh','gySH'));
   q6('#gyEF').addEventListener('click',()=>runStrat(v=>v[1],'ef','gyEF'));
-  q6('#gyReset').addEventListener('click',()=>{ stop(); state=IV.map(()=>0); res.es=res.sh=res.ef='?';
+  q6('#gyReset').addEventListener('click',()=>{ stop(); manual=false; q6('#gyHand').classList.remove('sel'); state=IV.map(()=>0); res.you=res.es=res.sh=res.ef='?';
     ['gyES','gySH','gyEF'].forEach(id=>q6('#'+id).classList.remove('sel')); draw(); ro(); });
   draw(); ro();
 }
@@ -4206,5 +4265,69 @@ q6('#trCorrupt').addEventListener('click',e=>{
   draw();
 });
 draw(); ro('pick an operation');
+}
+</script>
+
+<style>
+/* collapsible rail */
+#rail .rail-ch{cursor:pointer;user-select:none}
+#rail .rail-ch::before{content:"\25B8 ";color:var(--slate)}
+#rail .rail-ch.open::before{content:"\25BE ";color:var(--copper)}
+</style>
+<script>
+'use strict';
+{ /* ═══ rail: collapse to the active chapter ═══ */
+const rail=document.getElementById('rail');
+if(rail){
+  const groups=[]; let cur=null;
+  [...rail.children].forEach(k=>{
+    if(k.classList.contains('rail-ch')){ cur={h:k,links:[]}; groups.push(cur); }
+    else if(k.tagName==='A'&&cur){ cur.links.push(k); k._grp=cur; }
+  });
+  function setOpen(g){
+    groups.forEach(G=>{
+      const open=G===g;
+      G.h.classList.toggle('open',open);
+      G.links.forEach(a=>a.style.display=open?'':'none');
+    });
+  }
+  groups.forEach(G=>G.h.addEventListener('click',()=>setOpen(G.h.classList.contains('open')?null:G)));
+  const byHref=h=>rail.querySelector(`a[href="${h}"]`);
+  const spy2=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const a=byHref('#'+e.target.id);
+      if(!a||!a._grp) return;
+      if(!a._grp.h.classList.contains('open')) setOpen(a._grp);
+      a.scrollIntoView({block:'nearest'});
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  document.querySelectorAll('.lab').forEach(s=>spy2.observe(s));
+  const init=location.hash&&byHref(location.hash);
+  setOpen(init&&init._grp?init._grp:groups[0]);
+}
+}
+
+{ /* ═══ Lab 17 discover: guess my number ═══ */
+const q=s=>document.querySelector(s);
+const s=q('#ggS');
+if(s){
+  let secret=1+Math.floor(Math.random()*128), n=0, done=false;
+  const v=q('#ggV'), msg=q('#ggMsg'), cnt=q('#ggN');
+  s.addEventListener('input',()=>v.textContent=s.value);
+  q('#ggGo').addEventListener('click',()=>{
+    if(done) return;
+    const g=+s.value; n++; cnt.textContent=n;
+    if(g===secret){ done=true;
+      msg.innerHTML='Got it in <b>'+n+'</b>.'+(n<=7
+        ?' Optimal-class &#8212; that halving instinct IS this lab.'
+        :' It exists in 7 &#8212; what did you keep alive that a comparison had already killed?');
+    } else msg.textContent = g<secret ? 'Higher.' : 'Lower.';
+  });
+  q('#ggNew').addEventListener('click',()=>{
+    secret=1+Math.floor(Math.random()*128); n=0; done=false;
+    cnt.textContent=0; msg.textContent='Find it.';
+  });
+}
 }
 </script>
