@@ -250,6 +250,10 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
   <a href="#inv">17 &#183; Invariants</a>
   <a href="#wave">18 &#183; Graph ripples</a>
   <a href="#memo">19 &#183; Remembering (DP)</a>
+  <a href="#hash">20 &#183; Hashing</a>
+  <a href="#win">21 &#183; Two pointers</a>
+  <a href="#heap">22 &#183; Heaps</a>
+  <a href="#part">23 &#183; Partition</a>
   <div class="rail-ch">NEXT</div>
   <a href="#atlas">The atlas grows</a>
 </nav>
@@ -262,7 +266,7 @@ footer{padding:48px 56px;font-family:var(--mono);font-size:12px;color:var(--slat
     <h1>GPUs, and why<br>they dream in parallel</h1>
     <p class="sub">A hands-on tour from a single transistor-packed die to a neural network training live in your browser. Nothing here is a video &#8212; every diagram runs, and you drive it.</p>
     <div class="chapter-tags">
-      <div class="tag"><b>19 labs</b> &#183; interactive</div>
+      <div class="tag"><b>23 labs</b> &#183; interactive</div>
       <div class="tag"><b>self-paced</b> &#183; come back anytime</div>
       <div class="tag">a living page &#8212; ask Claude for the next chapter</div>
     </div>
@@ -1003,6 +1007,280 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
   <div class="try"><b>Try:</b> naive mode, slide n from 10 to 13 and watch the call counter roughly double per notch &#8212; that's O(&phi;&#8319;) happening to you personally. Then MEMOIZE and slide again: the counter barely moves. One switch, exponential &rarr; linear. That gap is why "have we computed this before?" is the most valuable question in the interview.</div>
 </section>
 
+<!-- ══════════════ LAB 20 ══════════════ -->
+<section class="lab" id="hash">
+  <p class="eyebrow">Chapter 6 &#183; Lab 20 &#183; Hashing</p>
+  <h2>The oldest trade: memory for time</h2>
+  <p class="lede">Half the easy problems on your ladder are one question in a costume: <b>&#8220;have I seen this before?&#8221;</b> An array answers it in O(n) by re-reading its whole life. A hash table answers in O(1) by spending memory: scramble the key into a bucket number, and the answer is waiting in that bucket. Below, watch the buckets fill &#8212; and watch what happens when the scrambling is lazy.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="hshAdd1">+ INSERT</button>
+      <button class="btn" id="hshAdd10">+ 10</button>
+      <button class="btn" id="hshGrow">RESIZE &times;2</button>
+      <button class="btn togg" id="hshBad">BAD HASH</button>
+      <button class="btn" id="hshReset">RESET</button>
+      <span class="spacer"></span>
+      <span class="readout">n <b id="hshN">0</b> &#183; load &alpha; <span class="bv" id="hshA">0.00</span> &#183; longest chain <b id="hshMax">0</b></span>
+    </div>
+    <canvas id="hshC" width="720" height="240" style="width:100%;height:auto" role="img" aria-label="Hash table buckets filling with keys"></canvas>
+    <div class="stage-caption">Each column is a bucket; each block a key. A lookup walks one column top-down &#8212; so the <b>longest chain</b> is your real worst case, and the load factor &alpha; = n/buckets is what you manage. Past &alpha; &asymp; 1, RESIZE &times;2 and re-scatter. Toggle BAD HASH: same keys, same table, and suddenly four columns do all the work &#8212; O(1) was never a property of the table, only of the <i>scatter</i>.</div>
+  </div>
+
+  <div class="notes">
+    <p>The contract has two clauses, and both are yours to keep: the hash must <b>spread</b> (real libraries mix every bit of the key; BAD HASH above keeps only the low bits &#8212; watch the clustering), and the table must <b>grow</b> before chains do (resize at a load threshold; amortized, still O(1)). Break either clause and every &#8220;O(1)&#8221; in your complexity analysis quietly becomes O(n) &#8212; which is precisely the follow-up question interviewers like to ask.</p>
+    <p>On the ladder (week 1), the table appears as three reflexes: the <b>seen-set</b> (duplicates, cycles), the <b>complement lookup</b> (two-sum: for each x, is target&minus;x already in the table?), and the <b>frequency map</b> (anagrams, counts, group-by). All three are the same move &#8212; pay one insert now so every future question costs O(1). And know the one thing the table can't do: it has no notion of order. The moment the question says &#8220;nearest,&#8221; &#8220;smallest above,&#8221; or &#8220;in sorted order,&#8221; you want a sorted structure or a heap (Lab 22), not a dict.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py"><i># the three reflexes, week 1 of the ladder</i>
+seen = set()                            <i># 1 · have I seen this?</i>
+for x in xs:
+    if x in seen: ...                   <i># O(1) expected</i>
+    seen.add(x)
+
+def two_sum(xs, t):                     <i># 2 · complement lookup</i>
+    at = {}                             <i># value -> index</i>
+    for i, x in enumerate(xs):
+        if <b>t - x in at</b>: return at[t - x], i
+        at[x] = i
+
+from collections import Counter        <i># 3 · frequency map</i>
+freq = Counter(s)                       <i># anagrams: Counter(a) == Counter(b)</i></pre>
+    <pre data-t="cpp">#include &lt;unordered_map&gt;
+#include &lt;unordered_set&gt;
+std::unordered_set&lt;int&gt; seen;           <i>// 1 · have I seen this?</i>
+for (int x : xs) {
+    if (seen.count(x)) { /* ... */ }    <i>// O(1) expected</i>
+    seen.insert(x);
+}
+std::pair&lt;int,int&gt; two_sum(const std::vector&lt;int&gt;&amp; xs, int t) {
+    std::unordered_map&lt;int,int&gt; at;     <i>// value -> index</i>
+    for (int i = 0; i &lt; (int)xs.size(); ++i) {
+        if (auto it = at.find(<b>t - xs[i]</b>); it != at.end())
+            return {it-&gt;second, i};
+        at[xs[i]] = i;
+    }
+    return {-1,-1};
+}
+<i>// need order (nearest / smallest-above / sorted walk)? std::map — O(log n),</i>
+<i>// but it can answer questions unordered_map can't even hear.</i></pre>
+  </div>
+
+  <div class="try"><b>Try:</b> insert ~30 keys with a good hash and read the longest chain. RESET, toggle BAD HASH, insert the same count &#8212; same n, same &alpha;, triple the chain. Then say, out loud, why "it's a hash map so it's O(1)" is a claim about the hash function, not the data structure. That sentence is a quant-dev screen question almost verbatim.</div>
+</section>
+
+<!-- ══════════════ LAB 21 ══════════════ -->
+<section class="lab" id="win">
+  <p class="eyebrow">Chapter 6 &#183; Lab 21 &#183; Two pointers</p>
+  <h2>Two pointers, zero regrets</h2>
+  <p class="lede">A brute force re-examines; two pointers <b>never look back</b>. The license for that confidence is always some monotone fact &#8212; &#8220;once a window is invalid, growing it can't fix it&#8221; &#8212; that lets you prove entire regions dead without visiting them. Below: the longest run of unrepeated characters, and a converging two-sum. Both pointers only ever move forward; count the steps.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn togg sel" id="winModeW">WINDOW</button>
+      <button class="btn togg" id="winModeC">CONVERGE</button>
+      <span class="spacer"></span>
+      <button class="btn primary" id="winRun">&#9654; RUN</button>
+      <button class="btn" id="winStep">STEP</button>
+      <button class="btn" id="winReset">RESET</button>
+    </div>
+    <canvas id="winC" width="720" height="200" style="width:100%;height:auto" role="img" aria-label="Sliding window and converging pointers over an array"></canvas>
+    <div class="bar" style="margin:12px 0 0">
+      <span class="readout" id="winRO">pointer moves <b>0</b></span>
+    </div>
+    <div class="stage-caption" id="winCap">WINDOW: copper bracket = L, blue bracket = R. R eats forward; when it swallows a repeat, L leaps past the old copy &#8212; never rewinding. Every cell L abandons is <b>proven</b> useless: any window containing the repeat is already invalid. Total pointer moves &le; 2n, against the 210 windows a brute force would inspect.</div>
+  </div>
+
+  <div class="notes">
+    <p>The two shapes cover week 2 of the ladder between them. <b>The window</b> (L chases R): substrings and subarrays with a constraint &#8212; longest without repeats, shortest with sum &ge; target, at most k distinct. The invariant is &#8220;the window is always valid&#8221;; R expands until it breaks, L contracts until it's repaired, and each index enters and leaves at most once. <b>The converge</b> (L and R close in): pair-hunting in <i>sorted</i> data &#8212; two-sum, container with most water, trapping rain. There the monotone fact is starker: if the sum is too small, <i>nothing</i> paired with the current L can ever work, so L's entire column of possibilities dies in one comparison. It's Lab 17's halving argument wearing running shoes.</p>
+    <p>Know when the license is <i>revoked</i>: &#8220;shortest subarray with sum &ge; k&#8221; with <b>negative numbers</b> breaks the window's monotonicity (growing can now fix an invalid window), and the honest answers are prefix sums with a monotonic deque, or a different tool entirely. Saying that unprompted &#8212; &#8220;two pointers needs monotonicity, negatives break it&#8221; &#8212; is the difference between pattern-matching and understanding, and interviewers are listening for exactly it.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">def longest_unrepeated(s):              <i># the window skeleton</i>
+    last, L, best = {}, 0, 0
+    for R, ch in enumerate(s):
+        if ch in last and last[ch] &gt;= L:
+            <b>L = last[ch] + 1</b>            <i># leap — never rewind</i>
+        last[ch] = R
+        best = max(best, R - L + 1)     <i># window is valid here</i>
+    return best
+
+def two_sum_sorted(a, t):               <i># the converge skeleton</i>
+    L, R = 0, len(a) - 1
+    while L &lt; R:
+        s = a[L] + a[R]
+        if s == t: return L, R
+        if s &lt; t: <b>L += 1</b>                <i># all pairs (L, *) proven dead</i>
+        else:     <b>R -= 1</b>
+    return None</pre>
+    <pre data-t="cpp">#include &lt;array&gt;
+int longest_unrepeated(const std::string&amp; s) {
+    std::array&lt;int,256&gt; last; last.fill(-1);
+    int L = 0, best = 0;
+    for (int R = 0; R &lt; (int)s.size(); ++R) {
+        if (last[(unsigned char)s[R]] &gt;= L)
+            <b>L = last[(unsigned char)s[R]] + 1;</b>  <i>// leap — never rewind</i>
+        last[(unsigned char)s[R]] = R;
+        best = std::max(best, R - L + 1);
+    }
+    return best;
+}
+std::pair&lt;int,int&gt; two_sum_sorted(const std::vector&lt;int&gt;&amp; a, int t) {
+    int L = 0, R = (int)a.size() - 1;
+    while (L &lt; R) {
+        int s = a[L] + a[R];
+        if (s == t) return {L, R};
+        if (s &lt; t) <b>++L;</b> else <b>--R;</b>       <i>// a whole row of pairs dies</i>
+    }
+    return {-1,-1};
+}</pre>
+  </div>
+
+  <div class="try"><b>Try:</b> STEP the window and, at each leap of L, name the cell it skipped and the reason it's provably useless. Then run CONVERGE and count moves: n=16 elements, &le;15 comparisons, versus the 120 pairs brute force would check. The ratio is small here &#8212; at n=10&#8309; it's the difference between an accepted OA and a timeout.</div>
+</section>
+
+<!-- ══════════════ LAB 22 ══════════════ -->
+<section class="lab" id="heap">
+  <p class="eyebrow">Chapter 6 &#183; Lab 22 &#183; Heaps</p>
+  <h2>An array wearing a tree costume</h2>
+  <p class="lede">A heap makes exactly one promise &#8212; <b>the smallest thing is on top</b> &#8212; and keeps it lazily: parents beat children, siblings are strangers. That laziness is the speed. And the tree is a costume: the whole thing lives in a flat array where node i's children sit at 2i+1 and 2i+2, no pointers anywhere. Push a value and watch <i>both views move as one</i>.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="hpPush">PUSH RANDOM</button>
+      <button class="btn" id="hpPop">POP MIN</button>
+      <button class="btn" id="hpBuild">HEAPIFY 15 FRESH</button>
+      <span class="spacer"></span>
+      <span class="readout">size <b id="hpN">7</b> &#183; last op <span class="bv" id="hpOps">&mdash;</span> swaps &#183; bound &lceil;log&#8322;n&rceil; = <b id="hpLog">3</b></span>
+    </div>
+    <canvas id="hpC" width="720" height="300" style="width:100%;height:auto" role="img" aria-label="Binary heap shown simultaneously as tree and array"></canvas>
+    <div class="stage-caption">Same fifteen slots, two costumes: the tree you reason in, the array it actually is. Cooler = smaller. A PUSH lands in the next free slot and <b>sifts up</b> its ancestor ladder; POP MIN crowns the last leaf and <b>sifts it down</b>. Every swap flashes in both views at once &#8212; there is no second data structure, only a second way of looking.</div>
+  </div>
+
+  <div class="notes">
+    <p>The costume trick is why heaps are everywhere: an insert touches only the ancestor ladder &#8212; &lceil;log&#8322;n&rceil; slots, 20 for a million items &#8212; and the array layout means those touches are cache-friendly integer arithmetic, not pointer chasing. HEAPIFY is the quieter surprise: building from scratch bottom-up costs O(n), not n&nbsp;log&nbsp;n, because almost all nodes are leaves and sift barely anywhere. Interviewers spring that one as a follow-up; now you've watched it happen.</p>
+    <p>Week 5 of the ladder is mostly one pattern: <b>top-k</b>. Keep a heap of size k of the best-so-far, and its top is the <i>worst of the best</i> &#8212; the gatekeeper each new candidate must beat. n&nbsp;log&nbsp;k, tiny memory, works on streams you can't hold. (k large relative to n? Quickselect, next lab, does it in linear time.) The other week-5 shape, intervals, is heaps too: sweep sorted starts, park end-times in a min-heap, and &#8220;rooms needed&#8221; is just the heap's high-water mark. And you've already run the loop that matters most: Dijkstra in Lab 18 &#8212; its bucket is exactly this structure.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">import heapq                            <i># min-heap. always. no flag.</i>
+h = [5, 9, 12]
+heapq.heapify(h)                        <i># O(n), in place</i>
+heapq.heappush(h, 3)                    <i># sift-up,  O(log n)</i>
+smallest = heapq.heappop(h)             <i># sift-down, O(log n)</i>
+
+def top_k(xs, k):                       <i># the week-5 pattern</i>
+    h = []
+    for x in xs:
+        if len(h) &lt; k: heapq.heappush(h, x)
+        elif x &gt; h[0]: <b>heapq.heapreplace(h, x)</b>  <i># beat the gatekeeper</i>
+    return sorted(h, reverse=True)      <i># n log k, stream-safe</i>
+
+<i># max-heap in python: push -x, negate on the way out. yes, really.</i></pre>
+    <pre data-t="cpp">#include &lt;queue&gt;
+<i>// DEFAULT IS A MAX-HEAP — the classic silent bug. read twice:</i>
+std::priority_queue&lt;int&gt; maxh;                       <i>// top() = largest</i>
+std::priority_queue&lt;int, std::vector&lt;int&gt;,
+                    std::greater&lt;&gt;&gt; minh;            <i>// top() = smallest</i>
+
+std::vector&lt;int&gt; top_k(const std::vector&lt;int&gt;&amp; xs, size_t k) {
+    std::priority_queue&lt;int, std::vector&lt;int&gt;, std::greater&lt;&gt;&gt; h;
+    for (int x : xs) {
+        if (h.size() &lt; k) h.push(x);
+        else if (x &gt; h.top()) { <b>h.pop(); h.push(x);</b> } <i>// beat the gatekeeper</i>
+    }
+    std::vector&lt;int&gt; out;
+    while (!h.empty()) { out.push_back(h.top()); h.pop(); }
+    return {out.rbegin(), out.rend()};
+}
+<i>// std::make_heap / push_heap / pop_heap: the same machine, exposed.</i></pre>
+  </div>
+
+  <div class="try"><b>Try:</b> PUSH until the readout shows a sift that used all &lceil;log&#8322;n&rceil; swaps, then one that used zero &#8212; both legal, both leave the promise intact. Then HEAPIFY 15 FRESH a few times and watch the swap count: never more than n, usually far less. Explaining <i>why</i> heapify is O(n) &#8212; "the expensive nodes are rare" &#8212; is a standard follow-up, and you've now seen the receipts.</div>
+</section>
+
+<!-- ══════════════ LAB 23 ══════════════ -->
+<section class="lab" id="part">
+  <p class="eyebrow">Chapter 6 &#183; Lab 23 &#183; Sorting &amp; selection</p>
+  <h2>Sort half as much as you think</h2>
+  <p class="lede">One move powers this whole lab: <b>partition</b> &#8212; pick a pivot, sweep once, and the array splits into smaller-than and larger-than, pivot seated in its final home forever. Recurse on <i>both</i> sides and you invented quicksort. Recurse on <b>one</b> side &#8212; because the k-th element can only be in one of them &#8212; and you get quickselect: the k-th smallest of anything, in linear expected time, no sorting.</p>
+
+  <div class="stage">
+    <div class="bar">
+      <button class="btn primary" id="qsSort">&#9654; QUICKSORT</button>
+      <button class="btn" id="qsSel">QUICKSELECT k</button>
+      <label>k <b id="qsKV" style="color:var(--copper-hi)">24</b> <input type="range" id="qsK" min="1" max="48" step="1" value="24"></label>
+      <button class="btn" id="qsWorst">WORST CASE</button>
+      <button class="btn" id="qsShuf">SHUFFLE</button>
+      <span class="spacer"></span>
+      <span class="readout">comparisons <b id="qsCmp">0</b> &#183; n log&#8322;n &asymp; <span class="bv">268</span> &#183; n&sup2;/2 = <b>1152</b></span>
+    </div>
+    <canvas id="qsC" width="720" height="220" style="width:100%;height:auto" role="img" aria-label="Quicksort and quickselect partitioning an array of bars"></canvas>
+    <div class="stage-caption">Copper bar = current pivot; the bright band = the active partition; blue bars are seated forever. QUICKSELECT is the reveal: after each partition, the half that provably can't hold the k-th <b>goes dark and stays dark</b> &#8212; Lab 17's halving argument, except the halves are earned with a sweep instead of given by sorted order. WORST CASE feeds quicksort sorted input with an end pivot: watch the comparison counter walk toward n&sup2;/2.</div>
+  </div>
+
+  <div class="notes">
+    <p>Three honest facts about sorting in interviews. One: <b>you will call <span style="font-family:var(--mono);font-size:13px">sort()</span>, not write it</b> &#8212; what's tested is knowing the n&nbsp;log&nbsp;n price, and spotting when sorting first turns a hard problem into an easy one (intervals, ladder week 5, is exactly this). Two: <b>the comparison bound is real</b> &#8212; n&nbsp;log&nbsp;n is the floor for comparison sorting, so any claimed faster sort is exploiting structure (counting sort on small ints, radix on fixed-width keys); saying which structure is the whole answer. Three: <b>WORST CASE isn't a party trick</b> &#8212; sorted input with a naive pivot is quicksort's n&sup2;, which is why real libraries randomize or use introsort, and why "how would an adversary hurt this?" is a fair question about any algorithm you name.</p>
+    <p>Quickselect is the one to actually carry: &#8220;k-th largest,&#8221; &#8220;median,&#8221; &#8220;top half&#8221; without n&nbsp;log&nbsp;n. The decision rule for week 5-and-beyond: k small or the data streams &rarr; heap (Lab 22, n&nbsp;log&nbsp;k); k anywhere and the data sits in memory &rarr; quickselect (expected O(n)); need the k results <i>in order</i> &rarr; sort and stop apologizing. And name-drop with precision: <span style="font-family:var(--mono);font-size:13px">std::nth_element</span> <i>is</i> quickselect, one call, already in the standard library &#8212; knowing that is worth more than reciting the partition loop.</p>
+  </div>
+
+  <div class="code6">
+    <div class="ctabs">
+      <button class="btn small togg sel" data-t="py">PYTHON</button>
+      <button class="btn small togg" data-t="cpp">C++</button>
+    </div>
+    <pre class="on" data-t="py">import random
+def quickselect(a, k):                  <i># k-th smallest, 0-indexed; avg O(n)</i>
+    lo, hi = 0, len(a) - 1
+    while True:
+        p = partition(a, lo, hi, random.randint(lo, hi))
+        if p == k: return a[p]
+        if p &lt; k: <b>lo = p + 1</b>            <i># left half can't hold the k-th</i>
+        else:     <b>hi = p - 1</b>            <i># right half can't either</i>
+
+def partition(a, lo, hi, pi):           <i># lomuto: one sweep, pivot seated</i>
+    a[pi], a[hi] = a[hi], a[pi]
+    store = lo
+    for i in range(lo, hi):
+        if a[i] &lt; a[hi]:
+            a[store], a[i] = a[i], a[store]; store += 1
+    a[store], a[hi] = a[hi], a[store]
+    return store                        <i># final home, forever</i></pre>
+    <pre data-t="cpp">#include &lt;algorithm&gt;
+<i>// the library already contains this lab:</i>
+std::vector&lt;int&gt; v = data;
+<b>std::nth_element(v.begin(), v.begin() + k, v.end());</b>
+<i>// v[k] is now the k-th smallest; left of it smaller, right larger,</i>
+<i>// neither side sorted — expected O(n), and saying so is the answer.</i>
+
+int partition(std::vector&lt;int&gt;&amp; a, int lo, int hi) {  <i>// lomuto, end pivot</i>
+    int store = lo;
+    for (int i = lo; i &lt; hi; ++i)
+        if (a[i] &lt; a[hi]) std::swap(a[store++], a[i]);
+    std::swap(a[store], a[hi]);
+    return store;                       <i>// pivot seated, forever</i>
+}
+<i>// std::sort: introsort — quicksort that watches its own recursion depth</i>
+<i>// and bails to heapsort before an adversary can make it quadratic.</i></pre>
+  </div>
+
+  <div class="try"><b>Try:</b> SHUFFLE, then QUICKSELECT with k=24 and watch how much of the array never lights up at all &#8212; that darkness is the linear-time argument, visible. Then WORST CASE and let the counter run: same algorithm, adversarial input, 4&times; the comparisons on just 48 elements. Close the loop from Lab 17: quickselect is binary search where you <i>earn</i> the halves.</div>
+</section>
+
 <section class="lab" id="atlas">
   <p class="eyebrow">The Atlas</p>
   <h2>This page is alive. What should it grow next?</h2>
@@ -1013,7 +1291,7 @@ long long min_path(const std::vector&lt;std::vector&lt;int&gt;&gt;&amp; g) {
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 3</span><h3>Transformers</h3><p>Tokens, embeddings, attention computed live, and the sampling dials.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 4</span><h3>The math of AI</h3><p>Chain rule with live numbers, loss landscapes, matrices as warps.</p></div>
     <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 5</span><h3>CUDA on your Jetson</h3><p>Real kernels mapped onto the Orin Nano's 8 SMs; coalescing.</p></div>
-    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster: binary search as a kept promise, graph ripples in three buckets, DP as refusing to redo work &#8212; each in Python and C++.</p></div>
+    <div class="card live"><span class="st">&#9679; LIVE &#8212; CH 6</span><h3>Algorithms</h3><p>The CS161 booster, seven labs: invariants, graph ripples, DP, hashing, two pointers, heaps, partition &#8212; every ladder pattern, each in Python and C++.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED &#8212; YOU ASKED</span><h3>Inside the CPU</h3><p>Branch prediction, pipelines, caches &amp; set-associativity &#8212; parked while AI is the focus.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How training runs work</h3><p>Data parallelism, gradients across 10,000 GPUs, why interconnect is destiny.</p></div>
     <div class="card"><span class="st">&#9675; QUEUED</span><h3>How SSDs remember</h3><p>Trapping electrons on purpose: floating gates, wear leveling, why drives die.</p></div>
@@ -2817,6 +3095,368 @@ document.querySelectorAll('.code6').forEach(box=>{
   q6('#dpGreedy').addEventListener('click',()=>{ greedy=greedyPath(); ddraw(); ro(); });
   q6('#dpReset').addEventListener('click',()=>{ cancelAnimationFrame(fraf); filled=0; opt=null; greedy=null; dp=null; ddraw(); ro(); });
   ddraw(); ro();
+}
+}
+</script>
+
+<script>
+'use strict';
+{ /* ═══════════ Chapter 6 · Labs 20–23 ═══════════ */
+const q6 = s => document.querySelector(s);
+const RM6 = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C6 = { bg:'#0F1620', line:'#243044', dim:'#22314A', dead:'#161F2E', bar:'#3A4A66',
+             txt:'#93A1B5', cu:'#B85C1E', cuh:'#E89350', bl:'#2453B8', blh:'#7FA3E8', act:'#5A6C8C' };
+const lerp6=(a,b,t)=>a+(b-a)*t;
+function mix6(h1,h2,t){
+  const p=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+  const a=p(h1),b=p(h2);
+  return `rgb(${Math.round(lerp6(a[0],b[0],t))},${Math.round(lerp6(a[1],b[1],t))},${Math.round(lerp6(a[2],b[2],t))})`;
+}
+
+/* ═══════════ Lab 20 · hashing ═══════════ */
+{
+  const cv=q6('#hshC'), ctx=cv.getContext('2d');
+  let B=16, keys=[], bad=false, timer=null;
+  const gh=x=>((x*2654435761)>>>0)%B, bh=x=>x%4;
+  const bucket=x=>bad?bh(x):gh(x);
+  function chains(){
+    const ch=Array.from({length:B},()=>[]);
+    keys.forEach(k=>ch[bucket(k)].push(k));
+    return ch;
+  }
+  function draw(flash){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const ch=chains(), cw=cv.width/B;
+    ctx.font='9px ui-monospace,Menlo,monospace';
+    for(let b=0;b<B;b++){
+      ctx.fillStyle=C6.line; ctx.fillRect(b*cw+2,18,cw-4,1.5);
+      if(B<=32){ ctx.fillStyle=C6.txt; ctx.fillText(b,b*cw+4,12); }
+      ch[b].forEach((k,i)=>{
+        ctx.fillStyle = (flash!==undefined&&k===flash)?C6.cuh:C6.bar;
+        const y=24+i*14;
+        if(y<cv.height-4) ctx.fillRect(b*cw+2,y,cw-4,11);
+      });
+    }
+  }
+  function ro(){
+    const ch=chains();
+    q6('#hshN').textContent=keys.length;
+    q6('#hshA').textContent=(keys.length/B).toFixed(2);
+    q6('#hshMax').textContent=Math.max(0,...ch.map(c=>c.length));
+  }
+  function ins(n){
+    if(timer){clearInterval(timer);timer=null;}
+    if(RM6||n===1){
+      let last;
+      for(let i=0;i<n;i++){ last=Math.floor(Math.random()*9999); keys.push(last); }
+      draw(last); ro(); return;
+    }
+    let left=n;
+    timer=setInterval(()=>{
+      const k=Math.floor(Math.random()*9999); keys.push(k);
+      draw(k); ro();
+      if(--left<=0){clearInterval(timer);timer=null;}
+    },70);
+  }
+  q6('#hshAdd1').addEventListener('click',()=>ins(1));
+  q6('#hshAdd10').addEventListener('click',()=>ins(10));
+  q6('#hshGrow').addEventListener('click',()=>{ if(B<128){B*=2;} draw(); ro(); });
+  q6('#hshBad').addEventListener('click',e=>{ bad=!bad; e.currentTarget.classList.toggle('sel',bad); draw(); ro(); });
+  q6('#hshReset').addEventListener('click',()=>{ if(timer){clearInterval(timer);timer=null;} B=16; keys=[]; bad=false; q6('#hshBad').classList.remove('sel'); draw(); ro(); });
+  draw(); ro();
+}
+
+/* ═══════════ Lab 21 · two pointers ═══════════ */
+{
+  const cv=q6('#winC'), ctx=cv.getContext('2d');
+  const S='thetrainingplanlives';
+  const A=[2,3,5,8,9,12,14,17,21,25,26,30,33,37,41,44], T=38;
+  let mode='w', trace=[], step=0, timer=null;
+  function buildW(){
+    trace=[]; const last={}; let L=0,best=0,bl=0,br=-1,moves=0;
+    for(let R=0;R<S.length;R++){
+      moves++;
+      const c=S[R];
+      if(last[c]!==undefined&&last[c]>=L){ moves+=(last[c]+1-L); L=last[c]+1; }
+      last[c]=R;
+      if(R-L+1>best){ best=R-L+1; bl=L; br=R; }
+      trace.push({L,R,best,bl,br,moves});
+    }
+  }
+  function buildC(){
+    trace=[]; let L=0,R=A.length-1,moves=0,found=null;
+    while(L<R){
+      const s=A[L]+A[R];
+      trace.push({L,R,s,moves:++moves,found:s===T?[L,R]:null});
+      if(s===T){ found=[L,R]; break; }
+      if(s<T) L++; else R--;
+    }
+  }
+  function cur(){ return step>0?trace[step-1]:null; }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const st=cur();
+    if(mode==='w'){
+      const n=S.length,cw=34,x0=(cv.width-n*cw)/2,y0=58,h=52;
+      for(let i=0;i<n;i++){
+        let col='#131C2A';
+        if(st){
+          if(i>=st.L&&i<=st.R) col=C6.dim;
+          if(i<st.L) col=C6.dead;
+        }
+        ctx.fillStyle=col; ctx.fillRect(x0+i*cw+1,y0,cw-2,h);
+        ctx.fillStyle=st&&i<st.L?'#4A5568':'#C9D3E2';
+        ctx.font='15px ui-monospace,Menlo,monospace';
+        ctx.fillText(S[i],x0+i*cw+cw/2-4,y0+h/2+5);
+      }
+      if(st){
+        ctx.strokeStyle=C6.cuh; ctx.lineWidth=2.5;
+        ctx.strokeRect(x0+st.L*cw-1,y0-6,3,h+12);
+        ctx.strokeStyle=C6.blh;
+        ctx.strokeRect(x0+(st.R+1)*cw-2,y0-6,3,h+12);
+        if(st.br>=0){
+          ctx.fillStyle=C6.cuh;
+          ctx.fillRect(x0+st.bl*cw+1,y0+h+10,(st.br-st.bl+1)*cw-2,3);
+        }
+        ctx.font='11px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+        ctx.fillText('L',x0+st.L*cw-2,y0-12); ctx.fillStyle=C6.blh;
+        ctx.fillText('R',x0+(st.R+1)*cw-3,y0-12);
+      }
+      ctx.font='10px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+      ctx.fillText('best run so far',x0,y0+h+34);
+    } else {
+      const n=A.length,cw=42,x0=(cv.width-n*cw)/2,base=170;
+      for(let i=0;i<n;i++){
+        const bh=A[i]/44*120+10, x=x0+i*cw+3, w=cw-6;
+        let col=C6.bar;
+        if(st){
+          if(i<st.L||i>st.R) col=C6.dead;
+          if(i===st.L) col=C6.cuh;
+          if(i===st.R) col=C6.blh;
+          if(st.found&&(i===st.found[0]||i===st.found[1])) col=C6.cuh;
+        }
+        ctx.fillStyle=col; ctx.fillRect(x,base-bh,w,bh);
+        ctx.font='9px ui-monospace,Menlo,monospace';
+        ctx.fillStyle=st&&(i<st.L||i>st.R)?'#4A5568':C6.txt;
+        ctx.fillText(A[i],x+w/2-6,base+12);
+      }
+      ctx.font='11px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+      ctx.fillText('target '+T+(st?' · L+R = '+st.s:''),x0,20);
+    }
+  }
+  function ro(){
+    const st=cur();
+    const el=q6('#winRO');
+    if(mode==='w'){
+      el.innerHTML='pointer moves <b>'+(st?st.moves:0)+'</b> · best run <span class="bv">'+(st?st.best:0)+'</span> · brute-force windows: <b>210</b>';
+    } else {
+      el.innerHTML='pointer moves <b>'+(st?st.moves:0)+'</b>'+(st&&st.found?' · <span class="bv">found '+A[st.found[0]]+' + '+A[st.found[1]]+' = '+T+'</span>':'')+' · pairs brute force checks: <b>120</b>';
+    }
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function doStep(){ if(step<trace.length){ step++; draw(); ro(); } else stop(); }
+  function run(){ stop(); if(RM6){ step=trace.length; draw(); ro(); return; } timer=setInterval(doStep,mode==='w'?350:500); }
+  function reset(){ stop(); step=0; mode==='w'?buildW():buildC(); draw(); ro(); }
+  const capW='WINDOW: copper bracket = L, blue bracket = R. R eats forward; when it swallows a repeat, L leaps past the old copy — never rewinding. Every cell L abandons is proven useless: any window containing the repeat is already invalid. Total pointer moves ≤ 2n, against the 210 windows a brute force would inspect.';
+  const capC='CONVERGE: sorted bars, pointers closing in on target '+T+'. Sum too small → nothing pairs with L, so L’s entire column of candidates dies in one comparison and L moves. Too big → R’s dies. The dark bars were never touched — that’s the O(n) argument, drawn.';
+  q6('#winModeW').addEventListener('click',()=>{ mode='w';
+    q6('#winModeW').classList.add('sel'); q6('#winModeC').classList.remove('sel');
+    q6('#winCap').textContent=capW; reset(); });
+  q6('#winModeC').addEventListener('click',()=>{ mode='c';
+    q6('#winModeC').classList.add('sel'); q6('#winModeW').classList.remove('sel');
+    q6('#winCap').textContent=capC; reset(); });
+  q6('#winStep').addEventListener('click',()=>{stop();doStep();});
+  q6('#winRun').addEventListener('click',run);
+  q6('#winReset').addEventListener('click',reset);
+  reset();
+}
+
+/* ═══════════ Lab 22 · heaps ═══════════ */
+{
+  const cv=q6('#hpC'), ctx=cv.getContext('2d');
+  let h=[8,20,15,31,44,23,17], hi=[-1,-1], timer=null;
+  function ro(ops){
+    q6('#hpN').textContent=h.length;
+    if(ops!==undefined) q6('#hpOps').textContent=ops;
+    q6('#hpLog').textContent=Math.ceil(Math.log2(Math.max(h.length,2)));
+  }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const pos=i=>{
+      const d=Math.floor(Math.log2(i+1)), p=i-(2**d-1);
+      return [cv.width*(p+0.5)/2**d, 26+d*46];
+    };
+    ctx.strokeStyle=C6.line; ctx.lineWidth=1;
+    for(let i=1;i<15;i++){
+      if(i>=h.length&&((i-1)>>1)>=h.length) continue;
+      const [x,y]=pos(i), [px,py]=pos((i-1)>>1);
+      if(i<h.length){ ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(x,y); ctx.stroke(); }
+    }
+    for(let i=0;i<15;i++){
+      const [x,y]=pos(i);
+      if(i<h.length){
+        ctx.beginPath(); ctx.arc(x,y,14,0,7);
+        ctx.fillStyle=mix6('#7FA3E8','#E89350',h[i]/99); ctx.fill();
+        if(i===hi[0]||i===hi[1]){ ctx.strokeStyle='#F4F6F9'; ctx.lineWidth=2.5; ctx.stroke(); }
+        ctx.fillStyle='#0F1620'; ctx.font='600 11px ui-monospace,Menlo,monospace';
+        ctx.fillText(h[i],x-(h[i]>9?7:3.5),y+4);
+      } else {
+        ctx.beginPath(); ctx.arc(x,y,14,0,7);
+        ctx.setLineDash([3,3]); ctx.strokeStyle=C6.line; ctx.lineWidth=1; ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    /* array view */
+    const cw=44, x0=(cv.width-15*cw)/2, y0=238;
+    ctx.font='9px ui-monospace,Menlo,monospace';
+    for(let i=0;i<15;i++){
+      const x=x0+i*cw;
+      if(i<h.length){
+        ctx.fillStyle=mix6('#7FA3E8','#E89350',h[i]/99);
+        ctx.fillRect(x+2,y0,cw-4,30);
+        if(i===hi[0]||i===hi[1]){ ctx.strokeStyle='#F4F6F9'; ctx.lineWidth=2.5; ctx.strokeRect(x+2,y0,cw-4,30); }
+        ctx.fillStyle='#0F1620'; ctx.font='600 12px ui-monospace,Menlo,monospace';
+        ctx.fillText(h[i],x+cw/2-(h[i]>9?7:3.5),y0+19);
+      } else {
+        ctx.setLineDash([3,3]); ctx.strokeStyle=C6.line; ctx.lineWidth=1;
+        ctx.strokeRect(x+2,y0,cw-4,30); ctx.setLineDash([]);
+      }
+      ctx.fillStyle=C6.txt; ctx.font='9px ui-monospace,Menlo,monospace';
+      ctx.fillText(i,x+cw/2-3,y0+42);
+    }
+    ctx.fillStyle=C6.txt; ctx.font='10px ui-monospace,Menlo,monospace';
+    ctx.fillText('THE TREE YOU REASON IN',10,14);
+    ctx.fillText('THE ARRAY IT ACTUALLY IS  ·  children of i live at 2i+1, 2i+2',x0,y0-8);
+  }
+  function replay(swaps){
+    if(timer){clearInterval(timer);timer=null;}
+    ro(swaps.length);
+    if(RM6||swaps.length===0){ swaps.forEach(([a,b])=>{[h[a],h[b]]=[h[b],h[a]];}); hi=[-1,-1]; draw(); return; }
+    let k=0;
+    timer=setInterval(()=>{
+      if(k<swaps.length){
+        const [a,b]=swaps[k]; hi=[a,b]; [h[a],h[b]]=[h[b],h[a]]; draw(); k++;
+      } else { hi=[-1,-1]; draw(); clearInterval(timer); timer=null; }
+    },420);
+  }
+  q6('#hpPush').addEventListener('click',()=>{
+    if(timer||h.length>=15) return;
+    const v=1+Math.floor(Math.random()*99);
+    h.push(v); draw();
+    const sw=[]; const t=h.slice();
+    let i=t.length-1;
+    while(i>0&&t[(i-1)>>1]>t[i]){ const p=(i-1)>>1; sw.push([i,p]); [t[i],t[p]]=[t[p],t[i]]; i=p; }
+    replay(sw);
+  });
+  q6('#hpPop').addEventListener('click',()=>{
+    if(timer||h.length===0) return;
+    h[0]=h[h.length-1]; h.pop(); draw();
+    const sw=[]; const t=h.slice(); let i=0;
+    for(;;){ let m=i; const l=2*i+1,r=2*i+2;
+      if(l<t.length&&t[l]<t[m])m=l; if(r<t.length&&t[r]<t[m])m=r;
+      if(m===i)break; sw.push([i,m]); [t[i],t[m]]=[t[m],t[i]]; i=m; }
+    replay(sw);
+  });
+  q6('#hpBuild').addEventListener('click',()=>{
+    if(timer) return;
+    h=Array.from({length:15},()=>1+Math.floor(Math.random()*99));
+    let sw=0;
+    for(let s=6;s>=0;s--){ let i=s;
+      for(;;){ let m=i; const l=2*i+1,r=2*i+2;
+        if(l<15&&h[l]<h[m])m=l; if(r<15&&h[r]<h[m])m=r;
+        if(m===i)break; [h[i],h[m]]=[h[m],h[i]]; sw++; i=m; } }
+    hi=[-1,-1]; draw(); ro(sw);
+  });
+  draw(); ro();
+}
+
+/* ═══════════ Lab 23 · partition ═══════════ */
+{
+  const cv=q6('#qsC'), ctx=cv.getContext('2d');
+  const N=48;
+  let vals=[], view=[], seated=new Set(), dead=new Set(), range=null, pivot=-1, cmp=0, raf=null;
+  function shuffle(){
+    vals=Array.from({length:N},(_,i)=>i+1);
+    for(let i=N-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [vals[i],vals[j]]=[vals[j],vals[i]]; }
+  }
+  function record(kind){ /* build op timeline on a working copy */
+    const a=vals.slice(), ops=[]; let c=0;
+    function part(lo,hi){
+      ops.push({t:'range',lo,hi}); ops.push({t:'pivot',i:hi});
+      let store=lo;
+      for(let i=lo;i<hi;i++){
+        c++; ops.push({t:'cmp'});
+        if(a[i]<a[hi]){ if(store!==i){ops.push({t:'swap',i:store,j:i});[a[store],a[i]]=[a[i],a[store]];} store++; }
+      }
+      if(store!==hi){ ops.push({t:'swap',i:store,j:hi}); [a[store],a[hi]]=[a[hi],a[store]]; }
+      ops.push({t:'seat',i:store});
+      return store;
+    }
+    if(kind==='sort'){
+      const st=[[0,N-1]];
+      while(st.length){
+        const [lo,hi]=st.pop();
+        if(lo>=hi){ if(lo===hi)ops.push({t:'seat',i:lo}); continue; }
+        const p=part(lo,hi);
+        st.push([lo,p-1]); st.push([p+1,hi]);
+      }
+    } else { /* select k-th smallest (0-indexed) */
+      const k=+q6('#qsK').value-1;
+      let lo=0,hi=N-1;
+      for(;;){
+        if(lo>=hi){ ops.push({t:'seat',i:lo}); break; }
+        const p=part(lo,hi);
+        if(p===k){ ops.push({t:'found',i:p}); break; }
+        if(p<k){ ops.push({t:'dead',lo,hi:p}); lo=p+1; }
+        else   { ops.push({t:'dead',lo:p,hi}); hi=p-1; }
+      }
+    }
+    return {ops,final:a};
+  }
+  function draw(){
+    ctx.fillStyle=C6.bg; ctx.fillRect(0,0,cv.width,cv.height);
+    const bw=cv.width/N;
+    for(let i=0;i<N;i++){
+      const hgt=view[i]/N*(cv.height-24)+6, x=i*bw+1.5, w=bw-3;
+      let col=C6.bar;
+      if(range&&i>=range.lo&&i<=range.hi) col=C6.act;
+      if(seated.has(i)) col=C6.blh;
+      if(dead.has(i)) col=C6.dead;
+      if(i===pivot) col=C6.cuh;
+      ctx.fillStyle=col; ctx.fillRect(x,cv.height-hgt-14,w,hgt);
+    }
+    ctx.font='10px ui-monospace,Menlo,monospace'; ctx.fillStyle=C6.txt;
+  }
+  function ro(){ q6('#qsCmp').textContent=cmp; }
+  function play(kind){
+    cancelAnimationFrame(raf);
+    const {ops,final}=record(kind);
+    view=vals.slice(); seated=new Set(); dead=new Set(); range=null; pivot=-1; cmp=0;
+    const perTick=Math.max(1,Math.ceil(ops.length/280));
+    let k=0;
+    const apply=o=>{
+      if(o.t==='range'){range={lo:o.lo,hi:o.hi};}
+      else if(o.t==='pivot'){pivot=o.i;}
+      else if(o.t==='cmp'){cmp++;}
+      else if(o.t==='swap'){[view[o.i],view[o.j]]=[view[o.j],view[o.i]]; if(pivot===o.j)pivot=o.i; else if(pivot===o.i)pivot=o.j;}
+      else if(o.t==='seat'){seated.add(o.i); if(pivot===o.i)pivot=-1;}
+      else if(o.t==='found'){seated.add(o.i); pivot=o.i; for(let i2=0;i2<N;i2++) if(i2!==o.i&&!dead.has(i2)) dead.add(i2);}
+      else if(o.t==='dead'){for(let i2=o.lo;i2<=o.hi;i2++) dead.add(i2); range=null;}
+    };
+    if(RM6){ ops.forEach(apply); range=null; if(!dead.size)pivot=-1; vals=final; draw(); ro(); return; }
+    const tick=()=>{
+      for(let n2=0;n2<perTick&&k<ops.length;n2++,k++) apply(ops[k]);
+      draw(); ro();
+      if(k<ops.length) raf=requestAnimationFrame(tick);
+      else { vals=final; range=null; draw(); }
+    };
+    raf=requestAnimationFrame(tick);
+  }
+  q6('#qsK').addEventListener('input',e=>{ q6('#qsKV').textContent=e.target.value; });
+  q6('#qsSort').addEventListener('click',()=>play('sort'));
+  q6('#qsSel').addEventListener('click',()=>play('sel'));
+  q6('#qsWorst').addEventListener('click',()=>{ cancelAnimationFrame(raf); vals=Array.from({length:N},(_,i)=>i+1); play('sort'); });
+  q6('#qsShuf').addEventListener('click',()=>{ cancelAnimationFrame(raf); shuffle(); view=vals.slice(); seated=new Set(); dead=new Set(); range=null; pivot=-1; cmp=0; draw(); ro(); });
+  shuffle(); view=vals.slice(); draw(); ro();
 }
 }
 </script>
