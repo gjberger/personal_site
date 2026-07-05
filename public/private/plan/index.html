@@ -501,12 +501,12 @@
   function recs(){
     var el=document.getElementById('recRow'); el.innerHTML='';
     var z=zeta(); var mmArr=arr('mm'); var today=mmArr.filter(function(x){return x.d===iso(new Date())});
-    var zTxt=z===null?'—':z;
+    var zTxt=z===null?'–':z;
     var defs=[
       {k:null,label:'ZETAMAC PB',val:zTxt,hint:'auto from LOG SCORE'},
-      {k:'lc',label:'LC CLEAN PB',val:pb().lc||'—',hint:'fastest clean medium, e.g. 14:30'},
-      {k:'matmul',label:'MATMUL %CUBLAS',val:pb().matmul||'—',hint:'best % of cuBLAS, e.g. 71'},
-      {k:'llm',label:'LLM TOK/S',val:pb().llm||'—',hint:'best tokens/sec on the Orin, e.g. 21'}
+      {k:'lc',label:'LC CLEAN PB',val:pb().lc||'–',hint:'fastest clean medium, e.g. 14:30'},
+      {k:'matmul',label:'MATMUL %CUBLAS',val:pb().matmul||'–',hint:'best % of cuBLAS, e.g. 71'},
+      {k:'llm',label:'LLM TOK/S',val:pb().llm||'–',hint:'best tokens/sec on the Orin, e.g. 21'}
     ];
     defs.forEach(function(d){
       var c=document.createElement('span'); c.className='rec';
