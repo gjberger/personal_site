@@ -109,7 +109,7 @@
   .lg label{color:var(--muted);cursor:pointer;margin-left:8px;white-space:nowrap}
   .lg input{accent-color:#7CA470}
   footer button.linky{background:none;border:none;padding:0;font:inherit;color:var(--build);font-weight:700;cursor:pointer}
-  footer{display:flex;justify-content:space-between;margin-top:20px;font-family:var(--mono);font-size:11px}
+  footer{display:flex;justify-content:center;margin-top:20px;font-family:var(--mono);font-size:11px}
   footer a{color:var(--build);text-decoration:none;font-weight:700}
 </style>
 </head>
@@ -124,6 +124,8 @@
   <div class="backdrop" id="backdrop"></div>
   <div class="sheet" id="sheet" role="dialog" aria-label="log">
     <p class="sh-title"><span>THE LOG · 60 SECONDS, DONE</span><button id="shClose" type="button" aria-label="close">×</button></p>
+    <div class="srow" id="recRow"></div>
+    <p id="clocks" style="font-family:var(--mono);font-size:10px;color:var(--muted);margin:0 0 12px">clocks · mental math 10m · GB 7m (10 ch.5) · LC 25m +10 hinted · mock 60m +15 writeup</p>
     <div class="srow"><input id="zV" type="number" inputmode="numeric" placeholder="zetamac score"><button class="go" id="zGo" type="button">LOG SCORE</button><span id="zLine" class="sline" style="margin:0"></span></div>
     <div class="sdiv"></div>
     <div class="srow" id="srcChips"><span class="chip" data-p="GB ">GB</span><span class="chip" data-p="LC ">LC</span><span class="chip" data-p="TM ">TM</span><input id="sSrc" type="text" placeholder="2.14 / 239"></div>
@@ -135,7 +137,6 @@
   </div>
   <footer>
     <button class="linky" id="logBtn" type="button">log a score / miss ▴</button>
-    <a href="/private/plan/">full plan ▸</a>
   </footer>
 </div>
 <script>
@@ -268,9 +269,22 @@ function sList(){ var el=document.getElementById('sList'); el.innerHTML='';
     b.addEventListener('change',function(){ arr('log')[+b.dataset.i][b.dataset.f]=b.checked?1:0; save(); }); });
   el.querySelectorAll('.del').forEach(function(x){
     x.addEventListener('click',function(){ arr('log').splice(+x.dataset.i,1); save(); sList(); sCounts(); }); }); }
+function pbo(){ if(!state.pb||typeof state.pb!=='object') state.pb={}; return state.pb; }
+function recs(){ var el=document.getElementById('recRow'); el.innerHTML='';
+  var defs=[
+    {k:null,label:'ZETAMAC',val:(zeta()===null?'\u2013':zeta()),hint:'auto from LOG SCORE'},
+    {k:'lc',label:'LC CLEAN',val:pbo().lc||'\u2013',hint:'fastest clean medium, e.g. 14:30'},
+    {k:'matmul',label:'MATMUL %',val:pbo().matmul||'\u2013',hint:'best % of cuBLAS, e.g. 71'},
+    {k:'llm',label:'TOK/S',val:pbo().llm||'\u2013',hint:'best tokens/sec on the Orin'}];
+  defs.forEach(function(d){ var c=document.createElement('span'); c.className='chip';
+    c.innerHTML=d.label+' <b style="color:var(--build)">'+String(d.val).replace(/[<>&]/g,'')+'</b>'; c.title=d.hint;
+    if(d.k) c.addEventListener('click',function(){ var v=prompt(d.label+' PB ('+d.hint+'):',pbo()[d.k]||'');
+      if(v===null) return; v=v.trim(); if(v==='') delete pbo()[d.k]; else pbo()[d.k]=v.slice(0,12);
+      save(); recs(); });
+    el.appendChild(c); }); }
 function sheetOpen(o){ document.getElementById('sheet').classList.toggle('open',o);
   document.getElementById('backdrop').classList.toggle('open',o);
-  if(o){ zLine(); sCounts(); sList(); document.getElementById('sMsg').textContent=''; } }
+  if(o){ recs(); zLine(); sCounts(); sList(); document.getElementById('sMsg').textContent=''; } }
 document.getElementById('logBtn').addEventListener('click',function(){ sheetOpen(true); });
 document.getElementById('shClose').addEventListener('click',function(){ sheetOpen(false); });
 document.getElementById('backdrop').addEventListener('click',function(){ sheetOpen(false); });
@@ -279,7 +293,7 @@ document.getElementById('zGo').addEventListener('click',function(){
   var v=+document.getElementById('zV').value; if(!v) return;
   var was=zeta(); arr('mm').push({d:today(),v:v}); save();
   document.getElementById('zV').value='';
-  zLine((was!==null&&v>was)?('NEW PB '+v+' (was '+was+')'):null); });
+  zLine((was!==null&&v>was)?('NEW PB '+v+' (was '+was+')'):null); recs(); });
 (function(){ var row=document.getElementById('catChips');
   CATS.forEach(function(k){ var c=document.createElement('span'); c.className='chip'; c.textContent=k;
     c.addEventListener('click',function(){ selCat=k; row.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('sel',x.textContent===k)}); });
