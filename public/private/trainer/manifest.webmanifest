@@ -1,0 +1,16 @@
+{
+  "name": "Trainer",
+  "short_name": "Trainer",
+  "start_url": "/private/trainer/",
+  "scope": "/private/trainer/",
+  "display": "standalone",
+  "background_color": "#0B0B0B",
+  "theme_color": "#0B0B0B",
+  "icons": [
+    {
+      "src": "/private/trainer/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

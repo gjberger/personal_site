@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B0B0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trainer">
+<link rel="apple-touch-icon" href="/private/trainer/icon.png">
+<link rel="manifest" href="/private/trainer/manifest.webmanifest">
+<title>Trainer</title>
+<style>
+  :root{
+    --bg:#0B0B0B;--surface:#141414;--raised:#1E1E1E;--line:#272727;
+    --text:#F4F2EC;--muted:#8C8C86;--accent-dim:#CFCDC6;
+    --drill:#C05B4C;--study:#C08A3E;--build:#7CA470;
+    --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+    --sans:"Avenir Next","Futura",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);margin:0}
+  body{-webkit-tap-highlight-color:transparent}
+  .wrap{max-width:460px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;
+    padding:calc(20px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom))}
+  header{display:flex;align-items:center;gap:12px;padding:2px 0 4px}
+  .seal{width:40px;height:40px;flex:none;background:var(--text);color:var(--bg);border-radius:6px;
+    display:grid;place-items:center;font-family:var(--mincho);font-size:24px}
+  .htitle{font-size:15px;font-weight:700;letter-spacing:.01em}
+  .htitle span{font-family:var(--mincho);color:var(--muted);font-weight:500;margin-left:6px}
+  #sync{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+  main{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .greet{font-family:var(--mincho);font-size:clamp(26px,7vw,34px);font-weight:500;margin:0 0 3px}
+  .phase{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+  .bar{height:6px;background:var(--raised);border-radius:3px;overflow:hidden;margin:0 0 5px}
+  .bar i{display:block;height:100%;width:0;background:var(--build);transition:width .4s}
+  @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+  .meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-bottom:20px;font-variant-numeric:tabular-nums}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 20px 20px}
+  .card.pulse{animation:pulse .4s ease}
+  @keyframes pulse{0%{transform:scale(.985);opacity:.5}100%{transform:scale(1);opacity:1}}
+  @media (prefers-reduced-motion:reduce){.card.pulse{animation:none}}
+  .stag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;font-weight:700;padding:3px 9px;border-radius:6px;background:var(--raised)}
+  .stag.b{color:var(--build)}.stag.st{color:var(--study)}.stag.d{color:var(--drill)}.stag.x{color:var(--accent-dim)}.stag.setup{color:var(--accent-dim)}
+  .stag.sh{background:var(--text);color:var(--bg)}
+  .swk{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-left:10px;letter-spacing:.04em}
+  .stext{font-size:18px;line-height:1.45;margin:14px 0 0}
+  .ssub{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--muted);margin:12px 0 0;border-top:1px solid var(--line);padding-top:10px}
+  .ssub b{color:var(--drill);font-weight:700}
+  .shipnote{color:var(--build);font-weight:650}
+  .btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .done{flex:1;min-width:170px;font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.02em;padding:16px;border-radius:12px;background:var(--build);color:var(--bg);border:none;cursor:pointer}
+  .done:active{filter:brightness(.92)}
+  .done:focus-visible,.skip:focus-visible{outline:2px solid var(--accent-dim);outline-offset:2px}
+  .skip{font-family:var(--mono);font-size:12px;padding:16px;border-radius:12px;background:var(--raised);color:var(--muted);border:1px solid var(--line);cursor:pointer}
+  .hype{font-family:var(--mono);font-size:12px;color:var(--build);min-height:16px;margin:12px 2px 0;font-weight:700}
+  .shelf{display:flex;gap:4px;margin:18px 0 0}
+  .shelf span{flex:1;height:6px;border-radius:3px;background:var(--raised)}
+  .shelf span.on{background:var(--build)}
+
+  .map{margin:20px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+  .lvl{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--muted);cursor:pointer}
+  .lvl:last-child{border-bottom:none}
+  .lvl .nm{width:74px;flex:none;letter-spacing:.06em}
+  .lvl .st{margin-left:auto;font-variant-numeric:tabular-nums}
+  .lvl.cur{color:var(--text)}
+  .lvl.cur .dot{color:var(--build)}
+  .lvl.clear .dot,.lvl.clear{color:var(--build)}
+  .lvl.locked{opacity:.45;cursor:default}
+  .lvl .dot{width:14px;flex:none;text-align:center}
+  .lvl .mini{display:flex;gap:3px;flex:1;max-width:110px}
+  .lvl .mini i{flex:1;height:4px;border-radius:2px;background:var(--raised)}
+  .lvl .mini i.on{background:var(--build)}
+  .lvl.cur{background:var(--raised)}
+  .pop{position:relative}
+  .pop::after{content:"\2713";position:absolute;inset:0;display:grid;place-items:center;font-size:34px;color:var(--build);
+    animation:pop .5s ease forwards;pointer-events:none}
+  @keyframes pop{0%{opacity:0;transform:scale(.4)}45%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){.pop::after{animation:none;opacity:0}}
+  footer{display:flex;justify-content:space-between;margin-top:20px;font-family:var(--mono);font-size:11px}
+  footer a{color:var(--build);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="seal">訓</div>
+    <div class="htitle">Trainer<span>訓練</span></div>
+    <div id="sync">…</div>
+  </header>
+  <main id="app"></main>
+  <footer>
+    <a href="/private/plan/#log" id="logJump">log a miss / score ▸</a>
+    <a href="/private/plan/">full plan ▸</a>
+  </footer>
+</div>
+<script>
+// Campaign steps generated from /private/plan (v2.2). Regenerate if the plan changes.
+var STEPS=[{"k":"s1","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>Calendar the anchors</b>: 2× evening BUILD + 2× gym + daily 15-min DRILL glued to first coffee / walking in from SCI","ds":""},{"k":"s2","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>NEXT.md in the repo</b>: never end a session without writing the literal next step","ds":""},{"k":"s3","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>Phone parking spot</b>: another room, during blocks","ds":""},{"k":"s4","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>Build the bench</b>: Jetson plugged in, <code>tmux new -s lab</code>, repo open. A ready bench is a 10-second start","ds":""},{"k":"s5","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>Send the Logan text</b>: “Friday review every week · roast me if it’s empty”","ds":""},{"k":"s6","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>One body double</b>, one block/week; the house is full of candidates","ds":""},{"k":"s7","wk":0,"tc":"setup","tl":"SETUP","tx":"<b>Sticky note</b>: “1 Green Book problem OR 10 min at the bench counts”","ds":""},{"k":"anchor","wk":0,"tc":"x","tl":"ANCHOR","tx":"<b>Logan holds the Friday review</b>: check when he says yes, not before. A review nobody sees is a diary","ds":""},{"k":"w1a","wk":1,"tc":"b","tl":"BUILD","tx":"Jetson bring-up: JetPack, jtop, deviceQuery; vector-add (Atlas Lab 15); benchmark CPU loop vs kernel across N","ds":"<b>DRILL</b>: MON+WED green book ch.2 · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair · SUN floor · visuals: Atlas L20"},{"k":"w1b","wk":1,"tc":"st","tl":"STUDY","tx":"Atlas Ch 1 + Ch 5 end to end, every checkpoint","ds":"<b>DRILL</b>: MON+WED green book ch.2 · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair · SUN floor · visuals: Atlas L20"},{"k":"w1c","wk":1,"tc":"d","tl":"DRILL","tx":"Green Book ch.2 brainteasers, timed · 4 LC mediums: arrays &amp; hashing · start <code>drill-log.md</code> (spec in §05)","ds":"<b>DRILL</b>: MON+WED green book ch.2 · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair · SUN floor · visuals: Atlas L20"},{"k":"w1s","wk":1,"tc":"sh","tl":"SHIP","tx":"Public repo <b>jetson-lab</b> with the benchmark table in the README","ds":"<b>DRILL</b>: MON+WED green book ch.2 · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair · SUN floor · visuals: Atlas L20"},{"k":"w2a","wk":2,"tc":"b","tl":"BUILD","tx":"Matmul ladder: naive → coalesced → tiled (Atlas Lab 16). Measure each; compare against cuBLAS and feel appropriate humility","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21"},{"k":"w2b","wk":2,"tc":"st","tl":"STUDY","tx":"First Nsight Compute profile: find the matmul bottleneck (it’s memory; prove it)","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21"},{"k":"w2c","wk":2,"tc":"d","tl":"DRILL","tx":"Green Book ch.4 probability, pt 1 · 4 LC mediums: two pointers + sliding window · mental math daily","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21"},{"k":"w2x","wk":2,"tc":"x","tl":"C++","tx":"Bridge #1: RAII · a <code>CudaBuffer</code> class owns alloc/free; no raw allocs from here on","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21"},{"k":"w2s","wk":2,"tc":"sh","tl":"SHIP","tx":"<b>Resume done</b> (systems-flavored, repo on it) + matmul numbers in the repo","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21"},{"k":"w3a","wk":3,"tc":"b","tl":"BUILD","tx":"Roofline of the Orin Nano from your own measurements (arithmetic intensity vs the ~68 GB/s ceiling)","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17"},{"k":"w3b","wk":3,"tc":"st","tl":"STUDY","tx":"Atlas Ch 4 + Ch 2; derive backprop for a 2-layer net on paper, no peeking","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17"},{"k":"w3c","wk":3,"tc":"d","tl":"DRILL","tx":"Green Book ch.4 probability, pt 2 · 4 LC mediums: stack + binary search","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17"},{"k":"w3x","wk":3,"tc":"x","tl":"C++","tx":"Bridge #2: move semantics + rule of five · why copying a device buffer is <code>= delete</code>","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17"},{"k":"w3s","wk":3,"tc":"sh","tl":"SHIP","tx":"500-word note: <b>“The roofline of my $250 supercomputer”</b>, posted anywhere public","ds":"<b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17"},{"k":"w4a","wk":4,"tc":"b","tl":"BUILD","tx":"Softmax, then single-head attention as CUDA kernels (Atlas Lab 10); verify against PyTorch","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27"},{"k":"w4b","wk":4,"tc":"st","tl":"STUDY","tx":"Atlas Ch 3; read FlashAttention knowing you’ve written the naive thing it beats","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27"},{"k":"w4c","wk":4,"tc":"d","tl":"DRILL","tx":"Green Book ch.5 stochastic, pt 1 · 4 LC mediums: linked lists + trees · mental math daily","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27"},{"k":"w4x","wk":4,"tc":"x","tl":"C++","tx":"Bridge #3: templates · a templated launch helper; look at what nvcc instantiates","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27"},{"k":"w4s","wk":4,"tc":"sh","tl":"SHIP","tx":"<b>First 5 quant applications out</b> (referrals where you have any) + attention kernel in the repo","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27"},{"k":"w5a","wk":5,"tc":"b","tl":"BUILD","tx":"Run a 1–3B LLM on the Orin (llama.cpp): tokens/sec at 4 quantization levels","ds":"<b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25"},{"k":"w5b","wk":5,"tc":"st","tl":"STUDY","tx":"Why quantization works (Lab 06) · KV-cache explainer, then explain it to Claude and get graded","ds":"<b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25"},{"k":"w5c","wk":5,"tc":"d","tl":"DRILL","tx":"Green Book mixed set: 20 timed problems across ch.2–5; log every miss · 4 LC mediums: heaps + intervals","ds":"<b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25"},{"k":"w5x","wk":5,"tc":"x","tl":"C++","tx":"Bridge #4: STL · redo one analysis script with vector/algorithm, once","ds":"<b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25"},{"k":"w5s","wk":5,"tc":"sh","tl":"SHIP","tx":"Chart + note: <b>“tokens/sec vs bits on a Jetson Orin Nano”</b>, a genuinely useful public datapoint","ds":"<b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25"},{"k":"w6a","wk":6,"tc":"b","tl":"BUILD","tx":"KV-cache experiment: context length vs latency &amp; memory; find where it falls over and say why","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26"},{"k":"w6b","wk":6,"tc":"st","tl":"STUDY","tx":"Skim ThunderKittens + re-read FlashAttention next to your own numbers; write 3 real questions for Stuart","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26"},{"k":"w6c","wk":6,"tc":"d","tl":"DRILL","tx":"Green Book ch.5 stochastic, pt 2 · market-making games with a friend or Claude · 4 LC mediums: graphs + 1-D DP","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26"},{"k":"w6x","wk":6,"tc":"x","tl":"C++","tx":"Bridge #5: interview C++ · virtual dispatch, unique_ptr vs shared_ptr, the memory model; 10 rapid-fire with Claude","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26"},{"k":"w6s","wk":6,"tc":"sh","tl":"SHIP","tx":"<b>10 more applications</b> (quant + any early frontier-lab postings)","ds":"<b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26"},{"k":"w7a","wk":7,"tc":"b","tl":"BUILD","tx":"None. Application + mock-interview sprint","ds":"<b>MOCK SPRINT</b>: LC timed randoms daily · 2 weekday mocks + SAT full mock · FRI review as usual"},{"k":"w7b","wk":7,"tc":"st","tl":"STUDY","tx":"Your mistake log, cover to cover; now your most valuable document","ds":"<b>MOCK SPRINT</b>: LC timed randoms daily · 2 weekday mocks + SAT full mock · FRI review as usual"},{"k":"w7c","wk":7,"tc":"d","tl":"DRILL","tx":"2 mock quant interviews + 1 mock coding interview, timed, out loud","ds":"<b>MOCK SPRINT</b>: LC timed randoms daily · 2 weekday mocks + SAT full mock · FRI review as usual"},{"k":"w7s","wk":7,"tc":"sh","tl":"SHIP","tx":"<b>Every remaining target firm applied to</b>: tracker live · message Stuart Sul, repo links attached","ds":"<b>MOCK SPRINT</b>: LC timed randoms daily · 2 weekday mocks + SAT full mock · FRI review as usual"},{"k":"w8a","wk":8,"tc":"b","tl":"BUILD","tx":"Patch week: whatever the mocks exposed gets the build hours","ds":"<b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP · FRI retests + review · visuals: Atlas L19·L23"},{"k":"w8b","wk":8,"tc":"st","tl":"STUDY","tx":"OA practice under real conditions · camera on, timer on, no music","ds":"<b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP · FRI retests + review · visuals: Atlas L19·L23"},{"k":"w8c","wk":8,"tc":"d","tl":"DRILL","tx":"Daily timed sets · LC: patch the weak patterns + 2-D DP · mental math should feel boringly easy by now","ds":"<b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP · FRI retests + review · visuals: Atlas L19·L23"},{"k":"w8s","wk":8,"tc":"sh","tl":"SHIP","tx":"<b>Mistake-log v2</b>: every miss categorized, fix written next to it","ds":"<b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP · FRI retests + review · visuals: Atlas L19·L23"},{"k":"w9a","wk":9,"tc":"b","tl":"BUILD","tx":"Stat-ML begins: linear/ridge/logistic from scratch in numpy on real market data (returns, not prices)","ds":"<b>MAINTENANCE</b>: 15 min/day, mental math daily · FRI retests · 1 LC hard per week"},{"k":"w9b","wk":9,"tc":"st","tl":"STUDY","tx":"Bias/variance, cross-validation done right, why financial data breaks IID","ds":"<b>MAINTENANCE</b>: 15 min/day, mental math daily · FRI retests · 1 LC hard per week"},{"k":"w9c","wk":9,"tc":"d","tl":"DRILL","tx":"Maintenance: 15 min/day; interviews may already be landing","ds":"<b>MAINTENANCE</b>: 15 min/day, mental math daily · FRI retests · 1 LC hard per week"},{"k":"w9s","wk":9,"tc":"sh","tl":"SHIP","tx":"Repo: <b>a tiny, honest backtest</b> with train/test hygiene documented","ds":"<b>MAINTENANCE</b>: 15 min/day, mental math daily · FRI retests · 1 LC hard per week"},{"k":"w10a","wk":10,"tc":"b","tl":"BUILD","tx":"Break your own backtest: lookahead, survivorship, overfitting, regime change · find all four","ds":"<b>MAINTENANCE</b>: 15 min/day · live OAs replace that day’s set 1:1 · FRI retests"},{"k":"w10b","wk":10,"tc":"st","tl":"STUDY","tx":"Walk-forward validation; one Lopez de Prado chapter","ds":"<b>MAINTENANCE</b>: 15 min/day · live OAs replace that day’s set 1:1 · FRI retests"},{"k":"w10c","wk":10,"tc":"d","tl":"DRILL","tx":"Maintenance + any live OAs","ds":"<b>MAINTENANCE</b>: 15 min/day · live OAs replace that day’s set 1:1 · FRI retests"},{"k":"w10s","wk":10,"tc":"sh","tl":"SHIP","tx":"Note: <b>“Five ways my backtest lied to me”</b> + research emails out: Ré (via/cc Stuart), Dawson, Dennis Sun · portfolio links included","ds":"<b>MAINTENANCE</b>: 15 min/day · live OAs replace that day’s set 1:1 · FRI retests"},{"k":"w11a","wk":11,"tc":"b","tl":"BUILD","tx":"Fall setup: classes locked (EE271? CS143?), CS140E TA confirmed with Dawson, research scope agreed; <b>Hazy first choice</b>","ds":"<b>INTERVIEW SEASON</b>: your logs + READMEs only · mock superday if an onsite is booked"},{"k":"w11b","wk":11,"tc":"st","tl":"STUDY","tx":"Interview-season reading only: your logs, your READMEs (you will be asked about every line)","ds":"<b>INTERVIEW SEASON</b>: your logs + READMEs only · mock superday if an onsite is booked"},{"k":"w11c","wk":11,"tc":"d","tl":"DRILL","tx":"Full mock superday if any onsite is scheduled","ds":"<b>INTERVIEW SEASON</b>: your logs + READMEs only · mock superday if an onsite is booked"},{"k":"w11s","wk":11,"tc":"sh","tl":"SHIP","tx":"<b>Fall plan on one page</b>; every ball (SCI wrap, Powerset cadence, UCSF) explicitly parked or scheduled","ds":"<b>INTERVIEW SEASON</b>: your logs + READMEs only · mock superday if an onsite is booked"},{"k":"w12a","wk":12,"tc":"b","tl":"BUILD","tx":"Buffer week; it exists because week 6 or 8 didn’t go to plan, and that’s fine","ds":"<b>DRILL</b>: keep the daily 15 · FRI retro · ship plan v2"},{"k":"w12b","wk":12,"tc":"st","tl":"STUDY","tx":"Retrospective with Claude: what shipped, what stalled, what the mocks say about odds","ds":"<b>DRILL</b>: keep the daily 15 · FRI retro · ship plan v2"},{"k":"w12c","wk":12,"tc":"d","tl":"DRILL","tx":"Keep the daily 15 through interview season · recall decays in weeks","ds":"<b>DRILL</b>: keep the daily 15 · FRI retro · ship plan v2"},{"k":"w12s","wk":12,"tc":"sh","tl":"SHIP","tx":"<b>Training Plan v2 (fall edition)</b>: stat-ML depth, research thread, compiler if bandwidth is real","ds":"<b>DRILL</b>: keep the daily 15 · FRI retro · ship plan v2"}];
+
+// --- slim cloud sync: same KEY + endpoint as the plan, so state is shared ---
+var KEY='training-plan-v1', API='/.netlify/functions/progress';
+var state={}, timer=null;
+function lget(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function lset(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
+function sync(s){ var e=document.getElementById('sync'); if(e)e.textContent=s; }
+function save(){ lset(); if(timer)clearTimeout(timer); timer=setTimeout(function(){
+  sync('saving\u2026');
+  fetch(API,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)})
+    .then(function(r){ sync(r.ok?'\u2713 synced':'saved locally'); })
+    .catch(function(){ sync('offline \u00b7 on this device'); });
+},600); }
+
+// --- campaign engine ---
+var DATES={1:"JUL 6\u201312",2:"JUL 13\u201319",3:"JUL 20\u201326",4:"JUL 27\u2013AUG 2",5:"AUG 3\u20139",6:"AUG 10\u201316",7:"AUG 17\u201323",8:"AUG 24\u201330",9:"AUG 31\u2013SEP 6",10:"SEP 7\u201313",11:"SEP 14\u201320",12:"SEP 21\u201327"};
+var app=document.getElementById('app'), focusWk=null;
+function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function today(){ return iso(new Date()); }
+function greet(){ var h=new Date().getHours(); return h<12?'Morning, Gabriel.':h<18?'Hi Gabriel.':'Evening, Gabriel.'; }
+function ctToday(){ var c=state.ct; return (c&&c.d===today())?c.n:0; }
+function bump(){ var t=today(); state.ct=(state.ct&&state.ct.d===t)?{d:t,n:state.ct.n+1}:{d:t,n:1}; }
+function pick(){ var a=['Done.','Nice. Next.','Logged.','That is a rep.','Onward.','Good. Keep moving.']; return a[ctToday()%a.length]; }
+function snoozed(k){ return state.sn && state.sn[k]===today(); }
+function snooze(k){ if(!state.sn||typeof state.sn!=='object') state.sn={}; state.sn[k]=today(); }
+function locked(s){ return s.wk>=2 && !state['w'+(s.wk-1)+'s']; }
+function wkSteps(w){ return STEPS.filter(function(x){return x.wk===w;}); }
+function wkDone(w){ return wkSteps(w).every(function(x){return state[x.k];}); }
+function pickNext(){
+  var pool=STEPS.filter(function(x){return !state[x.k] && !locked(x);});
+  if(!pool.length) return null;
+  if(focusWk!==null){ var f=pool.filter(function(x){return x.wk===focusWk;}); if(f.length) pool=f; }
+  var fresh=pool.filter(function(x){return !snoozed(x.k);});
+  return fresh[0]||pool[0];
+}
+function mapRow(w){
+  var steps=wkSteps(w), done=steps.filter(function(x){return state[x.k];}).length;
+  var isClear=done===steps.length, isLocked=w>=2&&!state['w'+(w-1)+'s'];
+  var nm=w===0?'PROLOGUE':'WK '+w, dt=w===0?'setup':DATES[w]||'';
+  var cls='lvl'+(isClear?' clear':isLocked?' locked':'');
+  var cur=window.__nextWk===w&&!isClear; if(cur) cls+=' cur';
+  var dot=isClear?'\u2713':isLocked?'\u25AA':cur?'\u25C9':'\u25CB';
+  var mini='';
+  steps.forEach(function(x){ mini+='<i class="'+(state[x.k]?'on':'')+'"></i>'; });
+  var st=isLocked?('ship wk '+(w-1)+' to open'):isClear?'cleared':done+'/'+steps.length;
+  return '<div class="'+cls+'" data-w="'+w+'" role="button" tabindex="'+(isLocked?-1:0)+'">'+
+    '<span class="dot">'+dot+'</span><span class="nm">'+nm+'</span>'+
+    '<span class="mini">'+mini+'</span><span class="st">'+st+' \u00b7 '+dt+'</span></div>';
+}
+function render(msg){
+  var done=STEPS.filter(function(x){return state[x.k];}).length, total=STEPS.length;
+  var next=pickNext();
+  window.__nextWk=next?next.wk:null;
+  var map='<div class="map">'; for(var w=0;w<=12;w++) map+=mapRow(w); map+='</div>';
+
+  if(!next){
+    app.innerHTML='<p class="greet">'+greet()+'</p><p class="phase">campaign complete</p>'+
+      '<div class="card"><p class="stext">All '+total+' steps done. Every SHIP shipped, start to finish.</p>'+
+      '<p class="ssub">Time for the fall edition. Tell Claude: \u201cthe plan is done, build the fall campaign.\u201d</p></div>'+map;
+    wire(); return;
+  }
+  var phase=next.wk===0?'Prologue \u00b7 setup':'Week '+next.wk+' of 12'+(focusWk!==null?' \u00b7 focused':'');
+  var sub='';
+  if(next.tc==='d'&&next.ds){ sub='<p class="ssub">'+next.ds+'</p>'; }
+  else if(next.tc==='sh'){ sub='<p class="ssub"><span class="shipnote">This is the SHIP. Clearing it unlocks week '+(next.wk+1<=12?next.wk+1:'\u2014')+'.</span></p>'; }
+  var ct=ctToday();
+  app.innerHTML=
+    '<p class="greet">'+greet()+'</p><p class="phase">'+phase+'</p>'+
+    '<div class="bar"><i style="width:'+(done/total*100)+'%"></i></div>'+
+    '<div class="meta"><span>'+done+' / '+total+' steps</span><span>'+(next.wk===0?'prologue':'week '+next.wk)+'</span></div>'+
+    '<div class="card" id="card"><span class="stag '+next.tc+'">'+next.tl+'</span><span class="swk">'+(next.wk===0?'WEEK 0':'WEEK '+next.wk)+'</span>'+
+      '<p class="stext">'+next.tx+'</p>'+sub+
+      '<div class="btns"><button class="done" id="done" type="button">'+(next.tc==='sh'?'SHIP it \u2713':'Mark done \u2713')+'</button>'+
+      '<button class="skip" id="skip" type="button">not now</button></div></div>'+
+    '<p class="hype" id="hype">'+(msg||(ct?('cleared today: '+ct):''))+'</p>'+map;
+
+  document.getElementById('done').onclick=function(){
+    var wasShip=next.tc==='sh', wk=next.wk, k=next.k;
+    state[k]=1; bump(); save();
+    var line;
+    if(wasShip && wk>=1 && wk<12) line='SHIP logged. Week '+(wk+1)+' is open.';
+    else if(wkDone(wk)) line=(wk===0?'Prologue':'Week '+wk)+' cleared. The map is greener.';
+    else line=pick();
+    render(line+' \u00b7 cleared today: '+ctToday());
+    var c=document.getElementById('card'); if(c)c.classList.add('pop');
+  };
+  document.getElementById('skip').onclick=function(){ snooze(next.k); save(); render('snoozed for today'); };
+  wire();
+}
+function wire(){
+  [].forEach.call(document.querySelectorAll('.lvl'),function(r){
+    var w=+r.dataset.w;
+    if(r.classList.contains('locked')) return;
+    function go(){ focusWk=(focusWk===w?null:w); render(); }
+    r.addEventListener('click',go);
+    r.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();go();} });
+  });
+}
+
+// paint from cache, then reconcile with cloud (cloud wins)
+state=lget(); render(); sync('\u2026');
+fetch(API,{credentials:'include'}).then(function(r){ return r.ok?r.json():Promise.reject(); }).then(function(c){
+  if(c&&typeof c==='object'){ state=Object.assign({},state,c); lset(); render(); sync('\u2713 synced'); }
+}).catch(function(){ sync('offline \u00b7 on this device'); });
+</script>
+</body>
+</html>

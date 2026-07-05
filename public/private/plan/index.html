@@ -109,6 +109,42 @@
   .wk.now { border-color: var(--accent-dim); }
   .wk.now .wdate::after { content: " · THIS WEEK"; color: var(--build); font-weight: 700; }
   #nowLink { font-family: var(--mono); color: var(--build); font-weight: 700; text-decoration: none; cursor: pointer; flex: none; }
+  .hidden { display: none; }
+  #toTrainer { display: inline-block; font-family: var(--mono); font-size: 11px; color: var(--build); text-decoration: none; font-weight: 700; margin-bottom: 8px; }
+
+  #trainer { min-height: 60vh; display: flex; flex-direction: column; justify-content: center; padding: 30px 0 20px; }
+  .tGreet { font-family: var(--mincho); font-size: clamp(24px, 6vw, 34px); font-weight: 500; margin: 0 0 4px; letter-spacing: .01em; }
+  .tPhase { font-family: var(--mono); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .tbar { height: 6px; background: var(--raised); border-radius: 3px; overflow: hidden; margin: 0 0 4px; }
+  .tbar i { display: block; height: 100%; width: 0; background: var(--build); transition: width .4s; }
+  @media (prefers-reduced-motion: reduce) { .tbar i { transition: none; } }
+  .tmeta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-bottom: 22px; font-variant-numeric: tabular-nums; }
+
+  .stepcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px 22px 20px; }
+  .stepcard.pulse { animation: pulse .4s ease; }
+  @keyframes pulse { 0% { transform: scale(.985); opacity: .5; } 100% { transform: scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .stepcard.pulse { animation: none; } }
+  .stepcard .steptag { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; font-weight: 700; padding: 3px 9px; border-radius: 6px; background: var(--raised); }
+  .steptag.b { color: var(--build); } .steptag.st { color: var(--study); } .steptag.d { color: var(--drill); } .steptag.x { color: var(--accent-dim); }
+  .steptag.sh { background: var(--text); color: var(--bg); }
+  .stepwk { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-left: 10px; letter-spacing: .04em; }
+  .steptext { font-size: 18px; line-height: 1.45; margin: 14px 0 0; }
+  .stepsub { font-family: var(--mono); font-size: 11px; line-height: 1.7; color: var(--muted); margin: 12px 0 0; border-top: 1px solid var(--line); padding-top: 10px; }
+  .stepsub b { color: var(--drill); font-weight: 700; }
+  .shipnote { color: var(--build); font-weight: 650; }
+  .tbtns { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .tdone { flex: 1; min-width: 180px; font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: .02em; padding: 15px; border-radius: 12px; background: var(--build); color: var(--bg); border: none; cursor: pointer; }
+  .tdone:active { filter: brightness(.92); }
+  .tdone:focus-visible, .tskip:focus-visible { outline: 2px solid var(--accent-dim); outline-offset: 2px; }
+  .tskip { font-family: var(--mono); font-size: 12px; padding: 15px 16px; border-radius: 12px; background: var(--raised); color: var(--muted); border: 1px solid var(--line); cursor: pointer; }
+  .thype { font-family: var(--mono); font-size: 12px; color: var(--build); min-height: 16px; margin: 12px 2px 0; font-weight: 700; }
+  .tfoot { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .tfoot a { color: var(--build); text-decoration: none; font-weight: 700; }
+  .tshelf { display: flex; gap: 4px; margin: 18px 0 0; }
+  .tshelf span { flex: 1; height: 6px; border-radius: 3px; background: var(--raised); }
+  .tshelf span.on { background: var(--build); }
+  .tlog { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .tlog a { color: var(--accent-dim); cursor: pointer; text-decoration: underline; }
   #ships { display: flex; gap: 5px; padding-top: 8px; }
   .shiptile { flex: 1; height: 17px; border: 1px solid var(--line); border-radius: 4px; background: var(--raised); color: var(--muted); font-family: var(--mono); font-size: 9px; display: grid; place-items: center; cursor: pointer; }
   .shiptile.on { background: var(--build); color: var(--bg); border-color: var(--build); font-weight: 700; }
@@ -139,6 +175,10 @@
 <body>
 <div class="wrap">
 
+<div id="trainer"></div>
+
+<div id="fullplan" class="hidden">
+<a id="toTrainer" href="#">◂ trainer</a>
 <header>
   <div class="seal">訓</div>
   <div class="title">
@@ -351,7 +391,7 @@
   </div></details>
 </section>
 
-<section>
+<section id="log">
   <p class="label">06 · The log: <b>record it here, 60 seconds, done</b></p>
   <div class="recrow" id="recRow"></div>
   <div class="mform"><input id="mmV" type="number" inputmode="numeric" placeholder="zetamac score"><button class="btn" id="mmBtn" type="button">LOG SCORE</button><span id="mmLine"></span></div>
@@ -423,6 +463,7 @@
 <footer>THE TRAINING PLAN v2.0 · built 2026-07-03 · v2.2 rev 2026-07-04: clear-cut + Sukima treatment · GB/LC ladder + this-week highlight · in-page drill log, zetamac PB (race your ghost), SHIP shelf; boxes &amp; sync unchanged (v1.4 prose in git history) · for the love of the game, and a top offer, since we’re being honest.</footer>
 
 </div>
+</div>
 <script>
 
 (function(){
@@ -439,7 +480,7 @@
   function apply(){ boxes.forEach(function(b){ b.checked=!!state[b.dataset.k]; }); prog(); if(window.__planRender) window.__planRender(); }
   function lget(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
   function lset(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
-  function status(s){ var e=document.getElementById('syncStatus'); if(e) e.textContent=s; }
+  function status(s){ var e=document.getElementById('syncStatus'); if(e) e.textContent=s; var t=document.getElementById('tStatus'); if(t) t.textContent=s; }
   // Instant paint from local cache, then reconcile with the cloud (cloud wins).
   state=lget(); apply(); status('\u2026');
   fetch(API,{credentials:'include'}).then(function(r){ return r.ok?r.json():Promise.reject(r.status); }).then(function(c){
@@ -580,8 +621,103 @@
     if(wasPB!==null&&v>wasPB) document.getElementById('mmLine').textContent='NEW PB '+v+' (was '+wasPB+')';
   });
   document.addEventListener('change',function(e){ if(e.target.matches('.ck input')) tiles(); });
-  window.__planRender=function(){ tiles(); recs(); mmLine(); counts(); list(); };
+  window.__planRender=function(){ tiles(); recs(); mmLine(); counts(); list(); if(window.__trainerRender) window.__trainerRender(); };
   window.__planRender();
+})();
+</script>
+<script>
+(function(){
+  var S=window.__planSync; if(!S) return;
+  var START=new Date(2026,6,6);
+  var TAGLABEL={b:'BUILD',st:'STUDY',d:'DRILL',x:'C++ BRIDGE',sh:'SHIP'};
+
+  // Build the campaign in order: Week 0 setup (prologue), then each week's boxes in card order.
+  var steps=[];
+  document.querySelectorAll('#fullplan section')[2].querySelectorAll('.ck input').forEach(function(cb){
+    steps.push({k:cb.dataset.k, wk:0, el:cb, tag:tagOf(cb), text:txtOf(cb)});
+  });
+  document.querySelectorAll('.wk').forEach(function(card,i){
+    card.querySelectorAll('.ck input').forEach(function(cb){
+      steps.push({k:cb.dataset.k, wk:i+1, el:cb, tag:tagOf(cb), text:txtOf(cb), strip:card.querySelector('.dstrip')?card.querySelector('.dstrip').innerHTML:''});
+    });
+  });
+  function tagOf(cb){ var t=cb.parentNode.querySelector('.tag'); if(!t)return {c:'x',l:'SETUP'}; var c=(t.className.match(/tag (\w+)/)||[])[1]||'x'; return {c:c,l:TAGLABEL[c]||t.textContent.trim()}; }
+  function txtOf(cb){ var x=cb.parentNode.querySelector('.txt').cloneNode(true); var tg=x.querySelector('.tag'); if(tg)tg.remove(); return x.innerHTML.trim(); }
+
+  var skip={}, lastKey=null;
+  function st(){ return S.get(); }
+  function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function greet(){ var hr=new Date().getHours(); return hr<12?'Morning, Gabriel.':hr<18?'Hi Gabriel.':'Evening, Gabriel.'; }
+  function clearedToday(){ var c=st().ct; var t=iso(new Date()); return (c&&c.d===t)?c.n:0; }
+  function bumpCleared(){ var s=st(); var t=iso(new Date()); s.ct=(s.ct&&s.ct.d===t)?{d:t,n:s.ct.n+1}:{d:t,n:1}; }
+
+  var el=document.getElementById('trainer');
+
+  function render(){
+    var s=st();
+    var done=steps.filter(function(x){return s[x.k];}).length;
+    var total=steps.length;
+    var next=steps.find(function(x){return !s[x.k] && !skip[x.k];});
+    if(!next){ var anySkipped=steps.some(function(x){return !s[x.k];}); if(anySkipped){ skip={}; next=steps.find(function(x){return !s[x.k];}); } }
+
+    if(!next){
+      el.innerHTML='<p class="tGreet">'+greet()+'</p><p class="tPhase">campaign complete</p>'+
+        '<div class="stepcard"><p class="steptext">All 61 steps done. Every SHIP shipped. That is the whole plan, start to finish.</p>'+
+        '<p class="stepsub">Time for v2 (fall edition). Tell Claude: &ldquo;the plan is done, build the fall campaign.&rdquo;</p></div>'+
+        '<div class="tfoot"><span>'+done+' / '+total+'</span><a href="#" id="toFull">full plan &#9656;</a></div>';
+      document.getElementById('toFull').onclick=toggle;
+      return;
+    }
+
+    var phase = next.wk===0 ? 'Setup &middot; the prologue' : 'Week '+next.wk+' of 12';
+    var wkLabel = next.wk===0 ? 'WEEK 0' : 'WEEK '+next.wk;
+    var isShip = next.tag.c==='sh';
+    var isDrill = next.tag.c==='d';
+    var sub='';
+    if(isDrill && next.strip){ sub='<p class="stepsub">'+next.strip+'</p>'; }
+    else if(isShip){ sub='<p class="stepsub"><span class="shipnote">This is the SHIP. The one box that actually makes the week count.</span></p>'; }
+
+    var ct=clearedToday();
+    var shelf=''; for(var n=1;n<=12;n++){ shelf+='<span class="'+(s['w'+n+'s']?'on':'')+'"></span>'; }
+
+    el.innerHTML=
+      '<p class="tGreet">'+greet()+'</p>'+
+      '<p class="tPhase">'+phase+'</p>'+
+      '<div class="tbar"><i style="width:'+(done/total*100)+'%"></i></div>'+
+      '<div class="tmeta"><span>'+done+' / '+total+' steps</span><span id="tStatus">&hellip;</span></div>'+
+      '<div class="stepcard" id="stepcard">'+
+        '<span class="steptag '+next.tag.c+'">'+next.tag.l+'</span><span class="stepwk">'+wkLabel+'</span>'+
+        '<p class="steptext">'+next.text+'</p>'+ sub +
+        '<div class="tbtns"><button class="tdone" id="tDone" type="button">'+(isShip?'SHIP it &#10003;':'Mark done &#10003;')+'</button>'+
+        '<button class="tskip" id="tSkip" type="button">not now</button></div>'+
+      '</div>'+
+      '<p class="thype" id="tHype">'+(ct?('cleared today: '+ct):'')+'</p>'+
+      '<div class="tshelf" title="your 12 SHIPs">'+shelf+'</div>'+
+      '<div class="tfoot"><a href="#" id="tLogJump">log a miss / score &#9656;</a><a href="#" id="toFull">full plan &#9656;</a></div>';
+
+    document.getElementById('tDone').onclick=function(){
+      lastKey=next.k;
+      next.el.checked=true; next.el.dispatchEvent(new Event('change'));
+      bumpCleared(); S.save();
+      var card=document.getElementById('stepcard'); if(card){ card.classList.add('pulse'); }
+      render();
+      var hype=document.getElementById('tHype');
+      if(hype){ var msg = isShip?('SHIP logged. Week '+next.wk+' stronger for it.'):pick(); hype.textContent=msg+'  ·  cleared today: '+clearedToday(); }
+    };
+    document.getElementById('tSkip').onclick=function(){ skip[next.k]=1; render(); };
+    document.getElementById('toFull').onclick=toggle;
+    document.getElementById('tLogJump').onclick=function(e){ e.preventDefault(); showFull(); var t=[].slice.call(document.querySelectorAll('.label')).find(function(l){return /THE LOG/i.test(l.textContent);}); if(t)t.scrollIntoView({block:'start'}); };
+    var t=document.getElementById('tStatus'); var src=document.getElementById('syncStatus'); if(t&&src)t.textContent=src.textContent;
+  }
+  function pick(){ var a=['Done.','Nice. Next.','Logged.','That is a rep.','Onward.']; return a[Math.floor((clearedToday())%a.length)]; }
+
+  function showFull(){ document.getElementById('fullplan').classList.remove('hidden'); document.getElementById('trainer').classList.add('hidden'); }
+  function showTrainer(){ document.getElementById('fullplan').classList.add('hidden'); document.getElementById('trainer').classList.remove('hidden'); render(); window.scrollTo(0,0); }
+  function toggle(e){ if(e)e.preventDefault(); showFull(); window.scrollTo(0,0); }
+  document.getElementById('toTrainer').onclick=function(e){ e.preventDefault(); showTrainer(); };
+
+  window.__trainerRender=render;
+  render();
 })();
 </script>
 </body>
