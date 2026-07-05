@@ -109,6 +109,30 @@
   .wk.now { border-color: var(--accent-dim); }
   .wk.now .wdate::after { content: " · THIS WEEK"; color: var(--build); font-weight: 700; }
   #nowLink { font-family: var(--mono); color: var(--build); font-weight: 700; text-decoration: none; cursor: pointer; flex: none; }
+  #ships { display: flex; gap: 5px; padding-top: 8px; }
+  .shiptile { flex: 1; height: 17px; border: 1px solid var(--line); border-radius: 4px; background: var(--raised); color: var(--muted); font-family: var(--mono); font-size: 9px; display: grid; place-items: center; cursor: pointer; }
+  .shiptile.on { background: var(--build); color: var(--bg); border-color: var(--build); font-weight: 700; }
+  .recrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+  .rec { font-family: var(--mono); font-size: 11px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+  .rec b { color: var(--build); font-weight: 700; }
+  .rec span { color: var(--muted); }
+  .mform { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 10px; align-items: center; }
+  .mform input { background: var(--raised); border: 1px solid var(--line); border-radius: 7px; color: var(--text); font-family: var(--mono); font-size: 12px; padding: 8px 10px; }
+  .mform input:focus-visible { outline: 2px solid var(--accent-dim); outline-offset: 1px; }
+  #mSrc { width: 110px; } #mFix { flex: 1; min-width: 170px; } #mmV { width: 130px; }
+  .catchip { font-family: var(--mono); font-size: 10px; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--raised); color: var(--muted); cursor: pointer; }
+  .catchip.sel { background: var(--text); color: var(--bg); border-color: var(--text); font-weight: 700; }
+  .btn { font-family: var(--mono); font-size: 11px; font-weight: 700; padding: 8px 12px; border-radius: 7px; background: var(--text); color: var(--bg); border: none; cursor: pointer; }
+  .btn:focus-visible { outline: 2px solid var(--accent-dim); outline-offset: 2px; }
+  .logline { font-family: var(--mono); font-size: 11px; line-height: 1.7; color: var(--accent-dim); border-bottom: 1px solid var(--line); padding: 7px 0; }
+  .logline:last-child { border-bottom: none; }
+  .logline .cat { color: var(--drill); font-weight: 700; }
+  .logline .fx { color: var(--muted); }
+  .logline .del { color: var(--muted); cursor: pointer; float: right; padding: 0 4px; }
+  .logline label { color: var(--muted); cursor: pointer; margin-left: 10px; white-space: nowrap; }
+  .logline input { accent-color: #7CA470; }
+  #wkCounts, #mmLine { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  #wkCounts { margin: 0 0 6px; }
   footer { padding: 22px 0 0; font-family: var(--mono); font-size: 10.5px; line-height: 1.7; color: var(--muted); letter-spacing: .03em; }
 </style>
 </head>
@@ -123,7 +147,7 @@
   </div>
 </header>
 
-<div id="progWrap"><div class="row"><span>PROGRESS</span><div id="progBar"><i></i></div><span id="progTxt">0 / 0</span><span id="syncStatus">…</span></div></div>
+<div id="progWrap"><div class="row"><span>PROGRESS</span><div id="progBar"><i></i></div><span id="progTxt">0 / 0</span><span id="syncStatus">…</span></div><div id="ships"></div></div>
 
 <section>
   <p class="label">01 · The clock</p>
@@ -270,8 +294,9 @@
 <section>
   <p class="label">05 · The dailies: <b>read the strip, don’t choose</b></p>
   <p>Each card’s DRILL strip pre-decides the day: a 5–10 min mental-math opener + one set, ~30 min, glued to the same trigger (first coffee, or walking in from SCI). SAT = long rep, out loud · SUN = floor only · wks 8–12 drop WED, live OAs replace that day 1:1.</p>
-  <p class="mut"><b>Green Book route:</b> ch.2 → ch.4 → ch.5, then mixed. Ch.3 (calc/linalg) and ch.7 (algorithms) are reference only; LC covers algorithms. A chapter is done when every problem is either solved in-clock or sits in the drill log with a fix.</p>
-  <p class="mut"><b>LC route:</b> 4 mediums/wk from the company-tagged lists (Citadel · HRT · Jane Street), filtered to the week&rsquo;s pattern. TUE python · THU c++ · SAT pair alternates · <b>retest a miss in the language you missed it in</b>. By wk 6 every ladder pattern exists twice in your hands.</p>
+  <p class="mut"><b>Green Book route:</b> ch.2 → ch.4 → ch.5, then mixed. Ch.3 (calc/linalg) and ch.7 (algorithms) are reference only; LC covers algorithms. A session = 3 problems at the clock, 2 for ch.5. A chapter is done when every problem is either solved in-clock or sits in the drill log with a fix.</p>
+  <p class="mut"><b>LC route:</b> 4 mediums/wk from the company-tagged lists (Citadel · HRT · Jane Street), filtered to the week&rsquo;s pattern. TUE python · THU c++ · SAT pair alternates · <b>retest a miss in the language you missed it in</b>. The 4/wk: TUE 1 · THU 1 · SAT 2. By wk 6 every ladder pattern exists twice in your hands.</p>
+  <p class="mut"><b>Mental math:</b> Zetamac, default settings, 120-second rounds. The opener = 3 rounds; log the best score in §06. The PB is the ghost you race: beat last week&rsquo;s you, nobody else.</p>
 
   <div class="tbl-wrap"><table>
     <tr><th>Wk</th><th>Green Book</th><th>LeetCode ×4</th><th>Atlas</th></tr>
@@ -327,7 +352,17 @@
 </section>
 
 <section>
-  <p class="label">06 · The rules</p>
+  <p class="label">06 · The log: <b>record it here, 60 seconds, done</b></p>
+  <div class="recrow" id="recRow"></div>
+  <div class="mform"><input id="mmV" type="number" inputmode="numeric" placeholder="zetamac score"><button class="btn" id="mmBtn" type="button">LOG SCORE</button><span id="mmLine"></span></div>
+  <div class="mform"><input id="mSrc" type="text" placeholder="GB 2.14 · LC 239"><span id="catRow"></span><input id="mFix" type="text" placeholder="fix, one actionable sentence"><button class="btn" id="missBtn" type="button">LOG MISS</button></div>
+  <p id="wkCounts"></p>
+  <div id="logList"></div>
+  <p class="mut" style="margin-top:10px">Mirrors <code>drill-log.md</code>; use whichever is closer, both count. Tick each miss&rsquo;s retests at +48h and FRI; fail both and it becomes a flashcard + a named 15-min STUDY slot next week.</p>
+</section>
+
+<section>
+  <p class="label">07 · The rules</p>
   <ul class="rules">
     <li><b>SHIP or it didn’t happen.</b> A week counts only if its SHIP box is checked · something another person could look at.</li>
     <li><b>FRI review, 20 min:</b> what shipped · what stalled and why (name what ate the time) · the ONE build next week.</li>
@@ -358,7 +393,7 @@
 </section>
 
 <section>
-  <p class="label">07 · Under your belt: <b>check what’s already true</b></p>
+  <p class="label">08 · Under your belt: <b>check what’s already true</b></p>
   <label class="ck"><input type="checkbox" data-k="b1"><span class="txt"><b>Modern C++</b> comfortable: the five bridge reps close most of the gap from strong-C</span></label>
   <label class="ck"><input type="checkbox" data-k="b2"><span class="txt"><b>Python + numpy</b> fluency: vectorized thinking, not for-loops with numpy sprinkled on</span></label>
   <label class="ck"><input type="checkbox" data-k="b3"><span class="txt"><b>Green Book cover to cover</b>, mistake log included</span></label>
@@ -372,11 +407,11 @@
 </section>
 
 <section>
-  <p class="label">08 · Run it with Claude</p>
+  <p class="label">09 · Run it with Claude</p>
   <ul class="cmds">
     <li><b>“boot me up”</b> <span>· reads NEXT.md, hands you the first 10 minutes, zero decisions</span></li>
     <li><b>“grade my week against the training plan”</b> <span>· Friday ritual</span></li>
-    <li><b>“grade my drill log”</b> <span>· Friday: counts categories, names next week’s emphasis</span></li>
+    <li><b>“grade my drill log”</b> <span>· Friday: reads §06 (or drill-log.md), counts categories, names next week’s emphasis</span></li>
     <li><b>“quiz me, green book chapter 4, timed”</b> <span>· drill partner</span></li>
     <li><b>“add a chapter on ___ to the Atlas”</b> <span>· when a STUDY block needs visuals</span></li>
     <li><b>“the plan is too heavy/light, rescale week N”</b> <span>· the two-miss rule in action</span></li>
@@ -385,7 +420,7 @@
   </ul>
 </section>
 
-<footer>THE TRAINING PLAN v2.0 · built 2026-07-03 · v2.0 rev 2026-07-04: cut to clear-cut + Sukima treatment; weeks, boxes &amp; sync unchanged (full v1.4 prose in git history) · for the love of the game, and a top offer, since we’re being honest.</footer>
+<footer>THE TRAINING PLAN v2.0 · built 2026-07-03 · v2.2 rev 2026-07-04: clear-cut + Sukima treatment · GB/LC ladder + this-week highlight · in-page drill log, zetamac PB (race your ghost), SHIP shelf; boxes &amp; sync unchanged (v1.4 prose in git history) · for the love of the game, and a top offer, since we’re being honest.</footer>
 
 </div>
 <script>
@@ -395,12 +430,13 @@
   var API='/.netlify/functions/progress';
   var boxes=[].slice.call(document.querySelectorAll('.ck input'));
   var state={}, timer=null;
+  window.__planSync={ get:function(){ return state; }, save:function(){ lset(); push(); } };
   function prog(){
     var done=boxes.filter(function(b){return b.checked;}).length;
     document.querySelector('#progBar i').style.width=(done/boxes.length*100)+'%';
     document.getElementById('progTxt').textContent=done+' / '+boxes.length;
   }
-  function apply(){ boxes.forEach(function(b){ b.checked=!!state[b.dataset.k]; }); prog(); }
+  function apply(){ boxes.forEach(function(b){ b.checked=!!state[b.dataset.k]; }); prog(); if(window.__planRender) window.__planRender(); }
   function lget(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
   function lset(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
   function status(s){ var e=document.getElementById('syncStatus'); if(e) e.textContent=s; }
@@ -436,6 +472,116 @@
   a.id='nowLink'; a.textContent='WK '+wk+' ↓'; a.href='#';
   a.addEventListener('click',function(e){e.preventDefault();card.scrollIntoView({block:'start'});});
   document.querySelector('#progWrap .row').appendChild(a);
+})();
+</script>
+<script>
+(function(){
+  var S=window.__planSync; if(!S) return;
+  var CATS=['MISREAD','CONCEPT','MECH','SPEED','BLANK'];
+  var RX={MISREAD:'slow the reading ritual',CONCEPT:'more STUDY, not reps',MECH:'more mental math + a slower final pass',SPEED:'reps of that pattern until boring',BLANK:'ladder too fast, flag it at FRI review'};
+  var START=new Date(2026,6,6);
+  function st(){ return S.get(); }
+  function arr(k){ var s=st(); if(!Array.isArray(s[k])) s[k]=[]; return s[k]; }
+  function pb(){ var s=st(); if(!s.pb||typeof s.pb!=='object') s.pb={}; return s.pb; }
+  function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function wkOf(ds){ return Math.floor((new Date(ds+'T12:00:00')-START)/(7*864e5))+1; }
+  function esc(x){ var d=document.createElement('i'); d.textContent=x; return d.innerHTML; }
+  var curWk=Math.min(12,Math.max(1,wkOf(iso(new Date()))));
+
+  function tiles(){
+    var el=document.getElementById('ships'); el.innerHTML='';
+    for(var n=1;n<=12;n++){(function(n){
+      var t=document.createElement('span');
+      t.className='shiptile'+(st()['w'+n+'s']?' on':''); t.textContent=n; t.title='Week '+n+' SHIP';
+      t.addEventListener('click',function(){ var c=document.querySelectorAll('.wk')[n-1]; if(c)c.scrollIntoView({block:'start'}); });
+      el.appendChild(t);})(n);
+    }
+  }
+  function zeta(){ var m=arr('mm').map(function(x){return +x.v||0}); return m.length?Math.max.apply(null,m):null; }
+  function recs(){
+    var el=document.getElementById('recRow'); el.innerHTML='';
+    var z=zeta(); var mmArr=arr('mm'); var today=mmArr.filter(function(x){return x.d===iso(new Date())});
+    var zTxt=z===null?'—':z;
+    var defs=[
+      {k:null,label:'ZETAMAC PB',val:zTxt,hint:'auto from LOG SCORE'},
+      {k:'lc',label:'LC CLEAN PB',val:pb().lc||'—',hint:'fastest clean medium, e.g. 14:30'},
+      {k:'matmul',label:'MATMUL %CUBLAS',val:pb().matmul||'—',hint:'best % of cuBLAS, e.g. 71'},
+      {k:'llm',label:'LLM TOK/S',val:pb().llm||'—',hint:'best tokens/sec on the Orin, e.g. 21'}
+    ];
+    defs.forEach(function(d){
+      var c=document.createElement('span'); c.className='rec';
+      c.innerHTML='<span>'+d.label+'</span> <b>'+esc(String(d.val))+'</b>';
+      c.title=d.hint;
+      if(d.k) c.addEventListener('click',function(){
+        var v=prompt(d.label+' ('+d.hint+'):', pb()[d.k]||'');
+        if(v===null) return; v=v.trim();
+        if(v==='') delete pb()[d.k]; else pb()[d.k]=v.slice(0,12);
+        S.save(); recs();
+      });
+      el.appendChild(c);
+    });
+  }
+  function mmLine(){
+    var m=arr('mm'), el=document.getElementById('mmLine');
+    if(!m.length){ el.textContent='no scores yet'; return; }
+    var last=m.slice(-3).map(function(x){return x.v}).join(' · ');
+    el.textContent='PB '+zeta()+' · last: '+last;
+  }
+  function counts(){
+    var el=document.getElementById('wkCounts');
+    var wk=arr('log').filter(function(e){ return Math.min(12,Math.max(1,wkOf(e.dd)))===curWk; });
+    if(!wk.length){ el.textContent='WK '+curWk+' · no misses logged yet'; return; }
+    var c={}; CATS.forEach(function(k){c[k]=0}); wk.forEach(function(e){ if(c[e.cat]!=null)c[e.cat]++; });
+    var modal=CATS.reduce(function(a,b){ return c[b]>c[a]?b:a; });
+    el.textContent='WK '+curWk+' · '+CATS.map(function(k){return k+' '+c[k]}).join(' · ')+'  →  modal '+modal+': '+RX[modal];
+  }
+  function list(){
+    var el=document.getElementById('logList'); el.innerHTML='';
+    var L=arr('log'); var show=L.filter(function(e){ return wkOf(e.dd)>=curWk-1; });
+    var hidden=L.length-show.length;
+    show.slice().reverse().forEach(function(e){
+      var i=L.indexOf(e);
+      var d=document.createElement('div'); d.className='logline';
+      d.innerHTML=e.dd.slice(5)+' · '+esc(e.src)+' · <span class="cat">'+e.cat+'</span>'+
+        '<span class="del" title="delete" data-i="'+i+'">×</span><br><span class="fx">fix: '+esc(e.fix)+'</span>'+
+        '<label><input type="checkbox" data-i="'+i+'" data-f="r48"'+(e.r48?' checked':'')+'> +48h</label>'+
+        '<label><input type="checkbox" data-i="'+i+'" data-f="rfri"'+(e.rfri?' checked':'')+'> FRI</label>';
+      el.appendChild(d);
+    });
+    if(hidden>0){ var m=document.createElement('p'); m.className='mut'; m.style.cssText='font-family:var(--mono);font-size:11px'; m.textContent='+ '+hidden+' older entries (synced, in the data)'; el.appendChild(m); }
+    el.querySelectorAll('input[type=checkbox]').forEach(function(b){
+      b.addEventListener('change',function(){ arr('log')[+b.dataset.i][b.dataset.f]=b.checked?1:0; S.save(); });
+    });
+    el.querySelectorAll('.del').forEach(function(x){
+      x.addEventListener('click',function(){ arr('log').splice(+x.dataset.i,1); S.save(); list(); counts(); });
+    });
+  }
+  // form
+  var sel=null, catRow=document.getElementById('catRow');
+  CATS.forEach(function(k){
+    var c=document.createElement('span'); c.className='catchip'; c.textContent=k;
+    c.addEventListener('click',function(){ sel=k; catRow.querySelectorAll('.catchip').forEach(function(x){x.classList.toggle('sel',x.textContent===k)}); });
+    catRow.appendChild(c);
+  });
+  document.getElementById('missBtn').addEventListener('click',function(){
+    var src=document.getElementById('mSrc').value.trim();
+    var fix=document.getElementById('mFix').value.trim();
+    if(!src||!sel||!fix){ alert('need: source + category + a one-sentence fix'); return; }
+    arr('log').push({dd:iso(new Date()),src:src.slice(0,24),cat:sel,fix:fix.slice(0,120),r48:0,rfri:0});
+    S.save(); document.getElementById('mSrc').value=''; document.getElementById('mFix').value='';
+    sel=null; catRow.querySelectorAll('.catchip').forEach(function(x){x.classList.remove('sel')});
+    list(); counts();
+  });
+  document.getElementById('mmBtn').addEventListener('click',function(){
+    var v=+document.getElementById('mmV').value; if(!v){ return; }
+    var wasPB=zeta(); arr('mm').push({d:iso(new Date()),v:v}); S.save();
+    document.getElementById('mmV').value='';
+    mmLine(); recs();
+    if(wasPB!==null&&v>wasPB) document.getElementById('mmLine').textContent='NEW PB '+v+' (was '+wasPB+')';
+  });
+  document.addEventListener('change',function(e){ if(e.target.matches('.ck input')) tiles(); });
+  window.__planRender=function(){ tiles(); recs(); mmLine(); counts(); list(); };
+  window.__planRender();
 })();
 </script>
 </body>
