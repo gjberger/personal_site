@@ -213,11 +213,38 @@ var WHY={
 
 // --- slim cloud sync: same KEY + endpoint as the plan, so state is shared ---
 var KEY='training-plan-v1', API='/.netlify/functions/progress';
-var state={}, timer=null;
+var state={}, timer=null, cloudReady=false, saveQueued=false;
 function lget(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
 function lset(){ try{ localStorage.setItem(KEY,JSON.stringify(state)); }catch(e){} }
 function sync(s){ var e=document.getElementById('sync'); if(e)e.textContent=s; }
-function save(){ lset(); if(timer)clearTimeout(timer); timer=setTimeout(function(){
+// union-merge, mirror of the server's: arrays (mm/log) never shrink from a stale
+// counterpart, `over` wins scalars, dl tombstones make log deletions stick
+function mergeState(base,over){
+  var out={},k; for(k in base)out[k]=base[k]; for(k in over)out[k]=over[k];
+  var dl={}; [].concat(base.dl||[],over.dl||[]).forEach(function(x){ if(typeof x==='string')dl[x]=1; });
+  var seen={},mm=[];
+  [].concat(base.mm||[],over.mm||[]).forEach(function(e){
+    if(!e||typeof e!=='object')return; var key=e.d+'|'+e.v;
+    if(!seen[key]){seen[key]=1;mm.push(e);} });
+  out.mm=mm.sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0;});
+  var byK={},order=[];
+  [].concat(base.log||[],over.log||[]).forEach(function(e){
+    if(!e||typeof e!=='object')return; var key=e.dd+'|'+e.src+'|'+e.fix;
+    if(dl[key])return;
+    if(!byK[key]){byK[key]=e;order.push(key);}
+    else byK[key]={dd:e.dd,src:e.src,cat:byK[key].cat,fix:e.fix,r48:(byK[key].r48||e.r48)?1:0,rfri:(byK[key].rfri||e.rfri)?1:0}; });
+  out.log=order.map(function(key){return byK[key];}).sort(function(a,b){return a.dd<b.dd?-1:a.dd>b.dd?1:0;});
+  out.pb={}; [base.pb,over.pb].forEach(function(p){ if(p&&typeof p==='object')for(var q in p)out.pb[q]=p[q]; });
+  out.sn={}; [base.sn,over.sn].forEach(function(p){ if(p&&typeof p==='object')for(var q in p)out.sn[q]=p[q]; });
+  var bc=base.ct,oc=over.ct;
+  if(bc&&oc) out.ct=bc.d===oc.d?{d:bc.d,n:Math.max(bc.n||0,oc.n||0)}:(oc.d>bc.d?oc:bc);
+  out.dl=Object.keys(dl).slice(-50);
+  return out;
+}
+function tomb(e){ if(!Array.isArray(state.dl))state.dl=[]; state.dl.push(e.dd+'|'+e.src+'|'+e.fix); if(state.dl.length>50)state.dl=state.dl.slice(-50); }
+function save(){ lset();
+  if(!cloudReady){ saveQueued=true; return; } // never POST a state built without the cloud's keys
+  if(timer)clearTimeout(timer); timer=setTimeout(function(){
   sync('saving\u2026');
   fetch(API,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)})
     .then(function(r){ sync(r.ok?'\u2713 synced':'saved locally'); })
@@ -345,7 +372,7 @@ function sList(){ var el=document.getElementById('sList'); el.innerHTML='';
   el.querySelectorAll('input[type=checkbox]').forEach(function(b){
     b.addEventListener('change',function(){ arr('log')[+b.dataset.i][b.dataset.f]=b.checked?1:0; save(); }); });
   el.querySelectorAll('.del').forEach(function(x){
-    x.addEventListener('click',function(){ arr('log').splice(+x.dataset.i,1); save(); sList(); sCounts(); }); }); }
+    x.addEventListener('click',function(){ tomb(arr('log')[+x.dataset.i]); arr('log').splice(+x.dataset.i,1); save(); sList(); sCounts(); }); }); }
 function pbo(){ if(!state.pb||typeof state.pb!=='object') state.pb={}; return state.pb; }
 function recs(){ var el=document.getElementById('recRow'); el.innerHTML='';
   var defs=[
@@ -390,11 +417,16 @@ document.getElementById('sGo').addEventListener('click',function(){
   selCat=null; document.querySelectorAll('#catChips .chip').forEach(function(x){x.classList.remove('sel')});
   msg.textContent='Logged. The fix is the rep.'; sCounts(); sList(); });
 
-// paint from cache, then reconcile with cloud (cloud wins)
+// paint from cache, then reconcile with cloud (union-merged; cloud wins scalars)
 state=lget(); render(); sync('\u2026');
-fetch(API,{credentials:'include'}).then(function(r){ return r.ok?r.json():Promise.reject(); }).then(function(c){
-  if(c&&typeof c==='object'){ state=Object.assign({},state,c); lset(); render(); sync('\u2713 synced'); }
-}).catch(function(){ sync('offline \u00b7 on this device'); });
+function settled(){ cloudReady=true; if(saveQueued){ saveQueued=false; save(); } }
+fetch(API,{credentials:'include'}).then(function(r){
+  if(r.status===401) return Promise.reject('auth');
+  return r.ok?r.json():Promise.reject();
+}).then(function(c){
+  if(c&&typeof c==='object'){ state=mergeState(state,c); lset(); render(); sync('\u2713 synced'); }
+  settled();
+}).catch(function(e){ sync(e==='auth'?'signed out \u00b7 log in at /private':'offline \u00b7 on this device'); settled(); });
 </script>
 </body>
 </html>
