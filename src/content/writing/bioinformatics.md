@@ -2,7 +2,7 @@
 title: "Great Ideas In Bioinformatics"
 date: 2026-07-08
 description: "Clever tools I've picked up in my first week or two at the Stanford Cancer Institute."
-draft: false
+draft: true
 ---
 
 This was my final project for CS140E, Stanford's bare-metal systems class, the one
