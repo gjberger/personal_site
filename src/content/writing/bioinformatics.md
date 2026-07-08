@@ -2,7 +2,7 @@
 title: "Great Ideas In Bioinformatics"
 date: 2026-07-08
 description: "Clever tools I've picked up in my first week or two at the Stanford Cancer Institute."
-draft: false
+draft: true
 ---
 
 I just started working in the Alizadeh Lab @ Stanford Cancer Institute under postdoc
@@ -15,4 +15,6 @@ I wanted to build a guide to various tools I pick up throughout my time here, hi
 the fundamental techniques underlying the lab's pipelines and the R packages we use.
 
 ## Differential Expression (DESeq2)
+
+## RNA-Seq by Expectation-Maximization (RSEM)
 
