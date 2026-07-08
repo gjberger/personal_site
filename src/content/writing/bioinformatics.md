@@ -2,19 +2,17 @@
 title: "Great Ideas In Bioinformatics"
 date: 2026-07-08
 description: "Clever tools I've picked up in my first week or two at the Stanford Cancer Institute."
-draft: true
+draft: false
 ---
 
-This was my final project for CS140E, Stanford's bare-metal systems class, the one
-where you build up from nothing on a Raspberry Pi, no operating system to stand on. I
-wanted the hardest version of "how does this actually work," so I went for the radio.
+I just started working in the Alizadeh Lab @ Stanford Cancer Institute under postdoc
+Lena Osswald. The Alizadeh Lab has developed various minimally invasive liquid biopsy
+techniques for detecting cancers in the blood. I'm working on using these techniques
+to characterize and detect Richter's transformation, a rare mutation that causes chronic
+lymphocytic leukemia (CLL) into an aggressive lymphoma with poor prognostic outcomes.
 
-The goal: get a Raspberry Pi Zero W onto WiFi with no operating system. No Linux, no
-vendor driver, no network stack. Just the chip, the datasheets, and the Linux kernel
-source to reverse-engineer the parts that aren't documented. The hardware (a
-Broadcom/Cypress CYW43438) is documented, but spread across a dozen PDFs; the software
-interface is proprietary, so most of the work was reading kernel source until the
-sequence made sense, then watching the hardware finally answer.
+I wanted to build a guide to various tools I pick up throughout my time here, highlighting
+the fundamental techniques underlying the lab's pipelines and the R packages we use.
 
 Here's the path, roughly in order.
 
