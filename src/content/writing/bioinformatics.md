@@ -1,7 +1,6 @@
 ---
 title: "Great Ideas In Bioinformatics"
 date: 2026-07-08
-description: "Pi Zero W onto WiFi with no operating system, one datasheet at a time."
 description: "Clever tools I've picked up in my first week or two at the Stanford Cancer Institute."
 draft: false
 ---
