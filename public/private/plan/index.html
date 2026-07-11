@@ -175,9 +175,9 @@
 <body>
 <div class="wrap">
 
-<div id="trainer"></div>
+<div id="trainer" class="hidden"></div>
 
-<div id="fullplan" class="hidden">
+<div id="fullplan">
 <a id="toTrainer" href="#">◂ trainer</a>
 <header>
   <div class="seal">訓</div>
@@ -193,9 +193,9 @@
   <p class="label">01 · The clock</p>
   <div class="tbl-wrap"><table>
     <tr><th>When</th><th>What happens</th><th>Your move</th></tr>
-    <tr><td class="dt">JUL (now)</td><td>Quant apps open (Jane Street, HRT, Citadel, Optiver, IMC, DRW…), rolling</td><td>Resume by <b>Jul 19</b> · first apps <b>Aug 1</b> · referrals &gt; portal</td></tr>
-    <tr><td class="dt">AUG–SEP</td><td>OAs + phone screens; frontier labs post internships</td><td>Daily drills · apply the week postings open · <b>Stuart coffee</b> once kernels exist</td></tr>
-    <tr><td class="dt">SEP</td><td>Research decisions: <b>Hazy (in: Stuart Sul)</b>, Dawson, Dennis Sun</td><td>Emails by <b>Sep 13</b>, portfolio links, not vibes; Hazy first</td></tr>
+    <tr><td class="dt">JUL (now)</td><td>SWE apps open, rolling: quant-systems desks (Jane Street, HRT, Citadel, IMC, DRW, Optiver) + NVIDIA/ML-infra</td><td>Resume by <b>Jul 19</b> · first apps <b>Aug 1</b> · referrals &gt; portal</td></tr>
+    <tr><td class="dt">AUG–SEP</td><td>OAs + phone screens; frontier labs post internships (research eng + SWE)</td><td>Daily drills · apply the week postings open · <b>Stuart coffee</b> once kernels exist</td></tr>
+    <tr><td class="dt">SEP</td><td>Research decisions: <b>Hazy (in: Stuart Sul)</b>, Dawson, Darve</td><td>Emails by <b>Sep 13</b>, portfolio links, not vibes; Hazy first</td></tr>
     <tr><td class="dt">OCT–DEC</td><td>Onsites / superdays · career fair</td><td>Maintenance mode, no new projects</td></tr>
   </table></div>
   <div class="callout">Class of 2028 → <b>Summer 2027 is THE cycle</b>. SCI is flexible per Lena: pin <b>2 fixed evening BUILD blocks</b> and guard them like meetings; unscheduled flexibility evaporates.</div>
@@ -204,12 +204,19 @@
 <section>
   <p class="label">02 · The bet</p>
   <div class="bet">
-    <div class="deck"><span class="k">MOAT</span><span><b>GPU/ML-systems.</b> RTL-to-attention-kernels is a rare, paid-for profile. The Jetson ladder + Atlas Ch 1·5 build it.</span></div>
+    <div class="deck"><span class="k">MOAT</span><span><b>GPU/ML-systems.</b> RTL-to-attention-kernels is a rare, paid-for profile, and it is the same story at a frontier lab, an ML-infra team, or a quant-systems desk. The Jetson ladder + Atlas Ch 1·5 build it.</span></div>
     <div class="deck"><span class="k">ANCHOR</span><span><b>Hazy Research (Chris Ré).</b> Build wks 1–6 → Stuart coffee wk 7 → Ré email wk 10. The ladder is the audition.</span></div>
-    <div class="deck"><span class="k">DEADLINE</span><span><b>Quant interviews, 6–12 wks out.</b> Drilled, not read: 30 min daily beats any binge.</span></div>
-    <div class="deck"><span class="k">DEFERRED</span><span><b>Stat-ML.</b> Wks 9–10 start it honestly; deepens in fall, after apps are out.</span></div>
+    <div class="deck"><span class="k">DEADLINE</span><span><b>Interviews, 6–12 wks out.</b> LC + C++ internals + the GPU story, drilled not read: 30 min daily beats any binge.</span></div>
+    <div class="deck"><span class="k">DEFERRED</span><span><b>Triton + the speedrun.</b> CS336 A1 (wks 9–10) is the on-ramp; A2 and the nanoGPT speedrun are the fall campaign, after apps are out.</span></div>
   </div>
   <p class="mut">Fourteen open threads is the real risk, not any missing skill. This plan runs <b>three</b>: ship the ladder, drill, apply early. The compiler and the SBC are parked, not killed.</p>
+  <div class="tbl-wrap"><table>
+    <tr><th>Arc</th><th>The move</th><th>Proof it happened</th></tr>
+    <tr><td class="dt">SUMMER ’26</td><td>This campaign: the ladder + the drill floor + apps out early</td><td>jetson-lab · 4 public notes · FA fwd · 20+ apps</td></tr>
+    <tr><td class="dt">FALL ’26</td><td>Research seat (<b>Hazy first</b>, in: Stuart) · CS140E TA · CS336 A2: FA in Triton · speedrun repro · onsites</td><td>scope in writing · Triton FA · offers</td></tr>
+    <tr><td class="dt">WIN–SPR ’27</td><td>Workshop paper from the research thread · Anthropic Fellows app (rolling), artifacts attached</td><td>submission · application out</td></tr>
+    <tr><td class="dt">SUMMER ’27</td><td>The seat this page exists for: frontier lab · ML infra · quant systems</td><td>signed</td></tr>
+  </table></div>
 </section>
 
 <section>
@@ -220,97 +227,98 @@
   <label class="ck"><input type="checkbox" data-k="s4"><span class="txt"><b>Build the bench</b>: Jetson plugged in, <code>tmux new -s lab</code>, repo open. A ready bench is a 10-second start</span></label>
   <label class="ck"><input type="checkbox" data-k="s5"><span class="txt"><b>Send the Logan text</b>: “Friday review every week · roast me if it’s empty”</span></label>
   <label class="ck"><input type="checkbox" data-k="s6"><span class="txt"><b>One body double</b>, one block/week; the house is full of candidates</span></label>
-  <label class="ck"><input type="checkbox" data-k="s7"><span class="txt"><b>Sticky note</b>: “1 Green Book problem OR 10 min at the bench counts”</span></label>
+  <label class="ck"><input type="checkbox" data-k="s7"><span class="txt"><b>Sticky note</b>: “1 kernel rep OR 10 min at the bench counts · AI never writes the kernel”</span></label>
   <label class="ck"><input type="checkbox" data-k="anchor"><span class="tag x">ANCHOR</span><span class="txt"><b>Logan holds the Friday review</b>: check when he says yes, not before. A review nobody sees is a diary</span></label>
 </section>
 
 <section>
   <p class="label">04 · The twelve weeks: <b>only the SHIP box really matters</b></p>
-  <p class="mut">One BUILD · one STUDY · the DRILL · one SHIP per week. Ammo owned: LC premium (company-tagged lists) + the Green Book. Wks 2–6 carry one C→C++ bridge rep, always inside the Jetson repo.</p>
-  <div class="rhythm">EVERY WEEK · MON green book · TUE LC (python) · WED green book · THU LC (C++) · FRI retests + 20-min review · SAT long rep, out loud · SUN floor only<br>+ 2 pinned evening BUILD blocks · one 75–90 min STUDY block · full GB/LC ladder in §05</div>
+  <p class="mut">One BUILD · one STUDY · the DRILL · one SHIP per week. Ammo owned: LC premium (company-tagged lists) + the Atlas drill decks. Wks 2–6 + 8 carry one C→C++ bridge rep, always inside the Jetson repo.</p>
+  <div class="rhythm">EVERY WEEK · MON kernel drill · TUE LC (python) · WED kernel drill · THU LC (C++) · FRI retests + 20-min review · SAT long rep, out loud · SUN floor only<br>+ 2 pinned evening BUILD blocks · one 75–90 min STUDY block · full drill/LC ladder in §05</div>
 
   <div class="wk"><h3>Week 1 <span class="wdate">JUL 6 – JUL 12</span></h3>
     <label class="ck"><input type="checkbox" data-k="w1a"><span class="tag b">BUILD</span><span class="txt">Jetson bring-up: JetPack, jtop, deviceQuery; vector-add (Atlas Lab 15); benchmark CPU loop vs kernel across N</span></label>
     <label class="ck"><input type="checkbox" data-k="w1b"><span class="tag st">STUDY</span><span class="txt">Atlas Ch 1 + Ch 5 end to end, every checkpoint</span></label>
-    <label class="ck"><input type="checkbox" data-k="w1c"><span class="tag d">DRILL</span><span class="txt">Green Book ch.2 brainteasers, timed · 4 LC mediums: arrays &amp; hashing · start <code>drill-log.md</code> (spec in §05)</span></label>
+    <label class="ck"><input type="checkbox" data-k="w1c"><span class="tag d">DRILL</span><span class="txt">GPU-basics retrieval set, timed (warps, memory wall, coalescing) · 4 LC mediums: arrays &amp; hashing · start <code>drill-log.md</code> (spec in §05)</span></label>
     <label class="ck"><input type="checkbox" data-k="w1s"><span class="tag sh">SHIP</span><span class="txt">Public repo <b>jetson-lab</b> with the benchmark table in the README</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book ch.2 · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair · SUN floor · visuals: Atlas L20</div>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: GPU basics cold (warps, coalescing) · TUE LC arrays (python) · THU LC hashing (C++) · FRI retests + review · SAT LC pair + prob set · SUN floor · visuals: Atlas L20</div>
   </div>
 
   <div class="wk"><h3>Week 2 <span class="wdate">JUL 13 – JUL 19</span></h3>
-    <label class="ck"><input type="checkbox" data-k="w2a"><span class="tag b">BUILD</span><span class="txt">Matmul ladder: naive → coalesced → tiled (Atlas Lab 16). Measure each; compare against cuBLAS and feel appropriate humility</span></label>
+    <label class="ck"><input type="checkbox" data-k="w2a"><span class="tag b">BUILD</span><span class="txt">Matmul ladder: naive → coalesced → tiled (Atlas Lab 16). Measure each; compare against cuBLAS and feel appropriate humility; then the full ladder: block → warp → register tiling (the CUTLASS shape)</span></label>
     <label class="ck"><input type="checkbox" data-k="w2b"><span class="tag st">STUDY</span><span class="txt">First Nsight Compute profile: find the matmul bottleneck (it’s memory; prove it)</span></label>
-    <label class="ck"><input type="checkbox" data-k="w2c"><span class="tag d">DRILL</span><span class="txt">Green Book ch.4 probability, pt 1 · 4 LC mediums: two pointers + sliding window · mental math daily</span></label>
+    <label class="ck"><input type="checkbox" data-k="w2c"><span class="tag d">DRILL</span><span class="txt">GEMM tiling re-derived on paper, timed · 4 LC mediums: two pointers + sliding window</span></label>
     <label class="ck"><input type="checkbox" data-k="w2x"><span class="tag x">C++</span><span class="txt">Bridge #1: RAII · a <code>CudaBuffer</code> class owns alloc/free; no raw allocs from here on</span></label>
     <label class="ck"><input type="checkbox" data-k="w2s"><span class="tag sh">SHIP</span><span class="txt"><b>Resume done</b> (systems-flavored, repo on it) + matmul numbers in the repo</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book ch.4 pt 1 · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair · visuals: Atlas L21</div>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: GEMM tiling cold · TUE+THU LC sliding window (python/C++) · FRI retests + review · SAT LC pair + prob set · visuals: Atlas L21</div>
   </div>
 
   <div class="wk"><h3>Week 3 <span class="wdate">JUL 20 – JUL 26</span></h3>
     <label class="ck"><input type="checkbox" data-k="w3a"><span class="tag b">BUILD</span><span class="txt">Roofline of the Orin Nano from your own measurements (arithmetic intensity vs the ~68 GB/s ceiling)</span></label>
-    <label class="ck"><input type="checkbox" data-k="w3b"><span class="tag st">STUDY</span><span class="txt">Atlas Ch 4 + Ch 2; derive backprop for a 2-layer net on paper, no peeking</span></label>
-    <label class="ck"><input type="checkbox" data-k="w3c"><span class="tag d">DRILL</span><span class="txt">Green Book ch.4 probability, pt 2 · 4 LC mediums: stack + binary search</span></label>
+    <label class="ck"><input type="checkbox" data-k="w3b"><span class="tag st">STUDY</span><span class="txt">Atlas Ch 4 + Ch 2; derive backprop for a 2-layer net on paper, no peeking · then the same net in PyTorch: nn.Module + training loop, from memory</span></label>
+    <label class="ck"><input type="checkbox" data-k="w3c"><span class="tag d">DRILL</span><span class="txt">Roofline + occupancy drills, timed · 4 LC mediums: stack + binary search</span></label>
     <label class="ck"><input type="checkbox" data-k="w3x"><span class="tag x">C++</span><span class="txt">Bridge #2: move semantics + rule of five · why copying a device buffer is <code>= delete</code></span></label>
     <label class="ck"><input type="checkbox" data-k="w3s"><span class="tag sh">SHIP</span><span class="txt">500-word note: <b>“The roofline of my $250 supercomputer”</b>, posted anywhere public</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book ch.4 pt 2 · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L17</div>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: roofline + occupancy cold · TUE LC stack (python) · THU LC binary search (C++) · FRI retests + review · SAT LC pair + prob set · visuals: Atlas L17</div>
   </div>
 
   <div class="wk"><h3>Week 4 <span class="wdate">JUL 27 – AUG 2</span></h3>
     <label class="ck"><input type="checkbox" data-k="w4a"><span class="tag b">BUILD</span><span class="txt">Softmax, then single-head attention as CUDA kernels (Atlas Lab 10); verify against PyTorch</span></label>
-    <label class="ck"><input type="checkbox" data-k="w4b"><span class="tag st">STUDY</span><span class="txt">Atlas Ch 3; read FlashAttention knowing you’ve written the naive thing it beats</span></label>
-    <label class="ck"><input type="checkbox" data-k="w4c"><span class="tag d">DRILL</span><span class="txt">Green Book ch.5 stochastic, pt 1 · 4 LC mediums: linked lists + trees · mental math daily</span></label>
+    <label class="ck"><input type="checkbox" data-k="w4b"><span class="tag st">STUDY</span><span class="txt">Atlas Ch 3 + online softmax derived on paper; read FlashAttention knowing you’ve written the naive thing it beats</span></label>
+    <label class="ck"><input type="checkbox" data-k="w4c"><span class="tag d">DRILL</span><span class="txt">Online softmax from blank paper, timed · 4 LC mediums: linked lists + trees</span></label>
     <label class="ck"><input type="checkbox" data-k="w4x"><span class="tag x">C++</span><span class="txt">Bridge #3: templates · a templated launch helper; look at what nvcc instantiates</span></label>
-    <label class="ck"><input type="checkbox" data-k="w4s"><span class="tag sh">SHIP</span><span class="txt"><b>First 5 quant applications out</b> (referrals where you have any) + attention kernel in the repo</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book ch.5 pt 1 · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L18·L27</div>
+    <label class="ck"><input type="checkbox" data-k="w4s"><span class="tag sh">SHIP</span><span class="txt"><b>First 5 applications out</b>: frontier labs, ML infra, NVIDIA, quant-SWE desks (referrals where you have any) + attention kernel in the repo</span></label>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: online softmax cold · TUE LC linked lists (python) · THU LC trees (C++) · FRI retests + review · SAT LC pair + prob set · visuals: Atlas L18·L27</div>
   </div>
 
   <div class="wk"><h3>Week 5 <span class="wdate">AUG 3 – AUG 9</span></h3>
     <label class="ck"><input type="checkbox" data-k="w5a"><span class="tag b">BUILD</span><span class="txt">Run a 1–3B LLM on the Orin (llama.cpp): tokens/sec at 4 quantization levels</span></label>
     <label class="ck"><input type="checkbox" data-k="w5b"><span class="tag st">STUDY</span><span class="txt">Why quantization works (Lab 06) · KV-cache explainer, then explain it to Claude and get graded</span></label>
-    <label class="ck"><input type="checkbox" data-k="w5c"><span class="tag d">DRILL</span><span class="txt">Green Book mixed set: 20 timed problems across ch.2–5; log every miss · 4 LC mediums: heaps + intervals</span></label>
+    <label class="ck"><input type="checkbox" data-k="w5c"><span class="tag d">DRILL</span><span class="txt">Mixed GPU set: 20 timed retrieval questions across weeks 1–4; log every miss · 4 LC mediums: heaps + intervals</span></label>
     <label class="ck"><input type="checkbox" data-k="w5x"><span class="tag x">C++</span><span class="txt">Bridge #4: STL · redo one analysis script with vector/algorithm, once</span></label>
-    <label class="ck"><input type="checkbox" data-k="w5s"><span class="tag sh">SHIP</span><span class="txt">Chart + note: <b>“tokens/sec vs bits on a Jetson Orin Nano”</b>, a genuinely useful public datapoint</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book mixed, timed · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair · visuals: Atlas L22·L25</div>
+    <label class="ck"><input type="checkbox" data-k="w5s"><span class="tag sh">SHIP</span><span class="txt">Chart + note: <b>“tokens/sec vs bits on a Jetson Orin Nano”</b>, a genuinely useful public datapoint · <b>email Darve</b>: fall independent study + GPU access, repo linked</span></label>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: quantization + KV cold · TUE LC heaps (python) · THU LC intervals (C++) · FRI retests + review · SAT LC pair + prob set · visuals: Atlas L22·L25</div>
   </div>
 
   <div class="wk"><h3>Week 6 <span class="wdate">AUG 10 – AUG 16</span></h3>
     <label class="ck"><input type="checkbox" data-k="w6a"><span class="tag b">BUILD</span><span class="txt">KV-cache experiment: context length vs latency &amp; memory; find where it falls over and say why</span></label>
     <label class="ck"><input type="checkbox" data-k="w6b"><span class="tag st">STUDY</span><span class="txt">Skim ThunderKittens + re-read FlashAttention next to your own numbers; write 3 real questions for Stuart</span></label>
-    <label class="ck"><input type="checkbox" data-k="w6c"><span class="tag d">DRILL</span><span class="txt">Green Book ch.5 stochastic, pt 2 · market-making games with a friend or Claude · 4 LC mediums: graphs + 1-D DP</span></label>
+    <label class="ck"><input type="checkbox" data-k="w6c"><span class="tag d">DRILL</span><span class="txt">GPU rapid-fire with Claude, out loud: memory hierarchy, occupancy, roofline · 4 LC mediums: graphs + 1-D DP</span></label>
     <label class="ck"><input type="checkbox" data-k="w6x"><span class="tag x">C++</span><span class="txt">Bridge #5: interview C++ · virtual dispatch, unique_ptr vs shared_ptr, the memory model; 10 rapid-fire with Claude</span></label>
-    <label class="ck"><input type="checkbox" data-k="w6s"><span class="tag sh">SHIP</span><span class="txt"><b>10 more applications</b> (quant + any early frontier-lab postings)</span></label>
-    <div class="dstrip"><b>DRILL</b>: MON+WED green book ch.5 pt 2 · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT market-making game · visuals: Atlas L18·L19·L24·L26</div>
+    <label class="ck"><input type="checkbox" data-k="w6s"><span class="tag sh">SHIP</span><span class="txt"><b>10 more applications</b> (frontier labs, ML infra, systems teams)</span></label>
+    <div class="dstrip"><b>DRILL</b>: MON+WED kernel drill: FA tiling cold · TUE LC graphs (python) · THU LC 1-D DP (C++) · FRI retests + review · SAT LC pair + prob set · visuals: Atlas L18·L19·L24·L26</div>
   </div>
 
   <div class="wk"><h3>Week 7 <span class="wdate">AUG 17 – AUG 23</span></h3>
     <label class="ck"><input type="checkbox" data-k="w7a"><span class="tag b">BUILD</span><span class="txt">None. Application + mock-interview sprint</span></label>
     <label class="ck"><input type="checkbox" data-k="w7b"><span class="tag st">STUDY</span><span class="txt">Your mistake log, cover to cover; now your most valuable document</span></label>
-    <label class="ck"><input type="checkbox" data-k="w7c"><span class="tag d">DRILL</span><span class="txt">2 mock quant interviews + 1 mock coding interview, timed, out loud</span></label>
+    <label class="ck"><input type="checkbox" data-k="w7c"><span class="tag d">DRILL</span><span class="txt">3 mocks, timed, out loud: systems (GPU, perf, C++) · coding (LC) · RE screen: a GPT block + training loop in PyTorch, from memory</span></label>
     <label class="ck"><input type="checkbox" data-k="w7s"><span class="tag sh">SHIP</span><span class="txt"><b>Every remaining target firm applied to</b>: tracker live · message Stuart Sul, repo links attached</span></label>
     <div class="dstrip"><b>MOCK SPRINT</b>: LC timed randoms daily · 2 weekday mocks + SAT full mock · FRI review as usual</div>
   </div>
 
   <div class="wk"><h3>Week 8 <span class="wdate">AUG 24 – AUG 30</span></h3>
-    <label class="ck"><input type="checkbox" data-k="w8a"><span class="tag b">BUILD</span><span class="txt">Patch week: whatever the mocks exposed gets the build hours</span></label>
+    <label class="ck"><input type="checkbox" data-k="w8a"><span class="tag b">BUILD</span><span class="txt">FA forward from a blank file: stream K/V tiles, merge the online softmax · then patch what the mocks exposed</span></label>
     <label class="ck"><input type="checkbox" data-k="w8b"><span class="tag st">STUDY</span><span class="txt">OA practice under real conditions · camera on, timer on, no music</span></label>
-    <label class="ck"><input type="checkbox" data-k="w8c"><span class="tag d">DRILL</span><span class="txt">Daily timed sets · LC: patch the weak patterns + 2-D DP · mental math should feel boringly easy by now</span></label>
+    <label class="ck"><input type="checkbox" data-k="w8c"><span class="tag d">DRILL</span><span class="txt">Daily timed sets · LC: patch the weak patterns + 2-D DP + backtracking · kernel recall should feel boringly easy by now</span></label>
+    <label class="ck"><input type="checkbox" data-k="w8x"><span class="tag x">C++</span><span class="txt">Bridge #6: concurrency · <code>std::thread</code>, mutex vs atomic, a lock-free SPSC queue · a false-sharing microbench (and its OpenMP port) · then the CUDA-streams parallel</span></label>
     <label class="ck"><input type="checkbox" data-k="w8s"><span class="tag sh">SHIP</span><span class="txt"><b>Mistake-log v2</b>: every miss categorized, fix written next to it</span></label>
-    <div class="dstrip"><b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP · FRI retests + review · visuals: Atlas L19·L23</div>
+    <div class="dstrip"><b>DRILL</b>: OA-condition sets daily · LC patch week + 2-D DP + backtracking · FRI retests + review · visuals: Atlas L19·L23</div>
   </div>
 
   <div class="wk"><h3>Week 9 <span class="wdate">AUG 31 – SEP 6</span></h3>
-    <label class="ck"><input type="checkbox" data-k="w9a"><span class="tag b">BUILD</span><span class="txt">Stat-ML begins: linear/ridge/logistic from scratch in numpy on real market data (returns, not prices)</span></label>
-    <label class="ck"><input type="checkbox" data-k="w9b"><span class="tag st">STUDY</span><span class="txt">Bias/variance, cross-validation done right, why financial data breaks IID</span></label>
+    <label class="ck"><input type="checkbox" data-k="w9a"><span class="tag b">BUILD</span><span class="txt">CS336 A1 begins: BPE tokenizer from scratch, then the LM skeleton (cs336.stanford.edu)</span></label>
+    <label class="ck"><input type="checkbox" data-k="w9b"><span class="tag st">STUDY</span><span class="txt">CS336 lectures 1–3 alongside A1; every checkpoint test passes before moving on</span></label>
     <label class="ck"><input type="checkbox" data-k="w9c"><span class="tag d">DRILL</span><span class="txt">Maintenance: 15 min/day; interviews may already be landing</span></label>
-    <label class="ck"><input type="checkbox" data-k="w9s"><span class="tag sh">SHIP</span><span class="txt">Repo: <b>a tiny, honest backtest</b> with train/test hygiene documented</span></label>
-    <div class="dstrip"><b>MAINTENANCE</b>: 15 min/day, mental math daily · FRI retests · 1 LC hard per week</div>
+    <label class="ck"><input type="checkbox" data-k="w9s"><span class="tag sh">SHIP</span><span class="txt">Repo: <b>tokenizer + LM skeleton</b>, tests green, loss curve in the README</span></label>
+    <div class="dstrip"><b>MAINTENANCE</b>: 15-min kernel drill daily · FRI retests · 1 LC hard per week</div>
   </div>
 
   <div class="wk"><h3>Week 10 <span class="wdate">SEP 7 – SEP 13</span></h3>
-    <label class="ck"><input type="checkbox" data-k="w10a"><span class="tag b">BUILD</span><span class="txt">Break your own backtest: lookahead, survivorship, overfitting, regime change · find all four</span></label>
-    <label class="ck"><input type="checkbox" data-k="w10b"><span class="tag st">STUDY</span><span class="txt">Walk-forward validation; one Lopez de Prado chapter</span></label>
+    <label class="ck"><input type="checkbox" data-k="w10a"><span class="tag b">BUILD</span><span class="txt">CS336 A1 done end to end: train, sample text · then FA backward on paper</span></label>
+    <label class="ck"><input type="checkbox" data-k="w10b"><span class="tag st">STUDY</span><span class="txt">FA backward, derived unaided; nobody assigns this, that’s the point</span></label>
     <label class="ck"><input type="checkbox" data-k="w10c"><span class="tag d">DRILL</span><span class="txt">Maintenance + any live OAs</span></label>
-    <label class="ck"><input type="checkbox" data-k="w10s"><span class="tag sh">SHIP</span><span class="txt">Note: <b>“Five ways my backtest lied to me”</b> + research emails out: Ré (via/cc Stuart), Dawson, Dennis Sun · portfolio links included</span></label>
+    <label class="ck"><input type="checkbox" data-k="w10s"><span class="tag sh">SHIP</span><span class="txt">Note: <b>“FA backward, unaided”</b> + research emails out: Ré (via/cc Stuart), Dawson, Darve follow-up · portfolio links included</span></label>
     <div class="dstrip"><b>MAINTENANCE</b>: 15 min/day · live OAs replace that day’s set 1:1 · FRI retests</div>
   </div>
 
@@ -323,39 +331,41 @@
   </div>
 
   <div class="wk"><h3>Week 12 <span class="wdate">SEP 21 – SEP 27</span></h3>
-    <label class="ck"><input type="checkbox" data-k="w12a"><span class="tag b">BUILD</span><span class="txt">Buffer week; it exists because week 6 or 8 didn’t go to plan, and that’s fine</span></label>
+    <label class="ck"><input type="checkbox" data-k="w12a"><span class="tag b">BUILD</span><span class="txt">Buffer week for whatever slipped · plus one cheap artifact: note, “Sharding my 1–3B model on paper: DP/TP/PP, KV, and the collectives underneath”</span></label>
     <label class="ck"><input type="checkbox" data-k="w12b"><span class="tag st">STUDY</span><span class="txt">Retrospective with Claude: what shipped, what stalled, what the mocks say about odds</span></label>
     <label class="ck"><input type="checkbox" data-k="w12c"><span class="tag d">DRILL</span><span class="txt">Keep the daily 15 through interview season · recall decays in weeks</span></label>
-    <label class="ck"><input type="checkbox" data-k="w12s"><span class="tag sh">SHIP</span><span class="txt"><b>Training Plan v2 (fall edition)</b>: stat-ML depth, research thread, compiler if bandwidth is real</span></label>
+    <label class="ck"><input type="checkbox" data-k="w12s"><span class="tag sh">SHIP</span><span class="txt"><b>Training Plan v2 (fall edition)</b>: CS336 A2 (FlashAttention in Triton) + the nanoGPT speedrun · research thread · compiler only if bandwidth is real</span></label>
     <div class="dstrip"><b>DRILL</b>: keep the daily 15 · FRI retro · ship plan v2</div>
   </div>
 </section>
 
 <section>
   <p class="label">05 · The dailies: <b>read the strip, don’t choose</b></p>
-  <p>Each card’s DRILL strip pre-decides the day: a 5–10 min mental-math opener + one set, ~30 min, glued to the same trigger (first coffee, or walking in from SCI). SAT = long rep, out loud · SUN = floor only · wks 8–12 drop WED, live OAs replace that day 1:1.</p>
-  <p class="mut"><b>Green Book route:</b> ch.2 → ch.4 → ch.5, then mixed. Ch.3 (calc/linalg) and ch.7 (algorithms) are reference only; LC covers algorithms. A session = 3 problems at the clock, 2 for ch.5. A chapter is done when every problem is either solved in-clock or sits in the drill log with a fix.</p>
-  <p class="mut"><b>LC route:</b> 4 mediums/wk from the company-tagged lists (Citadel · HRT · Jane Street), filtered to the week&rsquo;s pattern. TUE python · THU c++ · SAT pair alternates · <b>retest a miss in the language you missed it in</b>. The 4/wk: TUE 1 · THU 1 · SAT 2. By wk 6 every ladder pattern exists twice in your hands.</p>
-  <p class="mut"><b>Mental math:</b> Zetamac, default settings, 120-second rounds. The opener = 3 rounds; log the best score in §06. The PB is the ghost you race: beat last week&rsquo;s you, nobody else.</p>
+  <p>Each card’s DRILL strip pre-decides the day: a 10-min kernel-drill opener + one set, ~30 min, glued to the same trigger (first coffee, or walking in from SCI). SAT = long rep, out loud · SUN = floor only · wks 8–12: live OAs replace that day’s set 1:1.</p>
+  <p class="mut"><b>Kernel-drill route:</b> blank paper or an empty editor, no AI, no notes. Re-derive the week’s target from a deck prompt in <a href="/private/drills/" style="color:var(--build);text-decoration:none;font-weight:650">the Drills</a> (the strip names it), 10–15 min at the clock, then check against the Atlas lab or reference. A deck is done when every prompt is either clean in-clock or sits in the drill log with a fix.</p>
+  <p class="mut"><b>LC route:</b> 4 mediums/wk from the company-tagged lists (Citadel · HRT · Jane Street · NVIDIA), filtered to the week&rsquo;s pattern. TUE python · THU C++ · SAT pair in C++ (C++ reps ≥ python from wk 3; C++ is the quant-SWE differentiator) · <b>retest a miss in the language you missed it in</b>. The 4/wk: TUE 1 · THU 1 · SAT 2. From wk 4 the SAT pair runs OA-style (2×22, camera on) with one hard; fold one trie + one bit-manip medium into wks 5–6. By wk 6 every ladder pattern exists twice in your hands.</p>
+  <p class="mut"><b>The PB:</b> clean prompts in a 10-min drill round; log the best in §06. The PB is the ghost you race: beat last week&rsquo;s you, nobody else.</p>
+  <p class="mut"><b>Probability floor:</b> one 15-min timed set per week, stapled to the SAT pair: EV, conditioning, classic brainteasers (deck in <a href="/private/drills/" style="color:var(--build);text-decoration:none;font-weight:650">the Drills</a>). Kept warm because Jane Street / Optiver-style SWE loops still ask; misses logged like everything else.</p>
 
   <div class="tbl-wrap"><table>
-    <tr><th>Wk</th><th>Green Book</th><th>LeetCode ×4</th><th>Atlas</th></tr>
-    <tr><td class="dt">1</td><td>ch.2 brainteasers</td><td>arrays · hashing</td><td class="dt">L20</td></tr>
-    <tr><td class="dt">2</td><td>ch.4 probability, pt 1</td><td>two pointers · sliding window</td><td class="dt">L21</td></tr>
-    <tr><td class="dt">3</td><td>ch.4 probability, pt 2</td><td>stack · binary search</td><td class="dt">L17</td></tr>
-    <tr><td class="dt">4</td><td>ch.5 stochastic, pt 1</td><td>linked lists · trees</td><td class="dt">L18·L27</td></tr>
-    <tr><td class="dt">5</td><td>mixed, timed: 20 across all</td><td>heaps · intervals</td><td class="dt">L22·L25</td></tr>
-    <tr><td class="dt">6</td><td>ch.5 stochastic, pt 2 + market-making</td><td>graphs · 1-D DP</td><td class="dt">L19·L24·L26</td></tr>
+    <tr><th>Wk</th><th>Kernel drill</th><th>LeetCode ×4</th><th>Atlas</th></tr>
+    <tr><td class="dt">1</td><td>GPU basics: warps · memory wall · coalescing</td><td>arrays · hashing</td><td class="dt">L20</td></tr>
+    <tr><td class="dt">2</td><td>GEMM tiling</td><td>two pointers · sliding window</td><td class="dt">L21</td></tr>
+    <tr><td class="dt">3</td><td>roofline + occupancy</td><td>stack · binary search</td><td class="dt">L17</td></tr>
+    <tr><td class="dt">4</td><td>online softmax</td><td>linked lists · trees</td><td class="dt">L18·L27</td></tr>
+    <tr><td class="dt">5</td><td>mixed: 20 across wks 1–4</td><td>heaps · intervals</td><td class="dt">L22·L25</td></tr>
+    <tr><td class="dt">6</td><td>FA tiling: stream, merge, rescale</td><td>graphs · 1-D DP</td><td class="dt">L18·L19·L24·L26</td></tr>
     <tr><td class="dt">7</td><td>mock sprint</td><td>timed randoms, daily</td><td class="dt">your log</td></tr>
-    <tr><td class="dt">8</td><td>OA-condition sets</td><td>patch week · 2-D DP</td><td class="dt">L19·L23</td></tr>
-    <tr><td class="dt">9–12</td><td>maintenance: mental math daily, FRI retests</td><td>1 hard/wk + live OAs</td><td class="dt">as needed</td></tr>
+    <tr><td class="dt">8</td><td>OA-condition sets</td><td>patch week · 2-D DP · backtracking</td><td class="dt">L19·L23</td></tr>
+    <tr><td class="dt">9–12</td><td>maintenance: 15-min drill daily, FRI retests</td><td>1 hard/wk + live OAs</td><td class="dt">as needed</td></tr>
   </table></div>
 
   <details><summary>Per-rep clocks: an expired timer is data, not failure</summary><div class="dbody">
     <div class="tbl-wrap"><table>
       <tr><th>Rep</th><th>Clock</th><th>When it expires</th></tr>
-      <tr><td class="dt">MENTAL MATH</td><td>10 min</td><td>Log the best round’s score · just the number and its trend</td></tr>
-      <tr><td class="dt">GB PROBLEM</td><td>7 min (10 for ch. 5)</td><td>Read the solution actively, re-derive on blank paper within 24h. Log the miss</td></tr>
+      <tr><td class="dt">KERNEL DRILL</td><td>10 min (15 for FA weeks)</td><td>Log the clean-prompt count · check the reference, re-derive gaps within 24h</td></tr>
+      <tr><td class="dt">DRILL PROMPT</td><td>3–4 min each</td><td>Miss → read the reference actively, re-derive on blank paper within 24h. Log it</td></tr>
+      <tr><td class="dt">PROB SET</td><td>15 min weekly</td><td>Stapled to the SAT pair · misses get a log line, same five categories</td></tr>
       <tr><td class="dt">LC MEDIUM</td><td>25 min (+10 w/ hints)</td><td>Read editorial, re-implement from empty file same day. Re-queue +48h. Log it</td></tr>
       <tr><td class="dt">SAT PAIR/HARD</td><td>2×22 min OA-style, or 1 hard 40 min</td><td>Same protocol. Hards are allowed to beat you</td></tr>
       <tr><td class="dt">MOCK (WK 7+)</td><td>60 min + 15 writeup</td><td>Every miss gets a log line, same five categories</td></tr>
@@ -367,15 +377,15 @@
 
   <details><summary>The drill log: one file, five categories, two retests</summary><div class="dbody">
     <p><code>drill-log.md</code> in the jetson-lab repo. One line per miss, within 60 seconds of the miss:</p>
-    <pre class="log">07-08 · GB 2.14 · CONCEPT · treated the draws as independent
-        fix: write the sample space before touching arithmetic · retest ☐ +48h ☐ FRI
+    <pre class="log">07-08 · DRILL gemm.3 · CONCEPT · could not say why the tile must fit shared memory
+        fix: redo the Lab 16 traffic count, then re-derive · retest ☐ +48h ☐ FRI
 07-09 · LC 239 · BLANK · never seen the monotonic-deque idea
         fix: Atlas Lab 17, then 3 more sliding-window mediums · retest ☐ +48h ☐ FRI</pre>
     <div class="tbl-wrap"><table>
       <tr><th>Category</th><th>Means</th><th>Prescribes</th></tr>
       <tr><td class="dt">MISREAD</td><td>Answered a different question</td><td>Restate the ask in one line before solving</td></tr>
       <tr><td class="dt">CONCEPT</td><td>The idea was missing</td><td>STUDY time · never “more reps”; reps rehearse the error</td></tr>
-      <tr><td class="dt">MECH</td><td>Right idea, arithmetic/index slip</td><td>More mental math + a slower final pass</td></tr>
+      <tr><td class="dt">MECH</td><td>Right idea, arithmetic/index slip</td><td>Slower final pass + state the invariant before typing</td></tr>
       <tr><td class="dt">SPEED</td><td>Got it, too late</td><td>Reps of that exact pattern until boring</td></tr>
       <tr><td class="dt">BLANK</td><td>No foothold at all</td><td>Pattern not learned · it moves up the ladder this week</td></tr>
     </table></div>
@@ -394,8 +404,8 @@
 <section id="log">
   <p class="label">06 · The log: <b>record it here, 60 seconds, done</b></p>
   <div class="recrow" id="recRow"></div>
-  <div class="mform"><input id="mmV" type="number" inputmode="numeric" placeholder="zetamac score"><button class="btn" id="mmBtn" type="button">LOG SCORE</button><span id="mmLine"></span></div>
-  <div class="mform"><input id="mSrc" type="text" placeholder="GB 2.14 · LC 239"><span id="catRow"></span><input id="mFix" type="text" placeholder="fix, one actionable sentence"><button class="btn" id="missBtn" type="button">LOG MISS</button></div>
+  <div class="mform"><input id="mmV" type="number" inputmode="numeric" placeholder="drill: clean prompts"><button class="btn" id="mmBtn" type="button">LOG SCORE</button><span id="mmLine"></span></div>
+  <div class="mform"><input id="mSrc" type="text" placeholder="DRILL gemm.3 · LC 239"><span id="catRow"></span><input id="mFix" type="text" placeholder="fix, one actionable sentence"><button class="btn" id="missBtn" type="button">LOG MISS</button></div>
   <p id="wkCounts"></p>
   <div id="logList"></div>
   <p class="mut" style="margin-top:10px">Mirrors <code>drill-log.md</code>; use whichever is closer, both count. Tick each miss&rsquo;s retests at +48h and FRI; fail both and it becomes a flashcard + a named 15-min STUDY slot next week.</p>
@@ -434,10 +444,10 @@
 
 <section>
   <p class="label">08 · Under your belt: <b>check what’s already true</b></p>
-  <label class="ck"><input type="checkbox" data-k="b1"><span class="txt"><b>Modern C++</b> comfortable: the five bridge reps close most of the gap from strong-C</span></label>
-  <label class="ck"><input type="checkbox" data-k="b2"><span class="txt"><b>Python + numpy</b> fluency: vectorized thinking, not for-loops with numpy sprinkled on</span></label>
-  <label class="ck"><input type="checkbox" data-k="b3"><span class="txt"><b>Green Book cover to cover</b>, mistake log included</span></label>
-  <label class="ck"><input type="checkbox" data-k="b4"><span class="txt"><b>Mental math at speed</b>: sub-10s two-digit multiplication, fractions, quick EVs</span></label>
+  <label class="ck"><input type="checkbox" data-k="b1"><span class="txt"><b>Modern C++</b> comfortable: the six bridge reps close most of the gap from strong-C</span></label>
+  <label class="ck"><input type="checkbox" data-k="b2"><span class="txt"><b>Python + numpy + PyTorch</b> fluency: nn.Module, autograd, a training loop from memory; vectorized thinking throughout</span></label>
+  <label class="ck"><input type="checkbox" data-k="b3"><span class="txt"><b>A transformer from scratch</b> (CS336 A1): tokenizer → attention → training loop, tests green</span></label>
+  <label class="ck"><input type="checkbox" data-k="b4"><span class="txt"><b>Concurrency in anger</b>: threads, atomics, one lock-free queue; can whiteboard the C++ memory model</span></label>
   <label class="ck"><input type="checkbox" data-k="b5"><span class="txt"><b>Linear algebra as geometry</b> (Atlas Lab 14; Axler or 3B1B for rigor)</span></label>
   <label class="ck"><input type="checkbox" data-k="b6"><span class="txt"><b>One profiler mastered</b> (Nsight Compute) · “I measured it” beats “I think”</span></label>
   <label class="ck"><input type="checkbox" data-k="b7"><span class="txt"><b>Anything distributed, once</b>: 2-GPU data-parallel, or an honest writeup of why not on one Jetson</span></label>
@@ -452,15 +462,15 @@
     <li><b>“boot me up”</b> <span>· reads NEXT.md, hands you the first 10 minutes, zero decisions</span></li>
     <li><b>“grade my week against the training plan”</b> <span>· Friday ritual</span></li>
     <li><b>“grade my drill log”</b> <span>· Friday: reads §06 (or drill-log.md), counts categories, names next week’s emphasis</span></li>
-    <li><b>“quiz me, green book chapter 4, timed”</b> <span>· drill partner</span></li>
+    <li><b>“quiz me: week N kernel drill, timed”</b> <span>· drill partner, and the grader after</span></li>
     <li><b>“add a chapter on ___ to the Atlas”</b> <span>· when a STUDY block needs visuals</span></li>
     <li><b>“the plan is too heavy/light, rescale week N”</b> <span>· the two-miss rule in action</span></li>
     <li><b>“draft the Logan text”</b> <span>· if the ask needs words</span></li>
-    <li><b>“review my kernel/resume/backtest”</b> <span>· before anything ships</span></li>
+    <li><b>“review my kernel/resume/README”</b> <span>· before anything ships</span></li>
   </ul>
 </section>
 
-<footer>THE TRAINING PLAN v2.0 · built 2026-07-03 · v2.2 rev 2026-07-04: clear-cut + Sukima treatment · GB/LC ladder + this-week highlight · in-page drill log, zetamac PB (race your ghost), SHIP shelf; boxes &amp; sync unchanged (v1.4 prose in git history) · for the love of the game, and a top offer, since we’re being honest.</footer>
+<footer>THE TRAINING PLAN v2.0 · built 2026-07-03 · v2.2 rev 2026-07-04: clear-cut + Sukima treatment · GB/LC ladder + this-week highlight · in-page drill log, zetamac PB (race your ghost), SHIP shelf; boxes &amp; sync unchanged (v1.4 prose in git history) · v3.0 rev 2026-07-10: re-aimed at ML systems + frontier-lab + quant-SWE capability · Green Book, Zetamac &amp; market-making retired · kernel drills + CS336 + the FA ladder in · the arc on the page · full plan is the default view · for the love of the game, and a top offer, since we’re being honest.</footer>
 
 </div>
 </div>
@@ -547,7 +557,7 @@
 (function(){
   var S=window.__planSync; if(!S) return;
   var CATS=['MISREAD','CONCEPT','MECH','SPEED','BLANK'];
-  var RX={MISREAD:'slow the reading ritual',CONCEPT:'more STUDY, not reps',MECH:'more mental math + a slower final pass',SPEED:'reps of that pattern until boring',BLANK:'ladder too fast, flag it at FRI review'};
+  var RX={MISREAD:'slow the reading ritual',CONCEPT:'more STUDY, not reps',MECH:'slower final pass + state the invariant first',SPEED:'reps of that pattern until boring',BLANK:'ladder too fast, flag it at FRI review'};
   var START=new Date(2026,6,6);
   function st(){ return S.get(); }
   function arr(k){ var s=st(); if(!Array.isArray(s[k])) s[k]=[]; return s[k]; }
@@ -572,7 +582,7 @@
     var z=zeta(); var mmArr=arr('mm'); var today=mmArr.filter(function(x){return x.d===iso(new Date())});
     var zTxt=z===null?'–':z;
     var defs=[
-      {k:null,label:'ZETAMAC PB',val:zTxt,hint:'auto from LOG SCORE'},
+      {k:null,label:'DRILL PB',val:zTxt,hint:'auto from LOG SCORE'},
       {k:'lc',label:'LC CLEAN PB',val:pb().lc||'–',hint:'fastest clean medium, e.g. 14:30'},
       {k:'matmul',label:'MATMUL %CUBLAS',val:pb().matmul||'–',hint:'best % of cuBLAS, e.g. 71'},
       {k:'llm',label:'LLM TOK/S',val:pb().llm||'–',hint:'best tokens/sec on the Orin, e.g. 21'}
@@ -669,7 +679,7 @@
       steps.push({k:cb.dataset.k, wk:i+1, el:cb, tag:tagOf(cb), text:txtOf(cb), strip:card.querySelector('.dstrip')?card.querySelector('.dstrip').innerHTML:''});
     });
   });
-  function tagOf(cb){ var t=cb.parentNode.querySelector('.tag'); if(!t)return {c:'x',l:'SETUP'}; var c=(t.className.match(/tag (\w+)/)||[])[1]||'x'; return {c:c,l:TAGLABEL[c]||t.textContent.trim()}; }
+  function tagOf(cb){ var t=cb.parentNode.querySelector('.tag'); if(!t)return {c:'x',l:'SETUP'}; var c=(t.className.match(/tag (\w+)/)||[])[1]||'x'; var tt=t.textContent.trim(); return {c:c,l:tt==='ANCHOR'?tt:(TAGLABEL[c]||tt)}; }
   function txtOf(cb){ var x=cb.parentNode.querySelector('.txt').cloneNode(true); var tg=x.querySelector('.tag'); if(tg)tg.remove(); return x.innerHTML.trim(); }
 
   var skip={}, lastKey=null;
@@ -690,7 +700,7 @@
 
     if(!next){
       el.innerHTML='<p class="tGreet">'+greet()+'</p><p class="tPhase">campaign complete</p>'+
-        '<div class="stepcard"><p class="steptext">All 61 steps done. Every SHIP shipped. That is the whole plan, start to finish.</p>'+
+        '<div class="stepcard"><p class="steptext">All '+total+' steps done. Every SHIP shipped. That is the whole plan, start to finish.</p>'+
         '<p class="stepsub">Time for v2 (fall edition). Tell Claude: &ldquo;the plan is done, build the fall campaign.&rdquo;</p></div>'+
         '<div class="tfoot"><span>'+done+' / '+total+'</span><a href="#" id="toFull">full plan &#9656;</a></div>';
       document.getElementById('toFull').onclick=toggle;
