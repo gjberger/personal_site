@@ -41,7 +41,7 @@ form{display:flex;flex-direction:column;gap:12px;width:260px}
 input{padding:10px;border:1px solid #3A4A66;border-radius:4px;background:#131C2A;color:#E9EDF3;font:inherit}
 button{padding:10px;border:0;border-radius:4px;background:#B85C1E;color:#12100C;font:inherit;font-weight:600;cursor:pointer}
 .m{color:#E89350;min-height:18px;font-size:13px}h1{font-size:18px;margin:0 0 4px}</style>
-<form method="POST" action="/private/login"><h1>The Training Plan</h1>
+<form method="POST" action="/private/login"><h1>Algorithm Lab</h1>
 <div class="m">${msg || ""}</div>
 <input type="password" name="password" placeholder="password" autofocus autocomplete="current-password">
 <button>Enter</button></form>`;
@@ -64,7 +64,7 @@ export default async (request, context) => {
       return new Response(null, {
         status: 303,
         headers: {
-          "location": "/private/plan/",
+          "location": "/private/algolab/",
           "set-cookie": `tp_sess=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_DAYS * 86400}`,
         },
       });
