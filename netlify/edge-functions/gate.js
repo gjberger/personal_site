@@ -47,7 +47,12 @@ button{padding:10px;border:0;border-radius:4px;background:#B85C1E;color:#12100C;
 <button>Enter</button></form>`;
   return new Response(html, {
     status: msg ? 401 : 200,
-    headers: { "content-type": "text/html; charset=utf-8" },
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      // Never let a CDN cache the gate page — especially not at asset URLs,
+      // where a cached text/html response poisons .js/.css for every visitor.
+      "cache-control": "no-store",
+    },
   });
 }
 
@@ -66,6 +71,7 @@ export default async (request, context) => {
         headers: {
           "location": "/private/algolab/",
           "set-cookie": `tp_sess=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${MAX_AGE_DAYS * 86400}`,
+          "cache-control": "no-store",
         },
       });
     }
