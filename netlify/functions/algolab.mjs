@@ -6,7 +6,8 @@
 // saves while holding stale state can only move progress forward, never erase
 // another device's history: best-scores take the max, lesson status advances
 // only (new -> started -> passed), SM-2 concept state keeps the furthest-
-// scheduled review, streak keeps the later day, placements the more recent.
+// scheduled review, streak keeps the later day, placements the more recent,
+// and the append-only activity ledger is unioned by stable event id.
 // DELETE clears the save (used by the app's Reset button). The first write of
 // each day snapshots the previous state to "backup-YYYY-MM-DD".
 
@@ -95,7 +96,15 @@ export function mergeSave(base, over) {
     else if (os.last === streak.last) streak = { days: Math.max(streak.days || 0, os.days || 0), last: streak.last };
   }
 
-  return { version: 2, lessons, concepts, streak: streak || { days: 0, last: "" }, placements };
+  const historyById = new Map();
+  for (const event of [...(base.history || []), ...(over.history || [])]) {
+    if (event && typeof event.id === "string") historyById.set(event.id, event);
+  }
+  const history = [...historyById.values()]
+    .sort((a, b) => (a.at || 0) - (b.at || 0) || a.id.localeCompare(b.id))
+    .slice(-1000);
+
+  return { version: 3, lessons, concepts, streak: streak || { days: 0, last: "" }, placements, history };
 }
 
 export default async (req) => {
